@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
+<main class="flex-shrink-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-5">
+            <a class="navbar-brand" href="/">G1000 Profile Database</a>
+            <div class="navbar pl-0" id="header-search-box"><input class="input-text" type="text" id="header-search" /><button class="btn btn-primary btn-sm ml-2" type="button">Search</button></div>
+            <div class="navbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/profiles">Browse profiles</a></li>
+                    <AuthorizeView>
+                        <Authorized>
+                            <li class="nav-item"><a class="nav-link" href="/about">About this site</a></li>
+                            <div class="dropdown show">
+                              <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @context.User.Identity.Name
+                              </a>
+                                  <div class="dropdown-menu">
+                                    <h5 class="dropdown-item-text mb-0">@context.User.Identity.Name</h5>
+                                    <p class="dropdown-item-text text-muted mb-0">@context.User.GetEmail()</p>
+                                    <div class="dropdown-divider"></div>
+                                    <button class="dropdown-item" @onclick="MyProfiles">My profiles</button>
+                                    <button class="dropdown-item" @onclick="BeginLogout">Log out</button>
+                                </div>
+                            </div>
+                        </Authorized>
+                        <NotAuthorized>
+                            <li class="nav-item"><a class="nav-link" href="/authentication/login">Log in</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About this site</a></li>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</main>
+
+@code{
+    private async Task BeginLogout(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+
+    private async Task MyProfiles(MouseEventArgs args)
+    {
+        Navigation.NavigateTo("/myprofiles");
+    }
+}

@@ -1,0 +1,112 @@
+﻿@page "/profiles"
+@inject HttpClient Http
+
+<section class="py-5">
+    <div class="container px-5 my-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="text-center">
+                    <h2 class="fw-bolder">Browse profiles</h2>
+                    <div class="btn-group">
+                        <button class="btn btn-large @GetButtonState() mt-1 mb-4 shadow-none" @onclick="() => Filter()">All</button>
+                        @foreach(AircraftType type in Enum.GetValues<AircraftType>())
+                        {
+                          <button class="btn btn-large @GetButtonState(type) mt-1 mb-4 shadow-none" @onclick="() => Filter(type)">@type</button>  
+                        }
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-large btn-secondary mt-1 mb-4">Both</button>
+                        <button class="btn btn-large btn-secondary mt-1 mb-4">Single</button>
+                        <button class="btn btn-large btn-secondary mt-1 mb-4">Twin</button>
+                    </div>
+                    <button class="btn btn-large btn-primary mt-1 mb-4" @onclick="Reset">Refresh</button>
+                </div>
+            </div>
+        </div>
+        @if (ProfileSummaries != null)
+        {
+            <div class="row gx-5">
+                @foreach (ProfileSummary profileSummary in Filtered)
+                {
+                    <div class="col-lg-4 mb-5">
+                        <div class="card h-100 shadow border-0">
+                            <img class="card-img-top" src="@GetImageUri(profileSummary)" alt="Simionic custom profile screen" />
+                            <div class="card-body p-4">
+                                <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">@profileSummary.Name</h5></a>
+                                <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
+                            </div>
+                            <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
+                                <div class="d-flex align-items-end justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="small">
+                                            <div class="text"><b>By:</b> @(profileSummary.Owner ?? "Unknown")</div>
+                                            <div class="text"><b>Updated:</b> @profileSummary.LastUpdated</div>                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                <h5>Loading...</h5>
+            </div>
+        }
+        @if (Filtered?.Count() == 0)
+        {
+            <div class="text-center">
+                <h5>Nothing to see here... try changing the filter?</h5>
+            </div>
+        }
+    </div>
+</section>
+
+@code
+{
+    private AircraftType? _filter;
+
+    public IEnumerable<ProfileSummary> ProfileSummaries { get; set; }
+    public IEnumerable<ProfileSummary> Filtered => _filter.HasValue ? ProfileSummaries.Where(x => x.AircraftType == _filter) : ProfileSummaries;
+
+    protected string GetImageUri(ProfileSummary profileSummary)
+    {
+        return profileSummary.AircraftType switch
+        {
+            AircraftType.Piston => "/img/piston.jpg",
+            AircraftType.TurboProp => "/img/turboprop.jpg",
+            AircraftType.Jet => "/img/jet.jpg"
+        };
+    }
+
+    protected string GetButtonState(AircraftType? type = null)
+    {
+        if (_filter == type)
+        {
+            return "btn-primary";
+        }
+        else
+        {
+            return "btn-secondary";
+        }
+    }
+
+    protected async Task Filter(AircraftType? type = null)
+    {
+        _filter = type;
+    }
+
+    protected async Task Reset()
+    {
+        ProfileSummaries = await Http.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
+        await Filter();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Reset();
+    }
+}

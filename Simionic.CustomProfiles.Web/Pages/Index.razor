@@ -1,20 +1,21 @@
-﻿<!-- Copyright (c) Microsoft Corporation.
-     Licensed under the MIT license. -->
+﻿@page "/"
 
-<!-- <IndexSnippet> -->
-@page "/"
-
-<div class="jumbotron">
-    <h1>Blazor Client-side Graph Tutorial</h1>
-    <p class="lead">This sample app shows how to use the Microsoft Graph API to access a user's data from a Blazor client-side app</p>
-    <AuthorizeView>
-        <Authorized>
-            <h4>Welcome @context.User.Identity.Name!</h4>
-            <p>Use the navigation bar on the left to get started.</p>
-        </Authorized>
-        <NotAuthorized>
-            <a class="btn btn-primary btn-large" href="authentication/login">Click here to sign in</a>
-        </NotAuthorized>
-    </AuthorizeView>
-</div>
-<!-- </IndexSnippet> -->
+<header class="bg-dark py-5">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 class="display-5 fw-bolder text-white mb-2">Simionic G1000 Profiles</h1>
+                    <p class="lead fw-normal text-white-50 mb-4">Search and find custom aircraft profiles for the Simionic G1000 apps, contributed by the community.</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                        <input class="px-4 rounded border-0" /><a class="btn btn-primary btn-lg px-4 me-sm-3" href="/search">Search</a>
+                    </div>
+                </div>
+                <div class="my-5 text-center text-xl-start pt-4">
+                    <p class="lead fw-normal text-white-50 mb-4">You can <a href="/profiles">browse all the profiles</a>, <a href="/create">create a profile</a>, or <a href="/faq">find out how this all works</a>.</p>
+                </div>
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="/img/G1000_screen.jpg" alt="G1000 MFD & PFD set into a cockpit instrument panel" /></div>
+        </div>
+    </div>
+</header>
