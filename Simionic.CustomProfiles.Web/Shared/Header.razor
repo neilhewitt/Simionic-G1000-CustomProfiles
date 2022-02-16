@@ -3,12 +3,12 @@
 
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
+@inject AuthenticationStateProvider Authentication
 
 <main class="flex-shrink-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
             <a class="navbar-brand" href="/">G1000 Profile Database</a>
-            <div class="navbar pl-0" id="header-search-box"><input class="input-text" type="text" id="header-search" /><button class="btn btn-primary btn-sm ml-2" type="button">Search</button></div>
             <div class="navbar">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/profiles">Browse profiles</a></li>
@@ -48,6 +48,7 @@
 
     private async Task MyProfiles(MouseEventArgs args)
     {
-        Navigation.NavigateTo("/myprofiles");
+        var state = await Authentication.GetAuthenticationStateAsync();
+        Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", state.User.GetEmail()), (Navigation.Uri.Contains("/profiles")));
     }
 }

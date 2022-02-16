@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager Navigation
 
 <header class="bg-dark py-5">
     <div class="container px-5">
@@ -8,7 +9,7 @@
                     <h1 class="display-5 fw-bolder text-white mb-2">Simionic G1000 Profiles</h1>
                     <p class="lead fw-normal text-white-50 mb-4">Search and find custom aircraft profiles for the Simionic G1000 apps, contributed by the community.</p>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                        <input class="px-4 rounded border-0" /><a class="btn btn-primary btn-lg px-4 me-sm-3" href="/search">Search</a>
+                        <input class="px-4 rounded border-0" @bind="_searchTerm" @bind:event="oninput" @onkeydown="SearchKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3" @onclick="Search">Search</button>
                     </div>
                 </div>
                 <div class="my-5 text-center text-xl-start pt-4">
@@ -19,3 +20,21 @@
         </div>
     </div>
 </header>
+
+@code
+{
+    private string _searchTerm;
+
+    protected void SearchKey(KeyboardEventArgs args)
+    {
+        if (args.Code == "Enter" || args.Code == "NumpadEnter")
+        {
+            Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", _searchTerm));
+        }
+    }
+
+    protected void Search(MouseEventArgs args)
+    {
+        Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", _searchTerm));
+    }
+}

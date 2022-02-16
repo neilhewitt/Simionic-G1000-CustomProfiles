@@ -8,6 +8,7 @@ using Simionic.CustomProfiles.Core;
 using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
@@ -23,7 +24,7 @@ namespace Simionic.CustomProfiles.FunctionApp
         {
             try
             {
-                Profile profile = JsonConvert.DeserializeObject<Profile>(req.Form["profile"]);
+                Profile profile = JsonConvert.DeserializeObject<Profile>(new StreamReader(req.Body).ReadToEnd());
                 await client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
                 return new OkObjectResult("OK");
             }

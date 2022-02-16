@@ -26,7 +26,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             {
                 ProfileSummary[] profiles = client.CreateDocumentQuery<ProfileSummary>(
                     UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer),
-                    "SELECT c.id, c.AircraftType, c.Name, c.LastUpdated, c.Owner FROM c",
+                    "SELECT c.id, c.AircraftType, c.IsTwinEngine, c.Name, c.LastUpdated, c.Owner FROM c",
                     new FeedOptions() { EnableCrossPartitionQuery = true }
                     ).ToArray();
                 return new OkObjectResult(profiles);

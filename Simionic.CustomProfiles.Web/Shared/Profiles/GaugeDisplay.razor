@@ -1,0 +1,122 @@
+﻿@if (ProfileGauge != null)
+{
+    <div class="row justify-content-center mb-0">
+        <div class="col@(!ProfileGauge.Max.HasValue && !ProfileGauge.Min.HasValue ? "" : "-md-auto") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
+        @if (IsFuelGauge) // HACK!
+        {
+            <div class="col-md-auto">
+                <div class="form-group">
+                    <div class="btn-group">
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none" @onclick="() => ProfileGauge.FuelInGallons = true">Gal</button>
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none" @onclick="() => ProfileGauge.FuelInGallons = false">Lb</button>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ProfileGauge.Min.HasValue)
+        {
+            <div class="col-md-auto pt-1">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold">Min <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileGauge.Min" /></label>
+                </div>
+            </div>
+        }
+        @if (ProfileGauge.Max.HasValue)
+        {
+            <div class="col pt-1">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold">Max <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileGauge.Max" /></label>
+                </div>
+            </div>
+        }
+        @if (IsTorqueGauge) // HACK!
+        {
+            <div class="col-md-auto">
+                <div class="form-group">
+                    <div class="btn-group">
+                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none" @onclick="() => ProfileGauge.TorqueInFootPounds = true">Value</button>
+                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none" @onclick="() => ProfileGauge.TorqueInFootPounds = false">Percentage</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row justify-content-center mb-0">
+        <div class="col">
+            <div class="profile-indicator" data-toggle="dropdown" role="button"><img src="/img/@(ProfileGauge.Ranges[0].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <ul class="dropdown-menu px-0 py-0 w100">
+                <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.None" /></li>
+                <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.Green" /></li>
+                <li><div class="profile-indicator yellow" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.Yellow" /></li>
+                <li><div class="profile-indicator red" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.Red" /></li>
+            </ul>
+        </div>
+        <div class="col">
+            <div class="profile-indicator" data-toggle="dropdown" role="button"><img src="/img/@(ProfileGauge.Ranges[1].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <ul class="dropdown-menu px-0 py-0 w100">
+                <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.None" /></li>
+                <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.Green" /></li>
+                <li><div class="profile-indicator yellow" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.Yellow" /></li>
+                <li><div class="profile-indicator red" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.Red" /></li>
+            </ul>
+        </div>
+        <div class="col">
+            <div class="profile-indicator" data-toggle="dropdown" role="button"><img src="/img/@(ProfileGauge.Ranges[2].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <ul class="dropdown-menu px-0 py-0 w100">
+                <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.None" /></li>
+                <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.Green" /></li>
+                <li><div class="profile-indicator yellow" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.Yellow" /></li>
+                <li><div class="profile-indicator red" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.Red" /></li>
+            </ul>
+        </div>
+        <div class="col">
+            <div class="profile-indicator" data-toggle="dropdown" role="button"><img src="/img/@(ProfileGauge.Ranges[3].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <ul class="dropdown-menu px-0 py-0 w100">
+                <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.None" /></li>
+                <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.Green" /></li>
+                <li><div class="profile-indicator yellow" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.Yellow" /></li>
+                <li><div class="profile-indicator red" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.Red" /></li>
+            </ul>
+        </div>
+
+    </div>  
+    <div class="row justify-content-center mb-4">
+        <div class="col">
+            <input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[0].Min" /><input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[0].Max" />
+        </div>
+        <div class="col">
+            <input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[1].Min" /><input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[1].Max" />
+        </div>
+        <div class="col">
+            <input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[2].Min" /><input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[2].Max" />
+        </div>
+        <div class="col">
+            <input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[3].Min" /><input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[3].Max" />
+        </div>
+
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Gauge ProfileGauge { get; set; }
+    [Parameter]
+    public EventCallback<Gauge> ProfileGaugeChanged { get; set; }
+    [Parameter]
+    public bool IsFuelGauge { get; set; }
+    [Parameter]
+    public bool IsTorqueGauge { get; set; }
+
+    protected override void OnInitialized()
+    {        
+        base.OnInitialized();
+    }
+
+    public class SwitchInfo
+    {
+        public bool HasSwitch { get; set; }
+        public bool SwitchOnLeft { get; set; }
+        public string SwitchLeftText { get; set; }
+        public string SwitchRightText { get; set; }
+    }
+}

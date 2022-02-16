@@ -1,15 +1,15 @@
 ﻿namespace Simionic.CustomProfiles.Core
 {
-    public struct VSpeeds
+    public class VSpeeds
     {
-        public int Vs0;
-        public int Vs1;
-        public int Vfe;
-        public int Vno;
-        public int Vne;
-        public int Vglide;
-        public int Vr;
-        public int Vx;
-        public int Vy;
+        public int Vs0 { get; set; }
+        public int Vs1 { get; set; }
+        public int Vfe { get; set; }
+        public int Vno { get; set; }
+        public int Vne { get; set; }
+        public int Vglide { get; set; }
+        public int Vr { get; set; }
+        public int Vx { get; set; }
+        public int Vy { get; set; }
     }
 }

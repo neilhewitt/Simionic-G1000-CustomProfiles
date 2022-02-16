@@ -11961,3 +11961,49 @@ html {
 .dropdown-toggle::after {
     display: none;
 }
+
+.custom-profile-switch {
+    width: 4em!important;
+    height: 2em!important;
+    margin-top: -0.2em!important;
+    margin-left: 1em!important;
+}
+
+.custom-profile-textbox {
+    width: 4em;
+}
+
+.custom-profile-valuebox {
+    height: 1.5em;
+    background-color: lightgray;
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+    width: 50%;
+    text-align: center;
+}
+
+.profile-indicator {
+    width: 100%;
+    height: 1.5em;
+    border: 1px solid black;
+    background-color: white;
+    cursor: pointer;
+}
+    .profile-indicator.empty {
+        background-size: auto;
+        background-color: white;
+    }
+
+    .profile-indicator.green {
+        background-color: green;
+    }
+
+    .profile-indicator.yellow {
+        background-color: yellow;
+    }
+
+    .profile-indicator.red {
+        background-color: red;
+    }
+
