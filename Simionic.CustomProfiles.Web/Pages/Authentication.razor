@@ -42,10 +42,11 @@
     [Parameter] public string Action { get; set; }
     [Parameter] public string ReturnUrl { get; set; }
 
-    private void LoggedIn()
+    private void LoggedIn(RemoteAuthenticationState state)
     {
-        if (ReturnUrl != null){
-            Navigation.NavigateTo(ReturnUrl);
+        if (ReturnUrl != null)
+        {
+            state.ReturnUrl = ReturnUrl;
         }
     }
 

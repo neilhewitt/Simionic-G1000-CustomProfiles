@@ -1,5 +1,4 @@
 ﻿@page "/profiles"
-@inject HttpClient Http
 @inject NavigationManager Navigation
 
 <section class="py-5">
@@ -7,7 +6,18 @@
         <div class="row gx-5 justify-content-center">
             <div class="col-md-auto">
                 <div class="text-center">
-                    <h2 class="fw-bolder">@(String.IsNullOrWhiteSpace(_searchTerm) ? "Browse profiles" : "Search results")</h2>
+                    @if (!String.IsNullOrWhiteSpace(_ownerId))
+                    {
+                        <h2 class="fw-bolder">@(UserInfo.Name)'s profiles</h2>
+                    }
+                    else if (!String.IsNullOrWhiteSpace(_searchTerm))
+                    {
+                        <h2 class="fw-bolder">Search results</h2>
+                    }
+                    else
+                    {
+                        <h2 class="fw-bolder">Browse profiles</h2>
+                    }
                     <div class="text-center"><label for="search-box" class="form-label text-black font-weight-bold">Filter: <input class="input-text" type="text" id="search-box" @bind="_searchTerm" @bind:event="oninput" /></label></div>
                     <div class="btn-group">
                         <button class="btn btn-large @GetButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterType()">All</button>
@@ -21,7 +31,14 @@
                         <button class="btn btn-large @GetButtonState(EngineFilter.Single) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(EngineFilter.Single)">Single</button>
                         <button class="btn btn-large @GetButtonState(EngineFilter.Twin) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(EngineFilter.Twin)">Twin</button>
                     </div>
-                    <button class="btn btn-large btn-primary mt-1 mb-4 shadow-none" @onclick="() => Reset()">Reset</button>
+                    @if (UserInfo.OwnerId != null)
+                    {
+                        <div class="btn-group ml-1">
+                            <button class="btn btn-large @GetButtonState(_ownerId == null) mt-1 mb-4 shadow-none" @onclick="() => _ownerId = null">All</button>
+                            <button class="btn btn-large @GetButtonState(_ownerId != null) mt-1 mb-4 shadow-none" @onclick="() => _ownerId = UserInfo.OwnerId">Just mine</button>
+                        </div>
+                    }
+                    <button class="btn btn-large btn-primary mt-1 ml-1 mb-4 shadow-none" @onclick="() => Reset()">Reset</button>
                 </div>
             </div>
         </div>
@@ -38,7 +55,9 @@
                                 @profileSummary.Name
                                 <AuthorizeView>
                                     <Authorized>
-                                        @if (context.User.GetEmail() == profileSummary.Owner) { <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> }
+                                        @if (UserInfo.OwnerId == profileSummary.Owner.Id) { 
+                                            <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                        }
                                     </Authorized>
                                 </AuthorizeView>
                                 </h5>
@@ -48,7 +67,7 @@
                                 <div class="d-flex align-items-end justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <div class="small">
-                                            <div class="text"><b>By:</b> @(profileSummary.Owner ?? "Unknown")</div>
+                                            <div class="text"><b>By:</b> @(profileSummary.Owner.Name ?? "Unknown")</div>
                                             <div class="text"><b>Updated:</b> @profileSummary.LastUpdated</div>                                
                                         </div>
                                     </div>
@@ -84,6 +103,7 @@
     private AircraftType? _typeFilter;
     private EngineFilter _engineFilter;
     private string _searchTerm;
+    private string _ownerId;
     private string _errorMessage;
 
     public IEnumerable<ProfileSummary> ProfileSummaries { get; set; }
@@ -97,7 +117,7 @@
 
             if (!String.IsNullOrWhiteSpace(_searchTerm)) output = output.Where(
                 x => x.Name is not null && x.Name.ToLower().Contains(_searchTerm.ToLower()) ||
-                x.Owner is not null && x.Owner.ToLower().Contains(_searchTerm.ToLower()) ||
+                x.Owner.Name is not null && x.Owner.Name.ToLower().Contains(_searchTerm.ToLower()) ||
                 x.AircraftType.ToString().ToLower().Contains(_searchTerm.ToLower())
             );
 
@@ -135,6 +155,11 @@
         Navigation.NavigateTo($"/profile/{ id }");
     }
 
+    protected string GetButtonState(bool test)
+    {
+        return test ? "btn-primary" : "btn-secondary";
+    }
+
     protected string GetButtonState(EngineFilter engines)
     {
         if (_engineFilter == engines)
@@ -169,11 +194,16 @@
         _typeFilter = type;
     }
 
+    protected void BackToAll(MouseEventArgs args)
+    {
+        Navigation.NavigateTo("/profiles");
+    }
+
     protected async Task Reset(bool resetSearch = true)
     {
         try
         {
-            ProfileSummaries = await Http.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
+            ProfileSummaries = await HttpClientFactory.Client.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
         }
         catch (HttpRequestException ex)
         {
@@ -188,14 +218,29 @@
 
         _typeFilter = null;
         _engineFilter = EngineFilter.Both;
+        _ownerId = null;
         if (resetSearch) _searchTerm = null;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("profiles"))
+        {
+            _ownerId = null;
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
+        if (Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("myprofiles") && UserInfo.OwnerId == null)
+        {
+            Navigation.NavigateTo("/");
+        }
+
         var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
         StringValues values = String.Empty;
         if (query.TryGetValue("search", out values)) _searchTerm = values.SingleOrDefault()?.ToLower();
+        if (query.TryGetValue("ownerid", out values)) _ownerId = values.SingleOrDefault();
 
         await Reset(false);
     }

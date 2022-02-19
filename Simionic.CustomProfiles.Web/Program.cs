@@ -14,11 +14,9 @@ namespace Simionic.CustomProfiles.Web
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            
+
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
-
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:7071") });
 
             builder.Services.AddMsalAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
             {
@@ -26,9 +24,10 @@ namespace Simionic.CustomProfiles.Web
                 options.ProviderOptions.DefaultAccessTokenScopes.Add("email");
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
                 options.ProviderOptions.LoginMode = "redirect";
-            });
+            })
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, CustomAccountFactory>();
             
             await builder.Build().RunAsync();
         }
     }
-}
+ }

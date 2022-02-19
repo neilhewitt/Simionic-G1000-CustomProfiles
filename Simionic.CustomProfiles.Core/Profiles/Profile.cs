@@ -6,7 +6,7 @@ namespace Simionic.CustomProfiles.Core
     {
         [JsonProperty("id")] // need this for CosmosDB to work properly
         public string Id { get; set; }
-        public string Owner { get; set; }
+        public Owner Owner { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Name { get; set; }
         public AircraftType AircraftType { get; set; }

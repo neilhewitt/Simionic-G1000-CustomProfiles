@@ -1,11 +1,10 @@
 ﻿@page "/profile/{Id}"
 @page "/edit/{Id}"
-@inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthState
 
 <section class="pt-5">
-    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...") <span class="text-danger ml-3 @(Editing ? "" : "visually-hidden")">[Editing]</span></h3></div>
+    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Untitled") <span class="text-danger ml-3 @(Editing ? "" : "visually-hidden")">[Editing]</span></h3></div>
     @if (ProfileData is not null)
     {
         <div class="container px-5 py-3 mb-5 w-75 bg-dark bg-opacity-25 rounded-3">
@@ -184,12 +183,12 @@
                             }
                             else
                             {
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[0]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[1]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[2]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[3]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[4]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[5]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[0]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[1]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[2]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[3]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[4]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Markings[5]" readonly />
                             }
                         </div>
                     </div>
@@ -211,12 +210,12 @@
                             }
                             else
                             {
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="ProfileData.FlapsRange.Positions[0]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[1]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[2]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[3]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[4]" readonly />
-                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="ProfileData.FlapsRange.Positions[5]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="@ProfileData.FlapsRange.Positions[0]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Positions[1]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Positions[2]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Positions[3]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.FlapsRange.Positions[4]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="@ProfileData.FlapsRange.Positions[5]" readonly />
                             }
                         </div>
                     </div>
@@ -413,7 +412,7 @@
         await Task.Delay(500);
 
         ProfileData.LastUpdated = DateTime.Now;
-        HttpResponseMessage response = await Http.PostAsJsonAsync<Profile>($"/api/update/{Id}", ProfileData);
+        HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/update/{Id}", ProfileData);
         if (!response.IsSuccessStatusCode)
         {
             _errorMessage = response.ReasonPhrase ?? "Unknown error";
@@ -477,9 +476,8 @@
 
         try
         {
-            ProfileData = await Http.GetFromJsonAsync<Profile>($"/api/profile/{Id}");
-            string userEmail = state?.User?.GetEmail();
-            if (userEmail?.ToLower() == ProfileData.Owner.ToLower())
+            ProfileData = await HttpClientFactory.Client.GetFromJsonAsync<Profile>($"/api/profile/{Id}");
+            if (UserInfo.OwnerId != null && UserInfo.OwnerId == ProfileData?.Owner.Id)
             {
                 CanEdit = true;
             }

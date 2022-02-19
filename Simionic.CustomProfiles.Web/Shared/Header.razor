@@ -3,7 +3,6 @@
 
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
-@inject AuthenticationStateProvider Authentication
 
 <main class="flex-shrink-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -17,14 +16,11 @@
                             <li class="nav-item"><a class="nav-link" href="/about">About this site</a></li>
                             <div class="dropdown show">
                               <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @context.User.Identity.Name
+                                @UserInfo.Name
                               </a>
                                   <div class="dropdown-menu">
-                                    <h5 class="dropdown-item-text mb-0">@context.User.Identity.Name</h5>
-                                    <p class="dropdown-item-text text-muted mb-0">@context.User.GetEmail()</p>
-                                    <div class="dropdown-divider"></div>
-                                    <button class="dropdown-item" @onclick="MyProfiles">My profiles</button>
-                                    <button class="dropdown-item" @onclick="BeginLogout">Log out</button>
+                                    <h5 class="dropdown-item-text mb-0">@UserInfo.Name</h5>
+                                    <p class="dropdown-item-text text-muted mb-0">@UserInfo.Email</p>
                                 </div>
                             </div>
                         </Authorized>
@@ -59,11 +55,5 @@
     protected async Task About()
     {
         Navigation.NavigateTo("/about");
-    }
-
-    private async Task MyProfiles(MouseEventArgs args)
-    {
-        var state = await Authentication.GetAuthenticationStateAsync();
-        Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", state.User.GetEmail()), (Navigation.Uri.Contains("/profiles")));
     }
 }

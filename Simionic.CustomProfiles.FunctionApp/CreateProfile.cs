@@ -23,7 +23,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             try
             {
                 Profile profile = new Profile() { LastUpdated = DateTime.UtcNow };
-                var response = await client.UpsertDocumentAsync("%ProfileCollectionUri%", profile);
+                var response = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
                 return new OkObjectResult(new { Id = Guid.Parse(response.Resource.Id) });
             }
             catch (Exception ex)
