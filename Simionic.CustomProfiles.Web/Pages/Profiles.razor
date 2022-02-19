@@ -63,6 +63,11 @@
         {
             <div class="text-center">
                 <h5>Loading...</h5>
+                @if (!String.IsNullOrEmpty(_errorMessage))
+                {
+                    <p class="text-danger">@_errorMessage</p>
+                    <p>Try again later, or if this persists, contact <a href="/about">the site admin</a></p>
+                }
             </div>
         }
         @if (Filtered?.Count() == 0)
@@ -79,6 +84,7 @@
     private AircraftType? _typeFilter;
     private EngineFilter _engineFilter;
     private string _searchTerm;
+    private string _errorMessage;
 
     public IEnumerable<ProfileSummary> ProfileSummaries { get; set; }
     public IEnumerable<ProfileSummary> Filtered
@@ -121,12 +127,12 @@
 
     protected void Edit(string id)
     {
-       Navigation.NavigateTo($"/edit/{ id }");
+        Navigation.NavigateTo($"/edit/{ id }");
     }
 
     protected void Profile(string id)
     {
-       Navigation.NavigateTo($"/profile/{ id }");
+        Navigation.NavigateTo($"/profile/{ id }");
     }
 
     protected string GetButtonState(EngineFilter engines)
@@ -165,7 +171,21 @@
 
     protected async Task Reset(bool resetSearch = true)
     {
-        ProfileSummaries = await Http.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
+        try
+        {
+            ProfileSummaries = await Http.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
+        }
+        catch (HttpRequestException ex)
+        {
+            string statusCode = (ex.StatusCode.HasValue) ? ex.StatusCode.Value.ToString() : "";
+            if (String.IsNullOrWhiteSpace(statusCode)) statusCode = "unknown";
+            _errorMessage = $"Unable to load profiles. API unavailable. Status code was { statusCode }.";
+        }
+        catch
+        {
+            _errorMessage = $"Unable to load profiles. Unknown error.";        
+        }
+
         _typeFilter = null;
         _engineFilter = EngineFilter.Both;
         if (resetSearch) _searchTerm = null;

@@ -4,7 +4,10 @@
 <!-- <AuthenticationSnippet> -->
 @page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action" LogInFailed="LogInFailedFragment">
+
+@inject NavigationManager Navigation
+
+<RemoteAuthenticatorView Action="@Action" LogInFailed="LogInFailedFragment" OnLogInSucceeded="LoggedIn">
     <LoggingIn>
         <header class="bg-dark py-5">
             <div class="container px-5">
@@ -37,6 +40,14 @@
 
 @code{
     [Parameter] public string Action { get; set; }
+    [Parameter] public string ReturnUrl { get; set; }
+
+    private void LoggedIn()
+    {
+        if (ReturnUrl != null){
+            Navigation.NavigateTo(ReturnUrl);
+        }
+    }
 
     private static RenderFragment LogInFailedFragment(string message)
     {

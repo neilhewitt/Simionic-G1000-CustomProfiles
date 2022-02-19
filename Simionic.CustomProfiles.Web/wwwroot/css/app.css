@@ -12007,3 +12007,7 @@ html {
         background-color: red;
     }
 
+.pointer {
+    cursor: pointer;
+}
+

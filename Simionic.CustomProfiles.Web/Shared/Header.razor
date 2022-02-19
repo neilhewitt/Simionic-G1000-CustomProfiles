@@ -11,7 +11,7 @@
             <a class="navbar-brand" href="/">G1000 Profile Database</a>
             <div class="navbar">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="/profiles">Browse profiles</a></li>
+                    <li class="nav-item"><a class="nav-link pointer" @onclick="Profiles">Browse profiles</a></li>
                     <AuthorizeView>
                         <Authorized>
                             <li class="nav-item"><a class="nav-link" href="/about">About this site</a></li>
@@ -29,8 +29,8 @@
                             </div>
                         </Authorized>
                         <NotAuthorized>
-                            <li class="nav-item"><a class="nav-link" href="/authentication/login">Log in</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About this site</a></li>
+                            <li class="nav-item"><a class="nav-link pointer" @onclick="Login">Log in</a></li>
+                            <li class="nav-item"><a class="nav-link pointer" @onclick="About">About this site</a></li>
                         </NotAuthorized>
                     </AuthorizeView>
                 </ul>
@@ -44,6 +44,21 @@
     {
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
+    }
+
+    protected async Task Profiles()
+    {
+        Navigation.NavigateTo($"/profiles");
+    }
+
+    protected async Task Login()
+    {
+        Navigation.NavigateTo($"/authentication/login?returnUrl={ Navigation.Uri }");
+    }
+
+    protected async Task About()
+    {
+        Navigation.NavigateTo("/about");
     }
 
     private async Task MyProfiles(MouseEventArgs args)

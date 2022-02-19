@@ -1,9 +1,11 @@
 ﻿@page "/profile/{Id}"
+@page "/edit/{Id}"
 @inject HttpClient Http
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthState
 
 <section class="pt-5">
-    <div class="text-center mb-4"><h2 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")</h2></div>
+    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...") <span class="text-danger ml-3 @(Editing ? "" : "visually-hidden")">[Editing]</span></h3></div>
     @if (ProfileData is not null)
     {
         <div class="container px-5 py-3 mb-5 w-75 bg-dark bg-opacity-25 rounded-3">
@@ -23,6 +25,12 @@
                         </div>
                     </div>
                 </div>
+                @if (CanEdit && !Editing)
+                {
+                    <div class="col">
+                        <button class="btn btn-large btn-primary mt-1 mb-1 shadow-none float-end" @onclick="GoToEditMode">Edit this profile</button> 
+                    </div>
+                }
             </div>
             @if (ProfileData.AircraftType == AircraftType.Piston)
             {
@@ -76,37 +84,37 @@
             @if (ProfileData.AircraftType != AircraftType.Piston)
             {
                 <!-- Interior turbine temperature -->
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.ITT" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.ITT" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.TurboProp)
             {
                 <!-- Torque in ft-lbs -->
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.Torque" IsTorqueGauge="true" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.Torque" GaugeType="Torque" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType != AircraftType.Jet)
             {
                 <!-- RPM -->           
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.RPM" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.RPM" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.TurboProp)
             {
                 <!-- Gas generator speed -->            
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.NG" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.NG" @bind-Editing="@Editing" />
             }
             <!-- Fuel capacity -->           
-            <GaugeDisplay @bind-ProfileGauge="@ProfileData.Fuel" IsFuelGauge="true" />
+            <GaugeDisplay @bind-ProfileGauge="@ProfileData.Fuel" GaugeType="Fuel" @bind-Editing="@Editing" />
             <!-- Fuel flow (gallons per hour) -->           
-            <GaugeDisplay @bind-ProfileGauge="@ProfileData.FuelFlow" />
+            <GaugeDisplay @bind-ProfileGauge="@ProfileData.FuelFlow" @bind-Editing="@Editing" />
             <!-- Oil pressure -->            
-            <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilPressure" />
+            <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilPressure" @bind-Editing="@Editing" />
             <!-- Oil temperature -->            
-            <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilTemperature" />
+            <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilTemperature" @bind-Editing="@Editing" />
             @if (ProfileData.AircraftType == AircraftType.Piston)
             {
                 <!-- Cylinder head temperature -->           
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.CHT" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.CHT" @bind-Editing="@Editing" />
                 <!--  Exhaust gas temperature -->            
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.EGT" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.EGT" @bind-Editing="@Editing" />
             }
             <div class="row mb-3">
                 <div class="col-md-auto mr-5">
@@ -165,61 +173,149 @@
                     </div>
                     <div class="col-md-auto pt-1 ml-5">
                         <div class="form-group mb-0">
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[0]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[1]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[2]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[3]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[4]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[5]" />
+                            @if (Editing)
+                            {
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[0]" />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[1]" />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[2]" />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[3]" />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[4]" />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Markings[5]" />
+                            }
+                            else
+                            {
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[0]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[1]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[2]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[3]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[4]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Markings[5]" readonly />
+                            }
                         </div>
                     </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-1 pt-1 ml-5">
-                        <label class="form-label text-black font-weight-bold">Positions</label>
-                    </div>
-                    <div class="col-md-auto pt-1 ml-5">
-                        <div class="form-group mb-0">
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" @bind="ProfileData.FlapsRange.Positions[0]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[1]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[2]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[3]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[4]" />&nbsp;
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" @bind="ProfileData.FlapsRange.Positions[5]" />
+                    <div class="row mb-4">
+                        <div class="col-1 pt-1 ml-5">
+                            <label class="form-label text-black font-weight-bold">Positions</label>
+                        </div>
+                        <div class="col-md-auto pt-1 ml-5">
+                            @if (Editing)
+                            {
+                                <div class="form-group mb-0">
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" @bind="ProfileData.FlapsRange.Positions[0]" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[1]" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[2]" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[3]" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.FlapsRange.Positions[4]" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" @bind="ProfileData.FlapsRange.Positions[5]" />
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="ProfileData.FlapsRange.Positions[0]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[1]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[2]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[3]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" value="ProfileData.FlapsRange.Positions[4]" readonly />
+                                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="ProfileData.FlapsRange.Positions[5]" readonly />
+                            }
                         </div>
                     </div>
                 </div>
             }
-            <div class="row mb-1">
+            @if (Editing)
+            {
+                <div class="row mb-1">
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs0</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs0" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs1</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs1" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vfe</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vfe" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vno</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vno" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vne</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vne" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-2" />
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vglide</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vglide" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vr</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vr" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vx</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vx" />
+                    </div>
+                    <div class="col-1 text-end pr-1">
+                        <label class="form-label text-black font-weight-bold mb-0 mt-1">Vy</label>
+                    </div>
+                    <div class="col-1 px-0">
+                        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vy" />
+                    </div>            
+                </div>
+            }
+            else
+            {
+                <div class="row mb-1">
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs0</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs0" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vs0" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs1</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs1" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vs1" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vfe</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vfe" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vfe" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vno</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vno" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vno" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vne</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vne" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vne" readonly />
                 </div>
             </div>
             <div class="row mb-4">
@@ -228,51 +324,74 @@
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vglide</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vglide" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vglide" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vr</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vr" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vr" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vx</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vx" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vx" readonly />
                 </div>
                 <div class="col-1 text-end pr-1">
                     <label class="form-label text-black font-weight-bold mb-0 mt-1">Vy</label>
                 </div>
                 <div class="col-1 px-0">
-                    <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vy" />
+                    <input type="text" class="input-text ml-1 custom-profile-textbox" value="@ProfileData.VSpeeds.Vy" readonly />
                 </div>            
             </div>
+            }
             <div class="row">
-                <div class="col-md-auto">
-                    <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" @bind="ProfileData.Name" @bind:event="oninput"/></label>
-                </div>
-                <div class="col">
-                    @if (Editing)
-                    {
-                        <button class="btn btn-sm @(_saving ? "btn-secondary text-dark" : "btn-primary") @(_saving ? ":disabled" : "") shadow-none" @onclick="async () => await Save()">Save changes</button>
-                    }
-                </div>
+                @if (Editing)
+                {
+                    <div class="col-md-auto">
+                        <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" @bind="ProfileData.Name" @bind:event="oninput"/></label>
+                    </div>
+                    <div class="col">
+                            <button class="btn btn-sm @GetSaveButtonClasses("btn-primary", "btn-secondary") @GetSaveButtonClasses("", ":disabled") shadow-none" 
+                                @onclick="async () => await Save()">@GetSaveButtonText()</button>
+                                @if (_error)
+                                {
+                                    <span class="form-label text-danger mt-2 ml-3">Could not save! An error occurred: @_errorMessage</span>
+                                }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-auto">
+                        <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" readonly/></label>
+                    </div>
+                }
             </div>
         </div>
     }
-</section>
+    else
+    {
+        @if (_error)
+        {
+            <p class="text-center text-danger">@_errorMessage</p>
+            <p class="text-center">Please try again later, or if this persists, contact <a href="/about">the site admin</a>.</p>
+        }
+    }
+    </section>
 
 @code {
     private bool _saving;
+    private bool _saved;
+    private bool _error;
+    private string _errorMessage;
 
     [Parameter]
     public string Id { get; set; }
 
     public Profile ProfileData { get; set; }
+    public bool CanEdit { get; set; }
     public bool Editing { get; set; }
-    public char TempLetter => ProfileData.TemperaturesInFarenheit ? 'F' : 'C';
 
     protected Action Edit(Action onClick)
     {
@@ -286,12 +405,47 @@
 
     protected async Task Save()
     {
+        _error = false;
+        _errorMessage = null;
+
         _saving = true;
         StateHasChanged();
         await Task.Delay(500);
+
+        ProfileData.LastUpdated = DateTime.Now;
         HttpResponseMessage response = await Http.PostAsJsonAsync<Profile>($"/api/update/{Id}", ProfileData);
-        _saving = false;
-        StateHasChanged();
+        if (!response.IsSuccessStatusCode)
+        {
+            _errorMessage = response.ReasonPhrase ?? "Unknown error";
+            _saving = false;
+            _saved = false;
+            _error = true;
+        }
+        else
+        {
+            _saving = false;
+            _saved = true;
+            StateHasChanged();
+
+            await Task.Delay(1000);
+
+            _saved = false;
+            StateHasChanged();
+        }
+    }
+
+    protected string GetSaveButtonClasses(string active, string inactive)
+    {
+        if (_saving || _saved) return inactive;
+        return active;
+    }
+
+    protected string GetSaveButtonText()
+    {
+        if (_saving) return "Saving changes";
+        if (_saved) return "Changes saved";
+
+        return "Save changes";
     }
 
     protected string IsSelectedButton(bool expression)
@@ -312,20 +466,49 @@
         return $"{range.Colour},{range.Min},{range.Max}";
     }
 
+    protected void GoToEditMode()
+    {
+        Navigation.NavigateTo($"/edit/{Id}", true);
+    }
+
     protected async override Task OnInitializedAsync()
     {
-        ProfileData = await Http.GetFromJsonAsync<Profile>($"/api/profile/{Id}");
-        if (ProfileData.FlapsRange == null) ProfileData.FlapsRange = new FlapsRange();
-        
-        foreach(Gauge gauge in ProfileData.Gauges)
+        var state = await AuthState.GetAuthenticationStateAsync();
+
+        try
         {
-            for (int i = 0; i < 4; i++)
+            ProfileData = await Http.GetFromJsonAsync<Profile>($"/api/profile/{Id}");
+            string userEmail = state?.User?.GetEmail();
+            if (userEmail?.ToLower() == ProfileData.Owner.ToLower())
             {
-                if (gauge.Ranges[i] == null) gauge.Ranges[i] = new GaugeRange(RangeColour.None, 0, 0);
+                CanEdit = true;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            _error = true;
+            string statusCode = ex.StatusCode.HasValue ? ex.StatusCode.Value.ToString() : String.Empty;
+            if (String.IsNullOrWhiteSpace(statusCode)) statusCode = "unknown";
+            _errorMessage = $"Unable to load profile data. Status code was { statusCode }.";
+        }
+
+        if (ProfileData != null)
+        {
+            if (ProfileData.FlapsRange == null) ProfileData.FlapsRange = new FlapsRange();
+
+            foreach (Gauge gauge in ProfileData.Gauges)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (gauge.Ranges[i] == null) gauge.Ranges[i] = new GaugeRange(RangeColour.None, 0, 0);
+                }
             }
         }
 
-        Editing = true;
+        if (CanEdit && Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("edit/"))
+        {
+            Editing = true;
+        }
 
         await base.OnInitializedAsync();
     }

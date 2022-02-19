@@ -7,7 +7,7 @@ namespace Simionic.CustomProfiles.Web
     {
         public static string GetEmail(this ClaimsPrincipal user)
         {
-            return user.Claims.SingleOrDefault(x => x.Type == "email").Value ?? "none@none";
+            return user.Claims.SingleOrDefault(x => x.Type == "email")?.Value;
         }
     }
 }

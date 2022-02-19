@@ -1,4 +1,6 @@
-﻿namespace Simionic.CustomProfiles.Core
+﻿using Newtonsoft.Json;
+
+namespace Simionic.CustomProfiles.Core
 {
     public class Gauge
     {
@@ -8,7 +10,6 @@
         public bool? FuelInGallons { get; set; }
         public double? CapacityForSingleTank { get; set; }
         public bool? TorqueInFootPounds { get; set; }
-
         public GaugeRange[] Ranges { get; init; }
 
         public Gauge(string name, double? min = null, double? max = null, bool? fuelInGallons = null, double? capacityForSingleTank = null, bool? torqueInFootPounds = null)
@@ -26,5 +27,12 @@
                 Ranges[i] = new GaugeRange(RangeColour.None, 0, 0);
             }
         }
+    }
+
+    public enum GaugeType
+    {
+        Standard,
+        Fuel,
+        Torque
     }
 }
