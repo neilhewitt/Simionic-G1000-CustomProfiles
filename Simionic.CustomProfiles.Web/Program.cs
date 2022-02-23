@@ -23,7 +23,7 @@ namespace Simionic.CustomProfiles.Web
                 options.ProviderOptions.DefaultAccessTokenScopes.Add("openid");
                 options.ProviderOptions.DefaultAccessTokenScopes.Add("email");
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-                options.ProviderOptions.LoginMode = "redirect";
+                //options.ProviderOptions.LoginMode = "redirect";
             })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, CustomAccountFactory>();
             
