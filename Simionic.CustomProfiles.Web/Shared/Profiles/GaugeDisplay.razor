@@ -61,7 +61,7 @@
     </div>
     <div class="row justify-content-center mb-0">
         <div class="col">
-            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[0].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[0].Colour.ToString().ToLower()).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
             <ul class="dropdown-menu px-0 py-0 w100">
                 <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.None" /></li>
                 <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[0].Colour = RangeColour.Green" /></li>
@@ -70,7 +70,7 @@
             </ul>
         </div>
         <div class="col">
-            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[1].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[1].Colour.ToString().ToLower()).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
             <ul class="dropdown-menu px-0 py-0 w100">
                 <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.None" /></li>
                 <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[1].Colour = RangeColour.Green" /></li>
@@ -79,7 +79,7 @@
             </ul>
         </div>
         <div class="col">
-            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[2].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[2].Colour.ToString().ToLower()).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
             <ul class="dropdown-menu px-0 py-0 w100">
                 <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.None" /></li>
                 <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[2].Colour = RangeColour.Green" /></li>
@@ -88,7 +88,7 @@
             </ul>
         </div>
         <div class="col">
-            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[3].Colour).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
+            <div class="profile-indicator" data-toggle="@DropdownEnabled()" role="button"><img src="/img/@(ProfileGauge.Ranges[3].Colour.ToString().ToLower()).jpg" style="height:125%; width:100%; object-fit:cover" /></div>
             <ul class="dropdown-menu px-0 py-0 w100">
                 <li><div class="profile-indicator none" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.None" /></li>
                 <li><div class="profile-indicator green" @onclick="() => ProfileGauge.Ranges[3].Colour = RangeColour.Green" /></li>
