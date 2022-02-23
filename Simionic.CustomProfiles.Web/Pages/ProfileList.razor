@@ -54,13 +54,9 @@
                             <div class="card-body p-4">
                                 <h5 class="card-title mb-3">
                                 @profileSummary.Name
-                                <AuthorizeView>
-                                    <Authorized>
-                                        @if (User.OwnerId == profileSummary.Owner.Id) { 
-                                            <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
-                                        }
-                                    </Authorized>
-                                </AuthorizeView>
+                                @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
+                                    <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                }
                                 </h5>
                                 <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
                             </div>

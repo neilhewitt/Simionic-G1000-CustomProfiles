@@ -14,7 +14,7 @@ namespace Simionic.CustomProfiles.Web
         public static string Email { get; set; }
         public static string OwnerId { get; set; }
 
-        public static bool IsLoggedIn => OwnerId != null;
+        public static bool IsLoggedIn => Email != null;
 
         public static bool Owns(Profile profile)
         {

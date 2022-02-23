@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
 using Simionic.CustomProfiles.Core;
 
 namespace Simionic.CustomProfiles.Web
@@ -25,6 +28,14 @@ namespace Simionic.CustomProfiles.Web
                 exception = ex;
                 return false;
             }
+        }
+
+        public static string QueryValue(this NavigationManager navigation, string name)
+        {
+            var query = QueryHelpers.ParseQuery(navigation.ToAbsoluteUri(navigation.Uri).Query);
+            StringValues values = String.Empty;
+            if (query.TryGetValue(name, out values)) return values.SingleOrDefault();
+            return null;
         }
     }
 }
