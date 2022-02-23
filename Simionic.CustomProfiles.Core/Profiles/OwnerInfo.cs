@@ -2,7 +2,7 @@
 
 namespace Simionic.CustomProfiles.Core
 {
-    public class Owner
+    public class OwnerInfo
     {
         public string Id { get; set; }
         public string Name { get; set; }

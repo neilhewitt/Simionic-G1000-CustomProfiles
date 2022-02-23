@@ -10,7 +10,7 @@ namespace Simionic.CustomProfiles.FunctionApp
     public static class Helper
     {
         // we're using a single salt for all hashes... which would be *spectacularly* bad, except all we're doing
-        // is hashing the email address. There are no password or PII in CosmosDB other than name and a hash of the email
+        // is hashing the email address. There are no passwords or PII in CosmosDB other than name and a hash of the email
         private const string CRYPTO_SALT = "AWBH+yXC3ba1vxMj3MrnuXKHikL2RDSX"; 
         
         private const int CRYPTO_ITERATIONS = 100000;

@@ -2,15 +2,20 @@
 
 namespace Simionic.CustomProfiles.Core
 {
-    public class ProfileSummary
+    public class ProfileId
     {
-        [JsonProperty("id")] // need this for CosmosDB to work properly
+        [JsonProperty("id")]
         public string Id { get; set; }
-        public Owner Owner { get; set; }
+    }
+
+    public class ProfileSummary : ProfileId
+    {
+        public OwnerInfo Owner { get; set; } = new OwnerInfo();
         public DateTime LastUpdated { get; set; }
         public string Name { get; set; }
         public AircraftType AircraftType { get; set; }
-        public bool IsTwinEngine { get; set; }
+        public int Engines { get; set; } = 1;
+        public bool IsPublished { get; set; }
     }
 
     public class Profile : ProfileSummary
@@ -42,19 +47,15 @@ namespace Simionic.CustomProfiles.Core
         public Gauge OilPressure { get; set; } = new Gauge("Oil Pressure", null, 0);
         public Gauge OilTemperature { get; set; } = new Gauge("Oil Temperature", 0, 0);
         public bool DisplayElevatorTrim { get; set; }
-        public SettingRange ElevatorTrimTakeOffRange { get; set; }
+        public SettingRange ElevatorTrimTakeOffRange { get; set; } = new SettingRange();
         public bool DisplayRudderTrim { get; set; }
-        public SettingRange RudderTrimTakeOffRange { get; set; }
+        public SettingRange RudderTrimTakeOffRange { get; set; } = new SettingRange();
         public bool DisplayFlapsIndicator { get; set; }
-        public FlapsRange FlapsRange { get; set; }
-        public VSpeeds VSpeeds { get; set; }
+        public FlapsRange FlapsRange { get; set; } = new FlapsRange();
+        public VSpeeds VSpeeds { get; set; } = new VSpeeds();
 
         public Profile()
         {
-            FlapsRange = new FlapsRange();
-            VSpeeds = new VSpeeds();
-            ElevatorTrimTakeOffRange = new SettingRange();
-            RudderTrimTakeOffRange = new SettingRange();
         }
     }
 }

@@ -12,22 +12,24 @@ using System.IO;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
-    public static class CreateProfile
+    public static class InsertProfile
     {
-        [FunctionName("CreateProfile")]
+        [FunctionName("InsertProfile")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "create")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "insert")] HttpRequest req,
             [CosmosDB("%ProfileDB%", "%ProfileContainer%", ConnectionStringSetting = "CosmosDBConnection")]
                 DocumentClient client,
             ILogger log)
         {
             try
             {
-                Profile profile = new Profile() { LastUpdated = DateTime.UtcNow };
+                string body = new StreamReader(req.Body).ReadToEnd();
+                Profile profile = JsonConvert.DeserializeObject<Profile>(body);
                 profile.LastUpdated = DateTime.UtcNow;
 
-                var response = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);                
-                return new OkObjectResult(new { Id = Guid.Parse(response.Resource.Id) });
+                var response = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
+                profile.Id = response.Resource.Id;
+                return new OkObjectResult(profile);
             }
             catch (Exception ex)
             {

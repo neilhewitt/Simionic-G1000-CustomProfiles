@@ -25,6 +25,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             try
             {
                 Profile profile = JsonConvert.DeserializeObject<Profile>(new StreamReader(req.Body).ReadToEnd());
+                profile.LastUpdated = DateTime.UtcNow;
                 await client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
                 return new OkObjectResult("OK");
             }

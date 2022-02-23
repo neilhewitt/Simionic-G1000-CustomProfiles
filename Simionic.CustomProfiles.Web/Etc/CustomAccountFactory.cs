@@ -23,11 +23,11 @@ namespace Simionic.CustomProfiles.Web
         public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
         {
             var user = await base.CreateUserAsync(account, options);
-            UserInfo.Name = user.Identity.Name;
+            User.Name = user.Identity.Name;
             if (user.Claims.Any(x => x.Type == "email"))
             {
-                UserInfo.Email = user.Claims.SingleOrDefault(x => x.Type == "email").Value;
-                UserInfo.OwnerId = await HttpClientFactory.Client.GetStringAsync($"/api/ownerid?email={UserInfo.Email}");
+                User.Email = user.Claims.SingleOrDefault(x => x.Type == "email").Value;
+                User.OwnerId = await HttpClientFactory.Client.GetStringAsync($"/api/ownerid?email={User.Email}");
             }
             
             return user;

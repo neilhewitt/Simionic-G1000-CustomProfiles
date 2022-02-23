@@ -1,26 +1,33 @@
 ﻿@page "/profile/{Id}"
 @page "/edit/{Id}"
+@page "/new"
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthState
 
 <section class="pt-5">
-    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Untitled") <span class="text-danger ml-3 @(Editing ? "" : "visually-hidden")">[Editing]</span></h3></div>
+    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Untitled")@TitleWarts()</h3></div>
     @if (ProfileData is not null)
     {
         <div class="container px-5 py-3 mb-5 w-75 bg-dark bg-opacity-25 rounded-3">
             <div class="row justify-content-center">
+                @if (ProfileData.Id == null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <b>If you leave this page without saving your new profile as a draft, it will be lost.</b>
+                    </div>
+                }
                 <div class="col">
                     <div class="form-group">
                         <label class="form-label text-black font-weight-bold mr-2">Type</label>
                         <div class="btn-group">
                         @foreach(AircraftType type in Enum.GetValues<AircraftType>())
                         {
-                            <button class="btn btn-large @IsSelectedButton(type == ProfileData.AircraftType) mt-1 shadow-none" @onclick="Edit(() => ProfileData.AircraftType = type)">@type</button>
+                            <button class="btn btn-large @IsSelectedButton(type == ProfileData.AircraftType) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.AircraftType = type)">@type</button>
                         }
                         </div>
-                        <div class="btn-group ml-5">
-                            <button class="btn btn-large @IsSelectedButton(!ProfileData.IsTwinEngine) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsTwinEngine = false)">Single</button>
-                            <button class="btn btn-large @IsSelectedButton(ProfileData.IsTwinEngine) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsTwinEngine = true)">Twin</button>
+                        <div class="btn-group">
+                            <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 1) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 1)">Single</button>
+                            <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 2) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 2)">Twin</button>
                         </div>
                     </div>
                 </div>
@@ -28,6 +35,18 @@
                 {
                     <div class="col">
                         <button class="btn btn-large btn-primary mt-1 mb-1 shadow-none float-end" @onclick="GoToEditMode">Edit this profile</button> 
+                    </div>
+                }
+                else if (CanEdit && Editing && ProfileData.Id != null)
+                {
+                    <div class="col">
+                        <div class="form-group float-end">
+                            <label class="form-label text-black font-weight-bold mr-2">Status</label>
+                            <div class="btn-group ml-2">
+                                <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)">Draft</button>
+                                <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)">Published</button>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>
@@ -128,8 +147,8 @@
                 {
                     <div class="form-group mb-0">
                         <label class="form-label text-black font-weight-bold">T/O Range (0-100)
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@(ProfileData.ElevatorTrimTakeOffRange?.Min ?? 0)" />
-                            ~<input type="text" class="input-text ml-2 custom-profile-textbox" value="@(ProfileData.ElevatorTrimTakeOffRange?.Max ?? 0)" />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="ProfileData.ElevatorTrimTakeOffRange.Min" />
+                            ~<input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.ElevatorTrimTakeOffRange.Max" />
                         </label>
                     </div>
                 }
@@ -148,8 +167,8 @@
                 {
                     <div class="form-group mb-0">
                         <label class="form-label text-black font-weight-bold">T/O Range (0-100)
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@(ProfileData.RudderTrimTakeOffRange?.Min ?? 0)" />
-                            ~<input type="text" class="input-text ml-2 custom-profile-textbox" value="@(ProfileData.RudderTrimTakeOffRange?.Max ?? 0)" />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.RudderTrimTakeOffRange.Min" />
+                            ~<input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.RudderTrimTakeOffRange.Max" />
                         </label>
                     </div>
                 }
@@ -353,11 +372,8 @@
                     </div>
                     <div class="col">
                             <button class="btn btn-sm @GetSaveButtonClasses("btn-primary", "btn-secondary") @GetSaveButtonClasses("", ":disabled") shadow-none" 
+                                data-toggle="modal" data-target="#alertModal"
                                 @onclick="async () => await Save()">@GetSaveButtonText()</button>
-                                @if (_error)
-                                {
-                                    <span class="form-label text-danger mt-2 ml-3">Could not save! An error occurred: @_errorMessage</span>
-                                }
                     </div>
                 }
                 else
@@ -366,6 +382,29 @@
                         <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" readonly/></label>
                     </div>
                 }
+            </div>
+        </div>
+        <div class="modal" id="alertModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">Info</h5>
+                    </div>
+                    <div class="modal-body @(_error ? "text-danger" : "")">
+                        @((_error ? _errorMessage : _alertMessage) ?? "Please wait...")
+                    </div>
+                    <div class="modal-footer">
+                        @if (_saveWarning)
+                        {
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Save(); }">Save</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _saveWarning = false; _saved = false; _saving = false; }">Cancel</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false; StateHasChanged(); }">OK</button>
+                        }
+                </div>
+            </div>
             </div>
         </div>
     }
@@ -377,13 +416,16 @@
             <p class="text-center">Please try again later, or if this persists, contact <a href="/about">the site admin</a>.</p>
         }
     }
-    </section>
+</section>
 
 @code {
     private bool _saving;
     private bool _saved;
     private bool _error;
+    private bool _alert;
+    private string _alertMessage;
     private string _errorMessage;
+    private bool _saveWarning;
 
     [Parameter]
     public string Id { get; set; }
@@ -402,34 +444,82 @@
         return (T) => { if (Editing) onClick(T); };
     }
 
+    protected MarkupString TitleWarts()
+    {
+        string warts = "";
+        if (Editing)
+        {
+            warts += "<span class=\"text-danger ml-3\">";
+            if (ProfileData.Id == null)
+            {
+                warts += "New Profile";
+            }
+            else
+            {
+                warts += "Editing";
+            }
+            warts += "</span>";
+        }
+
+        return (MarkupString)warts;
+    }
+
     protected async Task Save()
     {
-        _error = false;
-        _errorMessage = null;
-
-        _saving = true;
-        StateHasChanged();
-        await Task.Delay(500);
-
-        ProfileData.LastUpdated = DateTime.Now;
-        HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/update/{Id}", ProfileData);
-        if (!response.IsSuccessStatusCode)
+        if (Editing)
         {
-            _errorMessage = response.ReasonPhrase ?? "Unknown error";
-            _saving = false;
-            _saved = false;
-            _error = true;
-        }
-        else
-        {
-            _saving = false;
-            _saved = true;
-            StateHasChanged();
+            _error = false;
+            _errorMessage = null;
+            _alert = false;
+            _alertMessage = null;
 
-            await Task.Delay(1000);
+            if (ProfileData.Id == null && !_saveWarning)
+            {
+                _saving = false;
+                _alert = true;
+                _alertMessage = "This will save your new profile to the database as a draft";
+                _saveWarning = true;
+                StateHasChanged();
+                return;
+            }
+            else
+            {
+                _saving = true;
+                _saveWarning = false;
+                StateHasChanged();
+                await Task.Delay(500);
 
-            _saved = false;
-            StateHasChanged();
+                try
+                {
+                    if (ProfileData.Id == null) // it's new
+                    {
+                        ProfileData = await ProfileStore.Insert(ProfileData);
+                        Navigation.NavigateTo($"/edit/{ProfileData.Id}");
+                    }
+                    else
+                    {
+                        await ProfileStore.Update(ProfileData);
+                    }
+
+                    _saving = false;
+                    _saved = true;
+                    _alert = true;
+                    _alertMessage = "Profile saved";
+                    StateHasChanged();
+
+                    await Task.Delay(1000);
+                    _saved = false;
+                    StateHasChanged();
+                }
+                catch (ProfileUpdateException ex)
+                {
+                    _errorMessage = ex.Message;
+                    _saving = false;
+                    _saved = false;
+                    _error = true;
+                    StateHasChanged();
+                }
+            }
         }
     }
 
@@ -443,6 +533,7 @@
     {
         if (_saving) return "Saving changes";
         if (_saved) return "Changes saved";
+        if (ProfileData.Id == null) return "Save as draft";
 
         return "Save changes";
     }
@@ -474,24 +565,46 @@
     {
         var state = await AuthState.GetAuthenticationStateAsync();
 
-        try
+        if (Navigation.IsAt("new") && Id == null && User.IsLoggedIn)
         {
-            ProfileData = await HttpClientFactory.Client.GetFromJsonAsync<Profile>($"/api/profile/{Id}");
-            if (UserInfo.OwnerId != null && UserInfo.OwnerId == ProfileData?.Owner.Id)
+            string name = null;
+            var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
+            StringValues values = String.Empty;
+            if (query.TryGetValue("name", out values)) name = values.SingleOrDefault() ?? "New Profile";
+
+            try
             {
-                CanEdit = true;
+                ProfileData = new Profile();
+                ProfileData.Name = name;
+                ProfileData.Owner.Name = User.Name;
+                ProfileData.Owner.Id = User.OwnerId;
+            }
+            catch (ProfileStoreException ex)
+            {
+                _error = true;
+                _errorMessage = ex.Message;
             }
         }
-        catch (HttpRequestException ex)
+        else
         {
-            _error = true;
-            string statusCode = ex.StatusCode.HasValue ? ex.StatusCode.Value.ToString() : String.Empty;
-            if (String.IsNullOrWhiteSpace(statusCode)) statusCode = "unknown";
-            _errorMessage = $"Unable to load profile data. Status code was { statusCode }.";
+            try
+            {
+                ProfileData = await ProfileStore.GetAsync(Id);
+            }
+            catch (ProfileStoreException ex)
+            {
+                _error = true;
+                _errorMessage = ex.Message;
+            }
         }
 
         if (ProfileData != null)
         {
+            if (User.IsLoggedIn && User.Owns(ProfileData))
+            {
+                CanEdit = true;
+            }
+
             if (ProfileData.FlapsRange == null) ProfileData.FlapsRange = new FlapsRange();
 
             foreach (Gauge gauge in ProfileData.Gauges)
@@ -503,7 +616,7 @@
             }
         }
 
-        if (CanEdit && Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("edit/"))
+        if (CanEdit && (Navigation.IsAt("edit") || Navigation.IsAt("new")))
         {
             Editing = true;
         }

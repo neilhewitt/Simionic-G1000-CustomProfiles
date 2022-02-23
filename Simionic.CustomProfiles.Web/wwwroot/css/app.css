@@ -12011,3 +12011,8 @@ html {
     cursor: pointer;
 }
 
+.card.bg-mid {
+    background-color: #b0b0b0;
+}
+
+

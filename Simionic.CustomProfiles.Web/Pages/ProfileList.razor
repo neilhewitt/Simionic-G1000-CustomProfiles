@@ -8,7 +8,7 @@
                 <div class="text-center">
                     @if (!String.IsNullOrWhiteSpace(_ownerId))
                     {
-                        <h2 class="fw-bolder">@(UserInfo.Name)'s profiles</h2>
+                        <h2 class="fw-bolder">@(User.Name)'s @(_justUnpublished ? "drafts" : "profiles")</h2>
                     }
                     else if (!String.IsNullOrWhiteSpace(_searchTerm))
                     {
@@ -20,22 +20,23 @@
                     }
                     <div class="text-center"><label for="search-box" class="form-label text-black font-weight-bold">Filter: <input class="input-text" type="text" id="search-box" @bind="_searchTerm" @bind:event="oninput" /></label></div>
                     <div class="btn-group">
-                        <button class="btn btn-large @GetButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterType()">All</button>
+                        <button class="btn btn-large @GetAircraftTypeButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterType()">All</button>
                         @foreach(AircraftType type in Enum.GetValues<AircraftType>())
                         {
-                          <button class="btn btn-large @GetButtonState(type) mt-1 mb-4 shadow-none" @onclick="() => FilterType(type)">@type</button>  
+                          <button class="btn btn-large @GetAircraftTypeButtonState(type) mt-1 mb-4 shadow-none" @onclick="() => FilterType(type)">@type</button>  
                         }
                     </div>
                     <div class="btn-group">
-                        <button class="btn btn-large @GetButtonState(EngineFilter.Both) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(EngineFilter.Both)">Both</button>
-                        <button class="btn btn-large @GetButtonState(EngineFilter.Single) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(EngineFilter.Single)">Single</button>
-                        <button class="btn btn-large @GetButtonState(EngineFilter.Twin) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(EngineFilter.Twin)">Twin</button>
+                        <button class="btn btn-large @GetEngineCountButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(null)">Both</button>
+                        <button class="btn btn-large @GetEngineCountButtonState(1) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(1)">Single</button>
+                        <button class="btn btn-large @GetEngineCountButtonState(2) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(2)">Twin</button>
                     </div>
-                    @if (UserInfo.OwnerId != null)
+                    @if (User.IsLoggedIn)
                     {
                         <div class="btn-group ml-1">
-                            <button class="btn btn-large @GetButtonState(_ownerId == null) mt-1 mb-4 shadow-none" @onclick="() => _ownerId = null">All</button>
-                            <button class="btn btn-large @GetButtonState(_ownerId != null) mt-1 mb-4 shadow-none" @onclick="() => _ownerId = UserInfo.OwnerId">Just mine</button>
+                            <button class="btn btn-large @GetButtonState(_ownerId == null) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = null; _justUnpublished = false; }">All</button>
+                            <button class="btn btn-large @GetButtonState(_ownerId != null && !_justUnpublished) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = User.OwnerId; _justUnpublished = false; }">Just mine</button>
+                            <button class="btn btn-large @GetButtonState(_ownerId != null && _justUnpublished) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = User.OwnerId; _justUnpublished = true; }">Just drafts</button>
                         </div>
                     }
                     <button class="btn btn-large btn-primary mt-1 ml-1 mb-4 shadow-none" @onclick="() => Reset()">Reset</button>
@@ -48,14 +49,14 @@
                 @foreach (ProfileSummary profileSummary in Filtered)
                 {
                     <div class="col-lg-4 mb-5" style="cursor: pointer" @onclick="() => Profile(profileSummary.Id)">
-                        <div class="card h-100 shadow border-0">
+                        <div class="card h-100 border-1 shadow-sm @(profileSummary.IsPublished ? "" : "bg-mid")">
                             <img class="card-img-top" src="@GetImageUri(profileSummary)" alt="Simionic custom profile screen" />
                             <div class="card-body p-4">
                                 <h5 class="card-title mb-3">
                                 @profileSummary.Name
                                 <AuthorizeView>
                                     <Authorized>
-                                        @if (UserInfo.OwnerId == profileSummary.Owner.Id) { 
+                                        @if (User.OwnerId == profileSummary.Owner.Id) { 
                                             <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
                                         }
                                     </Authorized>
@@ -67,7 +68,13 @@
                                 <div class="d-flex align-items-end justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <div class="small">
-                                            <div class="text"><b>By:</b> @(profileSummary.Owner.Name ?? "Unknown")</div>
+                                            <div class="text">
+                                                <b>By:</b> @(profileSummary.Owner.Name ?? "Unknown")
+                                                @if (User.IsLoggedIn && User.Owns(profileSummary) && !profileSummary.IsPublished)
+                                                {
+                                                    <span class="text-black">&nbsp;|&nbsp;</span><span class="text-black-50 fw-bold">Draft</span>
+                                                }
+                                            </div>
                                             <div class="text"><b>Updated:</b> @profileSummary.LastUpdated</div>                                
                                         </div>
                                     </div>
@@ -101,36 +108,25 @@
 @code
 {
     private AircraftType? _typeFilter;
-    private EngineFilter _engineFilter;
+    private int? _engineFilter;
     private string _searchTerm;
     private string _ownerId;
+    private bool _justUnpublished;
     private string _errorMessage;
 
-    public IEnumerable<ProfileSummary> ProfileSummaries { get; set; }
-    public IEnumerable<ProfileSummary> Filtered
+    public ProfileSummaryList ProfileSummaries { get; set; }
+    public ProfileSummaryList Filtered
     {
         get
         {
-            if (ProfileSummaries is null) return null;
-
-            IEnumerable<ProfileSummary> output = ProfileSummaries;
-
-            if (!String.IsNullOrWhiteSpace(_searchTerm)) output = output.Where(
-                x => x.Name is not null && x.Name.ToLower().Contains(_searchTerm.ToLower()) ||
-                x.Owner.Name is not null && x.Owner.Name.ToLower().Contains(_searchTerm.ToLower()) ||
-                x.AircraftType.ToString().ToLower().Contains(_searchTerm.ToLower())
-            );
-
-            if (_typeFilter.HasValue) output = output.Where(x => x.AircraftType == _typeFilter);
-
-            output = _engineFilter switch
+            PublishedStatus status = (User.IsLoggedIn, _justUnpublished) switch
             {
-                EngineFilter.Single => output.Where(x => x.IsTwinEngine == false),
-                EngineFilter.Twin => output.Where(x => x.IsTwinEngine == true),
-                _ => output
+                (true, false) => PublishedStatus.PublishedOwner,
+                (true, true) => PublishedStatus.UnpublishedOwner,
+                (_, _) => PublishedStatus.Published
             };
 
-            return output;
+            return ProfileSummaries?.Filter(status, _typeFilter, _engineFilter, (User.IsLoggedIn ? User.OwnerId : _ownerId), _searchTerm);
         }
     }
 
@@ -160,7 +156,7 @@
         return test ? "btn-primary" : "btn-secondary";
     }
 
-    protected string GetButtonState(EngineFilter engines)
+    protected string GetEngineCountButtonState(int? engines = null)
     {
         if (_engineFilter == engines)
         {
@@ -172,7 +168,7 @@
         }
     }
 
-    protected string GetButtonState(AircraftType? type = null)
+    protected string GetAircraftTypeButtonState(AircraftType? type = null)
     {
         if (_typeFilter == type)
         {
@@ -184,7 +180,7 @@
         }
     }
 
-    protected void FilterEngine(EngineFilter engines)
+    protected void FilterEngine(int? engines)
     {
         _engineFilter = engines;
     }
@@ -203,13 +199,11 @@
     {
         try
         {
-            ProfileSummaries = await HttpClientFactory.Client.GetFromJsonAsync<ProfileSummary[]>("/api/profiles");
+            ProfileSummaries = await ProfileStore.GetProfileSummaries();
         }
-        catch (HttpRequestException ex)
+        catch (ProfileStoreException ex)
         {
-            string statusCode = (ex.StatusCode.HasValue) ? ex.StatusCode.Value.ToString() : "";
-            if (String.IsNullOrWhiteSpace(statusCode)) statusCode = "unknown";
-            _errorMessage = $"Unable to load profiles. API unavailable. Status code was { statusCode }.";
+            _errorMessage = ex.Message;
         }
         catch
         {
@@ -217,14 +211,15 @@
         }
 
         _typeFilter = null;
-        _engineFilter = EngineFilter.Both;
+        _engineFilter = null;
         _ownerId = null;
+        _justUnpublished = false;
         if (resetSearch) _searchTerm = null;
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if (Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("profiles"))
+        if (Navigation.IsAt("profiles"))
         {
             _ownerId = null;
         }
@@ -232,21 +227,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("myprofiles") && UserInfo.OwnerId == null)
-        {
-            Navigation.NavigateTo("/");
-        }
-
         var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
         StringValues values = String.Empty;
         if (query.TryGetValue("search", out values)) _searchTerm = values.SingleOrDefault()?.ToLower();
         if (query.TryGetValue("ownerid", out values)) _ownerId = values.SingleOrDefault();
 
         await Reset(false);
-    }
-
-    protected enum EngineFilter
-    {
-        Both, Single, Twin   
     }
 }
