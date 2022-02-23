@@ -5,8 +5,8 @@ namespace Simionic.CustomProfiles.Web
 {
     public static class HttpClientFactory
     {
-        public const string BaseAddress = "http://localhost:7071";
+        //public const string BaseAddress = "";
 
-        public static HttpClient Client => new HttpClient() { BaseAddress = new Uri(BaseAddress) };
+        public static HttpClient Client => new HttpClient();// { BaseAddress = new Uri(BaseAddress) };
     }
 }
