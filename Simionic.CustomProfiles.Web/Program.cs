@@ -23,7 +23,12 @@ namespace Simionic.CustomProfiles.Web
                 options.ProviderOptions.DefaultAccessTokenScopes.Add("openid");
                 options.ProviderOptions.DefaultAccessTokenScopes.Add("email");
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-                //options.ProviderOptions.LoginMode = "redirect";
+                options.ProviderOptions.LoginMode = "redirect";
+                
+                // have to do this for Azure Static Web hosting - ignore values in appsetings.json
+                options.ProviderOptions.Authentication.Authority = "https://login.microsoftonline.com/consumers";
+                options.ProviderOptions.Authentication.ClientId = "e93af4e9-8c5d-445d-8701-74a436885702";
+                options.ProviderOptions.Authentication.ValidateAuthority = true;
             })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, CustomAccountFactory>();
             
