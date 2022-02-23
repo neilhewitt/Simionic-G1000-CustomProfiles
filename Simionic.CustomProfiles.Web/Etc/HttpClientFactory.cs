@@ -15,10 +15,10 @@ namespace Simionic.CustomProfiles.Web
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(BaseAddress);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("x-functions-key", ApiHostKey);
+                client.DefaultRequestHeaders.Add("x-functions-key", ApiHostKey);
                 return client;
             }
         }
-        
     }
 }
+
