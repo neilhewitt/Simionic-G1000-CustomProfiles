@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Simionic.CustomProfiles.Core\Simionic.CustomProfiles.Core.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+	</ItemGroup>
+
 </Project>
