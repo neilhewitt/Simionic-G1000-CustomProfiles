@@ -4,7 +4,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <Authorizing>
-                    <Index ShowSearch="false" Headline="Checking..." StrapLine="Please wait while we check some details." />
+                    <Notice ShowSearch="false" Headline="Checking..." StrapLine="Please wait while we check some details." />
                 </Authorizing>
                 <NotAuthorized>
                     @if (!context.User.Identity.IsAuthenticated)
@@ -20,7 +20,7 @@
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
-                <Index ShowSearch="false" Headline="Page not found" StrapLine="Sorry, the page you requested was not found." />
+                <Notice ShowSearch="false" Headline="Page not found" StrapLine="Sorry, the page you requested was not found." />
             </LayoutView>
         </NotFound>
     </Router>
