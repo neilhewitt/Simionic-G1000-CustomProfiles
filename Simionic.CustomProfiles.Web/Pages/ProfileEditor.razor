@@ -71,20 +71,23 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-auto pr-5">
+                    <div class="@(ProfileData.FADEC ? "col-12" : "col-2") pr-5">
                     <div class="form-check form-switch pt-2 pl-0 pr-5">
                         <label class="form-label text-black font-weight-bold">Turbocharged 
                             <input class="form-check-input custom-profile-switch shadow-none" type="checkbox" role="switch" disabled="@(!Editing)" @bind="ProfileData.Turbocharged" />
                         </label>
                     </div>            
                 </div>
-                <div class="col">
-                    <div class="form-check form-switch pt-2 pl-0">
-                        <label class="form-label text-black font-weight-bold">Constant-speed 
-                            <input class="form-check-input custom-profile-switch shadow-none" type="checkbox" role="switch" disabled="@(!Editing)" @bind="ProfileData.ConstantSpeed" />
-                        </label>
+                @if (!ProfileData.FADEC)
+                {
+                    <div class="col-10">
+                        <div class="form-check form-switch pt-2 pl-0">
+                            <label class="form-label text-black font-weight-bold">Constant-speed 
+                                <input class="form-check-input custom-profile-switch shadow-none" type="checkbox" role="switch" disabled="@(!Editing)" @bind="ProfileData.ConstantSpeed" />
+                            </label>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
             }
             <div class="row justify-content-center">
@@ -113,6 +116,11 @@
             {
                 <!-- Manifold Pressure -->           
                 <GaugeDisplay @bind-ProfileGauge="@ProfileData.ManifoldPressure" @bind-Editing="@Editing" />
+            }
+            @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.FADEC)
+            {
+                <!-- Manifold Pressure -->           
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.Load" GaugeType="Load" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType != AircraftType.Jet)
             {

@@ -10,6 +10,7 @@ namespace Simionic.CustomProfiles.Core
         public bool? FuelInGallons { get; set; }
         public double? CapacityForSingleTank { get; set; }
         public bool? TorqueInFootPounds { get; set; }
+        public double? MaxPower { get; set; }
         public GaugeRange[] Ranges { get; init; }
 
         public Gauge(string name, double? min = null, double? max = null, bool? fuelInGallons = null, double? capacityForSingleTank = null, bool? torqueInFootPounds = null)

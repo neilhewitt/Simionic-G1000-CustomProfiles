@@ -20,6 +20,9 @@ namespace Simionic.CustomProfiles.Core
 
     public class Profile : ProfileSummary
     {
+        private bool _fadec;
+        private bool _constantSpeed;
+
         [JsonIgnore]
         public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };
 
@@ -27,18 +30,18 @@ namespace Simionic.CustomProfiles.Core
 
         // Piston only
         public int Cylinders { get; set; } = 4;
-        public bool FADEC { get; set; } = false;
+        public bool FADEC { get { return _fadec; } set { _fadec = value; if (value) _constantSpeed = false; } }
         public bool Turbocharged { get; set; } = false;
-        public bool ConstantSpeed { get; set; } = false;
+        public bool ConstantSpeed { get { return _constantSpeed; } set { _constantSpeed = value; } }
         public VacuumPSIRange VacuumPSIRange { get; set; } = new VacuumPSIRange();
         public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure", 0, 0);
         public Gauge CHT { get; set; } = new Gauge("CHT", 0, 0);
         public Gauge EGT { get; set; } = new Gauge("EGT", 0, 0);
         public Gauge TIT { get; set; } = new Gauge("TIT", 0, 0);
-
+        public Gauge Load { get; set; } = new Gauge("Load %");
 
         // Turbo only
-        public Gauge Torque { get; set; } = new Gauge("Torque", torqueInFootPounds: true);
+        public Gauge Torque { get; set; } = new Gauge("Torque", 0, 0, torqueInFootPounds: true);
         public Gauge NG { get; set; } = new Gauge("NG", null, null);
 
         // Turbo + Jet

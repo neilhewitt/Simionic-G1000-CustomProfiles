@@ -1,9 +1,23 @@
 ﻿@if (ProfileGauge != null)
 {
     <div class="row justify-content-center mb-0">
-        <div class="col@(!ProfileGauge.Max.HasValue && !ProfileGauge.Min.HasValue ? "" : "-md-auto") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
+        <div class="col@(!ProfileGauge.Max.HasValue && !ProfileGauge.Min.HasValue && GaugeType != "Load" ? "" : "-md-auto") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
         @if (GaugeType == "Fuel")
         {
+            <div class="col">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold">Capacity for a single tank 
+                        @if (Editing)
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.CapacityForSingleTank" />
+                        }
+                        else
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.CapacityForSingleTank" readonly />
+                        }
+                    </label>
+                </div>            
+            </div>
             <div class="col-md-auto">
                 <div class="form-group">
                     <div class="btn-group">
@@ -17,7 +31,7 @@
         {
             <div class="col-md-auto pt-1">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">Min 
+                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "Range" : "Min") 
                         @if (Editing)
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Min" />
@@ -34,7 +48,7 @@
         {
             <div class="col pt-1">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">Max 
+                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "" : "Min")
                         @if (Editing)
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Max" />
@@ -42,6 +56,23 @@
                         else
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Max" readonly />
+                        }
+                    </label>
+                </div>
+            </div>
+        }
+        @if (GaugeType == "Load")
+        {
+            <div class="col pt-1">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold">Max power (watts)
+                        @if (Editing)
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.MaxPower" />
+                        }
+                        else
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.MaxPower" readonly />
                         }
                     </label>
                 </div>
