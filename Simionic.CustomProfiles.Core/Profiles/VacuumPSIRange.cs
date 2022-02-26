@@ -1,6 +1,6 @@
 ﻿namespace Simionic.CustomProfiles.Core
 {
-    public class VaccuumPSIRange
+    public class VacuumPSIRange
     {
         public double Min { get; set; }
         public double Max { get; set; }

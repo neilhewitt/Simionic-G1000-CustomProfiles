@@ -30,7 +30,7 @@ namespace Simionic.CustomProfiles.Core
         public bool FADEC { get; set; } = false;
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get; set; } = false;
-        public VaccuumPSIRange VaccuumPSIRange { get; set; } = new VaccuumPSIRange();
+        public VacuumPSIRange VacuumPSIRange { get; set; } = new VacuumPSIRange();
         public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure", 0, 0);
         public Gauge CHT { get; set; } = new Gauge("CHT", 0, 0);
         public Gauge EGT { get; set; } = new Gauge("EGT", 0, 0);
