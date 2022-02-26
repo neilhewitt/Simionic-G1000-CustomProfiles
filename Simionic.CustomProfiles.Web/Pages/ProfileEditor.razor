@@ -109,10 +109,20 @@
                 <!-- Torque in ft-lbs -->
                 <GaugeDisplay @bind-ProfileGauge="@ProfileData.Torque" GaugeType="Torque" @bind-Editing="@Editing" />
             }
+            @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.ConstantSpeed)
+            {
+                <!-- Manifold Pressure -->           
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.ManifoldPressure" @bind-Editing="@Editing" />
+            }
             @if (ProfileData.AircraftType != AircraftType.Jet)
             {
                 <!-- RPM -->           
                 <GaugeDisplay @bind-ProfileGauge="@ProfileData.RPM" @bind-Editing="@Editing" />
+            }
+            @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.Turbocharged)
+            {
+                <!-- TIT -->           
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.TIT" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.TurboProp)
             {
@@ -123,6 +133,71 @@
             <GaugeDisplay @bind-ProfileGauge="@ProfileData.Fuel" GaugeType="Fuel" @bind-Editing="@Editing" />
             <!-- Fuel flow (gallons per hour) -->           
             <GaugeDisplay @bind-ProfileGauge="@ProfileData.FuelFlow" @bind-Editing="@Editing" />
+            @if (ProfileData.AircraftType == AircraftType.Piston)
+            {
+                <!-- Vaccuum PSI -->
+                <div class="row">
+                    <div class="col-md-auto pt-2 pr-5"><p class="text-black font-weight-bold">Vaccuum (PSI)</p></div>
+                    <div class="col-md-auto pt-2 pr-1"><p class="text-black font-weight-bold">Range</p></div>
+                    <div class="col-md-auto pt-1">
+                        <div class="form-group">
+                            <label class="form-label text-black font-weight-bold"> 
+                                @if (Editing)
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VaccuumPSIRange.Min" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VaccuumPSIRange.Min" readonly />
+                                }
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto pt-1">
+                        <div class="form-group">
+                            <label class="form-label text-black font-weight-bold"> 
+                                @if (Editing)
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VaccuumPSIRange.Max" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VaccuumPSIRange.Max" readonly />
+                                }
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto pt-2 pl-5 pr-1"><p class="text-black font-weight-bold">Green</p></div>
+                    <div class="col-md-auto pt-1">
+                        <div class="form-group">
+                            <label class="form-label text-black font-weight-bold"> 
+                                @if (Editing)
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VaccuumPSIRange.GreenStart" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VaccuumPSIRange.GreenStart" readonly />
+                                }
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto pt-1">
+                        <div class="form-group">
+                            <label class="form-label text-black font-weight-bold"> 
+                                @if (Editing)
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VaccuumPSIRange.GreenEnd" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VaccuumPSIRange.GreenEnd" readonly />
+                                }
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
             <!-- Oil pressure -->            
             <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilPressure" @bind-Editing="@Editing" />
             <!-- Oil temperature -->            
@@ -600,16 +675,6 @@
             if (User.IsLoggedIn && User.Owns(ProfileData))
             {
                 CanEdit = true;
-            }
-
-            if (ProfileData.FlapsRange == null) ProfileData.FlapsRange = new FlapsRange();
-
-            foreach (Gauge gauge in ProfileData.Gauges)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    if (gauge.Ranges[i] == null) gauge.Ranges[i] = new GaugeRange(RangeColour.None, 0, 0);
-                }
             }
         }
 

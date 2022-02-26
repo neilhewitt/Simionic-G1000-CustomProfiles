@@ -20,7 +20,8 @@ namespace Simionic.CustomProfiles.Core
 
     public class Profile : ProfileSummary
     {
-        public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, RPM, Fuel, FuelFlow, OilPressure, OilTemperature };
+        [JsonIgnore]
+        public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };
 
         public string ForkedFrom { get; set; }
 
@@ -29,8 +30,11 @@ namespace Simionic.CustomProfiles.Core
         public bool FADEC { get; set; } = false;
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get; set; } = false;
+        public VaccuumPSIRange VaccuumPSIRange { get; set; } = new VaccuumPSIRange();
+        public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure", 0, 0);
         public Gauge CHT { get; set; } = new Gauge("CHT", 0, 0);
         public Gauge EGT { get; set; } = new Gauge("EGT", 0, 0);
+        public Gauge TIT { get; set; } = new Gauge("TIT", 0, 0);
 
 
         // Turbo only
