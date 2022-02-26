@@ -496,6 +496,7 @@
             <p class="text-center">Please try again later, or if this persists, contact <a href="/contact">the site admin</a>.</p>
         }
     }
+    <p class="text-center"><a href="/profiles">Back to profile list</a></p>
 </section>
 
 @code {
@@ -574,7 +575,6 @@
                     if (ProfileData.Id == null) // it's new
                     {
                         ProfileData = await ProfileStore.Insert(ProfileData);
-                        Navigation.NavigateTo($"/edit/{ProfileData.Id}");
                     }
                     else
                     {
