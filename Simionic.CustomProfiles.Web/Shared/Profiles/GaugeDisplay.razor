@@ -48,7 +48,7 @@
         {
             <div class="col pt-1">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "" : "Min")
+                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "" : "Max")
                         @if (Editing)
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Max" />
