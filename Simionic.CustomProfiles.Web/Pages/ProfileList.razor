@@ -6,9 +6,9 @@
         <div class="row gx-5 justify-content-center">
             <div class="col-md-auto">
                 <div class="text-center">
-                    @if (!String.IsNullOrWhiteSpace(_ownerId))
+                    @if (User.IsLoggedIn)
                     {
-                        <h2 class="fw-bolder">@(User.Name)'s @(_justUnpublished ? "drafts" : "profiles")</h2>
+                        <h2 class="fw-bolder">@(User.Name)'s @(_onlyShowDrafts ? "drafts" : "profiles")</h2>
                     }
                     else if (!String.IsNullOrWhiteSpace(_searchTerm))
                     {
@@ -34,9 +34,9 @@
                     @if (User.IsLoggedIn)
                     {
                         <div class="btn-group ml-1">
-                            <button class="btn btn-large @GetButtonState(_ownerId == null) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = null; _justUnpublished = false; }">All</button>
-                            <button class="btn btn-large @GetButtonState(_ownerId != null && !_justUnpublished) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = User.OwnerId; _justUnpublished = false; }">Just mine</button>
-                            <button class="btn btn-large @GetButtonState(_ownerId != null && _justUnpublished) mt-1 mb-4 shadow-none" @onclick="() => { _ownerId = User.OwnerId; _justUnpublished = true; }">Just drafts</button>
+                            <button class="btn btn-large @GetButtonState(!_onlyShowMine) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = false; _onlyShowDrafts = false; }">All</button>
+                            <button class="btn btn-large @GetButtonState(_onlyShowMine && !_onlyShowDrafts) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = true; _onlyShowDrafts = false; }">Just mine</button>
+                            <button class="btn btn-large @GetButtonState(_onlyShowMine && _onlyShowDrafts) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = true; _onlyShowDrafts = true; }">Just drafts</button>
                         </div>
                     }
                     <button class="btn btn-large btn-primary mt-1 ml-1 mb-4 shadow-none" @onclick="() => Reset()">Reset</button>
@@ -106,8 +106,8 @@
     private AircraftType? _typeFilter;
     private int? _engineFilter;
     private string _searchTerm;
-    private string _ownerId;
-    private bool _justUnpublished;
+    private bool _onlyShowDrafts;
+    private bool _onlyShowMine;
     private string _errorMessage;
 
     public ProfileSummaryList ProfileSummaries { get; set; }
@@ -115,14 +115,14 @@
     {
         get
         {
-            PublishedStatus status = (User.IsLoggedIn, _justUnpublished) switch
+            PublishedStatus status = (User.IsLoggedIn, _onlyShowDrafts) switch
             {
                 (true, false) => PublishedStatus.PublishedOwner,
                 (true, true) => PublishedStatus.UnpublishedOwner,
                 (_, _) => PublishedStatus.Published
             };
 
-            return ProfileSummaries?.Filter(status, _typeFilter, _engineFilter, (User.IsLoggedIn ? User.OwnerId : _ownerId), _searchTerm);
+            return ProfileSummaries?.Filter(status, _typeFilter, _engineFilter, (User.IsLoggedIn ? User.OwnerId : null), _onlyShowMine, _searchTerm);
         }
     }
 
@@ -208,8 +208,8 @@
 
         _typeFilter = null;
         _engineFilter = null;
-        _ownerId = null;
-        _justUnpublished = false;
+        _onlyShowMine = false;
+        _onlyShowDrafts = false;
         if (resetSearch) _searchTerm = null;
     }
 
@@ -217,7 +217,7 @@
     {
         if (Navigation.IsAt("profiles"))
         {
-            _ownerId = null;
+            _onlyShowMine = false;
         }
     }
 
@@ -226,7 +226,6 @@
         var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
         StringValues values = String.Empty;
         if (query.TryGetValue("search", out values)) _searchTerm = values.SingleOrDefault()?.ToLower();
-        if (query.TryGetValue("ownerid", out values)) _ownerId = values.SingleOrDefault();
 
         await Reset(false);
     }

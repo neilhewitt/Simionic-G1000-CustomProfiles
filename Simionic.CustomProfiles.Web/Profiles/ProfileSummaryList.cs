@@ -30,7 +30,7 @@ namespace Simionic.CustomProfiles.Web
             return new ProfileSummaryList(output);
         }
 
-        public ProfileSummaryList Filter(PublishedStatus published, AircraftType? type, int? engines, string ownerId, string searchTerms)
+        public ProfileSummaryList Filter(PublishedStatus published, AircraftType? type, int? engines, string ownerId, bool ownerOnly, string searchTerms)
         {
             ProfileSummaryList output = this;
             output = published switch
@@ -43,7 +43,7 @@ namespace Simionic.CustomProfiles.Web
 
             if (type.HasValue) output = output.FilterByType(type.Value);
             if (engines.HasValue) output = output.FilterByEngineCount(engines.Value);
-            if (ownerId != null) output = output.FilterByOwner(ownerId);
+            if (ownerId != null && ownerOnly) output = output.FilterByOwner(ownerId);
             if (searchTerms != null) output = output.FilterBySearch(searchTerms);
 
             return output;
