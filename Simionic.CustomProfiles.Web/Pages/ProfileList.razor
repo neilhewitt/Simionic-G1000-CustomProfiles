@@ -6,7 +6,7 @@
         <div class="row gx-5 justify-content-center">
             <div class="col-md-auto">
                 <div class="text-center">
-                    @if (User.IsLoggedIn)
+                    @if (User.IsLoggedIn && _onlyShowMine)
                     {
                         <h2 class="fw-bolder">@(User.Name)'s @(_onlyShowDrafts ? "drafts" : "profiles")</h2>
                     }
