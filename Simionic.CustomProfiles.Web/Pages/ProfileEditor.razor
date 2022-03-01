@@ -5,15 +5,22 @@
 @inject AuthenticationStateProvider AuthState
 
 <section class="pt-5">
-    <div class="text-center mb-4"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")@TitleWarts()</h3></div>
+    <div class="text-center @(ProfileData == null ? "mb-4" : "")"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")@TitleWarts()</h3></div>
     @if (ProfileData is not null)
     {
+        <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
         <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
             <div class="row justify-content-center">
                 @if (ProfileData.Id == null)
                 {
                     <div class="alert alert-danger" role="alert">
                         <b>If you leave this page without saving your new profile as a draft, it will be lost.</b>
+                    </div>
+                }
+                else if (!String.IsNullOrWhiteSpace(ProfileData.Notes ?? ""))
+                {
+                    <div class="alert alert-secondary" role="alert">
+                         <b>Author note:</b> @ProfileData.Notes
                     </div>
                 }
                 <div class="col">
@@ -466,6 +473,15 @@
                     </div>
                 }
             </div>
+            @if (Editing)
+            {
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <label class="form-label text-black font-weight-bold">Notes</label><br />
+                        <textarea class="form-control input-text shadow-none w-auto p-3" style="resize:none; min-width:100%" rows="5" maxlength="2000" placeholder="Any notes about this profile you want users to see" @bind="ProfileData.Notes" @bind:event="oninput" />
+                    </div>
+                </div>
+            }
         </div>
         <div class="modal" id="alertModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

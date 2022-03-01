@@ -16,6 +16,7 @@ namespace Simionic.CustomProfiles.Core
         public AircraftType AircraftType { get; set; }
         public int Engines { get; set; } = 1;
         public bool IsPublished { get; set; }
+        public string Notes { get; set; }
     }
 
     public class Profile : ProfileSummary
@@ -60,6 +61,11 @@ namespace Simionic.CustomProfiles.Core
         public bool DisplayFlapsIndicator { get; set; }
         public FlapsRange FlapsRange { get; set; } = new FlapsRange();
         public VSpeeds VSpeeds { get; set; } = new VSpeeds();
+
+        public override string ToString()
+        {
+            return $"{Name} ({AircraftType}) LastUpdated: {LastUpdated}";
+        }
 
         public Profile()
         {
