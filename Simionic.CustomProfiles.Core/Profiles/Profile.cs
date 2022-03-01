@@ -48,6 +48,7 @@ namespace Simionic.CustomProfiles.Core
         // Turbo + Jet
         public Gauge ITT { get; set; } = new Gauge("ITT", 0, 0);
 
+        // common to all
         public bool TemperaturesInFarenheit { get; set; } = false;
         public Gauge RPM { get; set; } = new Gauge("RPM", null, 0); // not jet
         public Gauge Fuel { get; set; } = new Gauge("Fuel", fuelInGallons: true, capacityForSingleTank: 0);
