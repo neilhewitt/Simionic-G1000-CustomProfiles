@@ -4,9 +4,18 @@
         <div class="@(GaugeType == "NG" ? "col-12" : "col-2") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
         @if (GaugeType == "Fuel")
         {
-            <div class="col-5">
+            <div class="col-2">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">Capacity for a single tank 
+                    <div class="btn-group">
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = true">Gal</button>
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = false">Lb</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold mt-1">Capacity for a single tank 
                         @if (Editing)
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.CapacityForSingleTank" />
@@ -17,14 +26,6 @@
                         }
                     </label>
                 </div>            
-            </div>
-            <div class="col-5">
-                <div class="form-group">
-                    <div class="btn-group">
-                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = true">Gal</button>
-                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = false">Lb</button>
-                    </div>
-                </div>
             </div>
         }
         @if (GaugeType == "Standard" && HasRange)
@@ -145,7 +146,7 @@
     </div> 
     @if (Editing)
     {
-        <div class="row justify-content-center mb-4">
+        <div class="row justify-content-center mb-5">
             <div class="col">
                 <input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[0].Min" /><input type="text" class="input-text custom-profile-valuebox" @bind="ProfileGauge.Ranges[0].Max" />
             </div>
@@ -162,7 +163,7 @@
     }
     else
     {
-        <div class="row justify-content-center mb-4">
+        <div class="row justify-content-center mb-5">
             <div class="col">
                 <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Min" readonly /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Max" readonly />
             </div>

@@ -35,26 +35,26 @@ namespace Simionic.CustomProfiles.Core
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get { return _constantSpeed; } set { _constantSpeed = value; } }
         public VacuumPSIRange VacuumPSIRange { get; set; } = new VacuumPSIRange();
-        public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure", 0, 0);
-        public Gauge CHT { get; set; } = new Gauge("CHT", 0, 0);
-        public Gauge EGT { get; set; } = new Gauge("EGT", 0, 0);
-        public Gauge TIT { get; set; } = new Gauge("TIT", 0, 0);
+        public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure (inHg)", 0, 0);
+        public Gauge CHT { get; set; } = new Gauge("CHT (°F)", 0, 0);
+        public Gauge EGT { get; set; } = new Gauge("EGT (°F)", 0, 0);
+        public Gauge TIT { get; set; } = new Gauge("TIT (°F)", 0, 0);
         public Gauge Load { get; set; } = new Gauge("Load %");
 
         // Turbo only
-        public Gauge Torque { get; set; } = new Gauge("Torque", 0, 0, torqueInFootPounds: true);
-        public Gauge NG { get; set; } = new Gauge("NG", null, null);
+        public Gauge Torque { get; set; } = new Gauge("Torque (FT-LB)", 0, 0, torqueInFootPounds: true);
+        public Gauge NG { get; set; } = new Gauge("NG (RPM%)", null, null);
 
         // Turbo + Jet
-        public Gauge ITT { get; set; } = new Gauge("ITT", 0, 0);
+        public Gauge ITT { get; set; } = new Gauge("ITT (°F)", 0, 0);
 
         // common to all
-        public bool TemperaturesInFarenheit { get; set; } = false;
+        public bool TemperaturesInFarenheit { get; set; } = true;
         public Gauge RPM { get; set; } = new Gauge("RPM", null, 0); // not jet
         public Gauge Fuel { get; set; } = new Gauge("Fuel", fuelInGallons: true, capacityForSingleTank: 0);
-        public Gauge FuelFlow { get; set; } = new Gauge("Fuel Flow", null, 0);
-        public Gauge OilPressure { get; set; } = new Gauge("Oil Pressure", null, 0);
-        public Gauge OilTemperature { get; set; } = new Gauge("Oil Temperature", 0, 0);
+        public Gauge FuelFlow { get; set; } = new Gauge("Fuel Flow (GPH)", null, 0);
+        public Gauge OilPressure { get; set; } = new Gauge("Oil Pressure (PSI)", null, 0);
+        public Gauge OilTemperature { get; set; } = new Gauge("Oil Temp (°F)", 0, 0);
         public bool DisplayElevatorTrim { get; set; }
         public SettingRange ElevatorTrimTakeOffRange { get; set; } = new SettingRange();
         public bool DisplayRudderTrim { get; set; }
