@@ -102,8 +102,8 @@
                     <div class="form-group">
                         <label class="form-label text-black font-weight-bold mr-2">Temperature</label>
                         <div class="btn-group">
-                            <button class="btn btn-large @IsSelectedButton(ProfileData.TemperaturesInFarenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(true))">&deg;F</button>
-                            <button class="btn btn-large @IsSelectedButton(!ProfileData.TemperaturesInFarenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(false))">&deg;C</button>
+                            <button class="btn btn-large @IsSelectedButton(ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(true))">&deg;F</button>
+                            <button class="btn btn-large @IsSelectedButton(!ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(false))">&deg;C</button>
                         </div>
                     </div>
                 </div>
@@ -626,6 +626,8 @@
 
     protected void SetTempScale(bool fahrenheit)
     {
+        ProfileData.TemperaturesInFahrenheit = fahrenheit;
+
         string newTemp = "°" + (fahrenheit ? "F" : "C");
         string oldTemp = "°" + (fahrenheit ? "C" : "F");
         foreach(Gauge gauge in ProfileData.Gauges)
