@@ -1,7 +1,7 @@
 ﻿@if (ProfileGauge != null)
 {
     <div class="row justify-content-center">
-        <div class="@(GaugeType == "NG" ? "col-12" : "col-2") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
+        <div class="@(GaugeType == "NG" ? "col-12" : "col-3") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
         @if (GaugeType == "Fuel")
         {
             <div class="col-2">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="col-8">
+            <div class="col-7">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold mt-1">Capacity for a single tank 
                         @if (Editing)
@@ -30,7 +30,7 @@
         }
         @if (GaugeType == "Standard" && HasRange)
         {
-            <div class="col-10 pt-1">
+            <div class="col-9 pt-1">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold">Range
                         @if (Editing)
@@ -47,7 +47,7 @@
         }
         @if (GaugeType == "Standard" && !HasRange)
         {
-            <div class="col-10 pt-1">
+            <div class="col-9 pt-1">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold">Max
                         @if (Editing)
@@ -64,7 +64,7 @@
         }
         @if (GaugeType == "Load")
         {
-            <div class="col-10">
+            <div class="col-9">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold">Max power (watts)
                         @if (Editing)
@@ -95,7 +95,7 @@
                     </label>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <div class="form-group">
                     <div class="btn-group">
                         <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = true">Value</button>
