@@ -114,7 +114,7 @@
                 <!-- Interior turbine temperature -->
                 <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.ITT" @bind-Editing="@Editing" />
             }
-            @if (ProfileData.AircraftType == AircraftType.TurboProp)
+            @if (ProfileData.AircraftType == AircraftType.Turboprop)
             {
                 <!-- Torque in ft-lbs -->
                 <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.Torque" GaugeType="Torque" @bind-Editing="@Editing" />
@@ -139,7 +139,7 @@
                 <!-- TIT -->           
                 <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.TIT" @bind-Editing="@Editing" />
             }
-            @if (ProfileData.AircraftType == AircraftType.TurboProp)
+            @if (ProfileData.AircraftType == AircraftType.Turboprop)
             {
                 <!-- Gas generator speed -->            
                 <GaugeDisplay @bind-ProfileGauge="@ProfileData.NG" GaugeType="NG" @bind-Editing="@Editing" />
