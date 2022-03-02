@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="@(ProfileData.FADEC ? "col-12" : "col-2") pr-5">
+                    <div class="@(ProfileData.FADEC ? "col-12" : "col-4") pr-5">
                     <div class="form-check form-switch pt-2 pl-0 pr-5">
                         <label class="form-label text-black font-weight-bold">Turbocharged 
                             <input class="form-check-input custom-profile-switch shadow-none" type="checkbox" role="switch" disabled="@(!Editing)" @bind="ProfileData.Turbocharged" />
@@ -87,7 +87,7 @@
                 </div>
                 @if (!ProfileData.FADEC)
                 {
-                    <div class="col-10">
+                    <div class="col-8">
                         <div class="form-check form-switch pt-2 pl-0">
                             <label class="form-label text-black font-weight-bold">Constant-speed 
                                 <input class="form-check-input custom-profile-switch shadow-none" type="checkbox" role="switch" disabled="@(!Editing)" @bind="ProfileData.ConstantSpeed" />
@@ -112,21 +112,21 @@
             @if (ProfileData.AircraftType != AircraftType.Piston)
             {
                 <!-- Interior turbine temperature -->
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.ITT" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.ITT" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.TurboProp)
             {
                 <!-- Torque in ft-lbs -->
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.Torque" GaugeType="Torque" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.Torque" GaugeType="Torque" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.ConstantSpeed)
             {
                 <!-- Manifold Pressure -->           
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.ManifoldPressure" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.ManifoldPressure" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.FADEC)
             {
-                <!-- Manifold Pressure -->           
+                <!-- Load -->           
                 <GaugeDisplay @bind-ProfileGauge="@ProfileData.Load" GaugeType="Load" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType != AircraftType.Jet)
@@ -137,12 +137,12 @@
             @if (ProfileData.AircraftType == AircraftType.Piston && ProfileData.Turbocharged)
             {
                 <!-- TIT -->           
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.TIT" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.TIT" @bind-Editing="@Editing" />
             }
             @if (ProfileData.AircraftType == AircraftType.TurboProp)
             {
                 <!-- Gas generator speed -->            
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.NG" @bind-Editing="@Editing" />
+                <GaugeDisplay @bind-ProfileGauge="@ProfileData.NG" GaugeType="NG" @bind-Editing="@Editing" />
             }
             <!-- Fuel capacity -->           
             <GaugeDisplay @bind-ProfileGauge="@ProfileData.Fuel" GaugeType="Fuel" @bind-Editing="@Editing" />
@@ -152,32 +152,18 @@
             {
                 <!-- Vacuum PSI -->
                 <div class="row">
-                    <div class="col-md-auto pt-2 pr-5"><p class="text-black font-weight-bold">Vacuum (PSI)</p></div>
+                    <div class="col-2 pt-2 pr-5"><p class="text-black font-weight-bold">Vacuum (PSI)</p></div>
                     <div class="col-md-auto pt-2 pr-1"><p class="text-black font-weight-bold">Range</p></div>
                     <div class="col-md-auto pt-1">
                         <div class="form-group">
                             <label class="form-label text-black font-weight-bold"> 
                                 @if (Editing)
                                 {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.Min" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.Min" /><span>~</span><input type="text" class="input-text custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.Max" />
                                 }
                                 else
                                 {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Min" readonly />
-                                }
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-auto pt-1">
-                        <div class="form-group">
-                            <label class="form-label text-black font-weight-bold"> 
-                                @if (Editing)
-                                {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.Max" />
-                                }
-                                else
-                                {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Max" readonly />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Max" readonly />
                                 }
                             </label>
                         </div>
@@ -188,25 +174,11 @@
                             <label class="form-label text-black font-weight-bold"> 
                                 @if (Editing)
                                 {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.GreenStart" />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.GreenStart" /><span>~</span><input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.GreenEnd" />
                                 }
                                 else
                                 {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenStart" readonly />
-                                }
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-auto pt-1">
-                        <div class="form-group">
-                            <label class="form-label text-black font-weight-bold"> 
-                                @if (Editing)
-                                {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileData.VacuumPSIRange.GreenEnd" />
-                                }
-                                else
-                                {
-                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenEnd" readonly />
+                                    <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenStart" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenEnd" readonly />
                                 }
                             </label>
                         </div>
@@ -216,13 +188,13 @@
             <!-- Oil pressure -->            
             <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilPressure" @bind-Editing="@Editing" />
             <!-- Oil temperature -->            
-            <GaugeDisplay @bind-ProfileGauge="@ProfileData.OilTemperature" @bind-Editing="@Editing" />
+            <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.OilTemperature" @bind-Editing="@Editing" />
             @if (ProfileData.AircraftType == AircraftType.Piston)
             {
                 <!-- Cylinder head temperature -->           
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.CHT" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.CHT" @bind-Editing="@Editing" />
                 <!--  Exhaust gas temperature -->            
-                <GaugeDisplay @bind-ProfileGauge="@ProfileData.EGT" @bind-Editing="@Editing" />
+                <GaugeDisplay HasRange="true" @bind-ProfileGauge="@ProfileData.EGT" @bind-Editing="@Editing" />
             }
             <div class="row mb-3">
                 <div class="col-md-auto mr-5">

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Data.Sqlite;
+using Newtonsoft.Json;
 using Simionic.CustomProfiles.Core;
 
 namespace Simonic.CustomProfiles.ImportExport
@@ -9,9 +10,20 @@ namespace Simonic.CustomProfiles.ImportExport
         private SqliteConnection _connection;
         private List<AircraftConfig> _aircraft;
 
-        public string Path { get; init; }
         public bool Loaded { get; private set; }
-        public IEnumerable<Profile> Profiles {get; private set;}
+        public IEnumerable<Profile> Profiles {get; private set; }
+
+        public void Save(string folderPath)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                foreach (Profile profile in Profiles)
+                {
+                    string json = JsonConvert.SerializeObject(profile);
+                    File.WriteAllText(Path.Combine(folderPath, profile.Name.Replace(' ', '-') + ".json"), json);
+                }
+            }
+        }
 
         private void Load()
         {
@@ -63,7 +75,6 @@ namespace Simonic.CustomProfiles.ImportExport
         {
             if (File.Exists(path))
             {
-                Path = path;
                 _connection = new SqliteConnection($"Data Source={path}");
                 _aircraft = new List<AircraftConfig>();
                 Load();

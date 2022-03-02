@@ -1,10 +1,10 @@
 ﻿@if (ProfileGauge != null)
 {
-    <div class="row justify-content-center mb-0">
-        <div class="col@(!ProfileGauge.Max.HasValue && !ProfileGauge.Min.HasValue && GaugeType != "Load" ? "" : "-md-auto") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
+    <div class="row justify-content-center">
+        <div class="@(GaugeType == "NG" ? "col-12" : "col-2") pt-2 pr-5"><p class="text-black font-weight-bold">@ProfileGauge.Name</p></div>
         @if (GaugeType == "Fuel")
         {
-            <div class="col">
+            <div class="col-5">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold">Capacity for a single tank 
                         @if (Editing)
@@ -18,7 +18,7 @@
                     </label>
                 </div>            
             </div>
-            <div class="col-md-auto">
+            <div class="col-5">
                 <div class="form-group">
                     <div class="btn-group">
                         <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = true">Gal</button>
@@ -27,28 +27,28 @@
                 </div>
             </div>
         }
-        @if (ProfileGauge.Min.HasValue)
+        @if (GaugeType == "Standard" && HasRange)
         {
-            <div class="col-md-auto pt-1">
+            <div class="col-10 pt-1">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "Range" : "Min") 
+                    <label class="form-label text-black font-weight-bold">Range
                         @if (Editing)
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Min" />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Min" /><span>~</span><input type="text" class="input-text custom-profile-textbox" @bind="@ProfileGauge.Max" />
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" readonly />
                         }
                     </label>
                 </div>
             </div>
         }
-        @if (ProfileGauge.Max.HasValue)
+        @if (GaugeType == "Standard" && !HasRange)
         {
-            <div class="col pt-1">
+            <div class="col-10 pt-1">
                 <div class="form-group">
-                    <label class="form-label text-black font-weight-bold">@(GaugeType == "Torque" ? "" : "Max")
+                    <label class="form-label text-black font-weight-bold">Max
                         @if (Editing)
                         {
                             <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Max" />
@@ -63,7 +63,7 @@
         }
         @if (GaugeType == "Load")
         {
-            <div class="col pt-1">
+            <div class="col-10">
                 <div class="form-group">
                     <label class="form-label text-black font-weight-bold">Max power (watts)
                         @if (Editing)
@@ -80,7 +80,21 @@
         }
         @if (GaugeType == "Torque")
         {
-            <div class="col-md-auto">
+            <div class="col-6 pt-1">
+                <div class="form-group">
+                    <label class="form-label text-black font-weight-bold">Range
+                        @if (Editing)
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.Min" /><span>~</span><input type="text" class="input-text custom-profile-textbox" @bind="@ProfileGauge.Max" />
+                        }
+                        else
+                        {
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" readonly />
+                        }
+                    </label>
+                </div>
+            </div>
+            <div class="col-4">
                 <div class="form-group">
                     <div class="btn-group">
                         <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = true">Value</button>
@@ -166,18 +180,14 @@
 }
 
 @code {
-    [Parameter]
-    public Gauge ProfileGauge { get; set; }
-    [Parameter]
-    public EventCallback<Gauge> ProfileGaugeChanged { get; set; }
+    [Parameter] public Gauge ProfileGauge { get; set; }
+    [Parameter] public EventCallback<Gauge> ProfileGaugeChanged { get; set; }
 
-    [Parameter]
-    public bool Editing { get; set; }
-    [Parameter]
-    public EventCallback<bool> EditingChanged { get; set; }
+    [Parameter] public bool Editing { get; set; }
+    [Parameter] public EventCallback<bool> EditingChanged { get; set; }
 
-    [Parameter]
-    public string GaugeType { get; set; } = "Standard";
+    [Parameter] public string GaugeType { get; set; } = "Standard";
+    [Parameter] public bool HasRange { get; set; } = false;
 
     protected string Editable()
     {
@@ -194,13 +204,5 @@
     protected override void OnInitialized()
     {        
         base.OnInitialized();
-    }
-
-    public class SwitchInfo
-    {
-        public bool HasSwitch { get; set; }
-        public bool SwitchOnLeft { get; set; }
-        public string SwitchLeftText { get; set; }
-        public string SwitchRightText { get; set; }
     }
 }
