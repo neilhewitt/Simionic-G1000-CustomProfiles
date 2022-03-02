@@ -46,7 +46,7 @@ namespace Simionic.CustomProfiles.Web
             if (ownerId != null && ownerOnly) output = output.FilterByOwner(ownerId);
             if (searchTerms != null) output = output.FilterBySearch(searchTerms);
 
-            return output;
+            return new ProfileSummaryList(output.OrderByDescending(x => x.LastUpdated));
         }
 
         public ProfileSummaryList(IEnumerable<ProfileSummary> profiles)
