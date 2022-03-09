@@ -139,7 +139,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                             foreach (int selectedIndex in _selectedProfileIndexes)
                             {
                                 Profile profile = (Profile)ProfileList.Items[selectedIndex];
-                                profile.SaveAsJson(Path.Combine(folderPath, $"{profile.Name}.json"));
+                                profile.SaveAsJson(folderPath);
                                 message += $"\n\t{profile.Name}";
                             }
 
