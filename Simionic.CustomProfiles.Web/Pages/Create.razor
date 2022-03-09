@@ -1,4 +1,6 @@
 ﻿@page "/create"
+@using System.IO
+@using Newtonsoft.Json
 @inject NavigationManager Navigation
 
 <header class="bg-dark py-5">
@@ -6,22 +8,41 @@
         <div class="row gx-5 align-items-center justify-content-center">
             <div class="col-lg-8 col-xl-7 col-xxl-6">
                 <div class="my-5 text-center text-xl-start">
-                    <h3 class="fw-bolder text-white mb-2">Create a profile</h3>
+                    <h3 class="fw-bolder text-white mb-2">Create a profile...</h3>
                     @if (!User.IsLoggedIn)
                     {
-                        <p class="lead fw-normal text-white mb-4">To create a profile, you must be logged in with a Microsoft Account. You can log in <a href="/authentication/login?returnUrl=@Navigation.Uri">here</a>.</p> 
-                        <p class="lead fw-normal text-white mb-4">You will be asked to give this site permissions to see your name and email address the first time you log in. You can find out about how we use your information <a href="/privacy">here</a>.</p>
+                        <p class="lead fw-normal text-white-50 mb-4">To create a profile, you must be logged in with a Microsoft Account. You can log in <a href="/authentication/login?returnUrl=@Navigation.Uri">here</a>.</p> 
+                        <p class="fw-normal text-white-50 mb-4">You will be asked to give this site permissions to see your name and email address the first time you log in. You can find out about how we use your information <a href="/privacy">here</a>.</p>
                     }
                     else
                     {
-                    <p class="lead fw-normal text-white-50 mb-4">Choose a name for your new profile, then click Create.</p>
-                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                            <input class="px-4 rounded border-0" @bind="_profileName" @bind:event="oninput" @onkeydown="ProfileNameKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3" @onclick="CreateProfile">Create</button>
+                        <p class="lead fw-normal text-white-50 mb-4">Choose a name for your new profile, then click Create.</p>
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start mb-5">
+                            <input class="px-4 rounded border-0 shadow-none" placeholder="Your new profile's name" @bind="_profileName" @bind:event="oninput" @onkeydown="ProfileNameKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3" @onclick="CreateProfile">Create</button>
                         </div>
+                        @if (1 == 2)
+                        {
+                            <h3 class="fw-bolder text-white mb-2">...or import one</h3>
+                            <p class="lead fw-normal text-white-50 mb-4">If you have an exported profile (.json file), you can import it directly. The imported file will be saved to the database as a draft immediately.</p>
+                            @if (!_fileChosen && !_error)
+                            {
+                                <InputFile OnChange="UploadFile" class="form-control form-control-lg" />
+                            }
+                            else if (!_error && _uploading)
+                            {
+                                <h4 class="text-white">Importing '@_fileName'...</h4>
+                            }
+                            else if (!_error && !_uploading)
+                            {
+                                <h4 class="text-success">Imported successfully. Opening editor...</h4>
+                            }
+                            else
+                            {
+                                <p class="lead fw-normal text-danger">An error occurred uploading the file. Are you sure this is a valid profile JSON file?</p>
+                                <p class="lead fw-normal text-white-50 mb-4">You can <a href="/create" @onclick="() => { _error = false; _uploading = false; _fileChosen = false; }">try again.</a></p>
+                            }
+                        }
                     }
-                    <div class="my-5 text-center text-xl-start pt-4">
-                        <p class="lead fw-normal text-white-50 mb-4">Or, you can <a href="/profiles">browse the existing profiles</a>.</p>
-                    </div>
                 </div>
             </div>
             <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="/img/G1000_screen.jpg" alt="G1000 MFD & PFD set into a cockpit instrument panel" /></div>
@@ -32,6 +53,10 @@
 @code
 {
     private string _profileName;
+    private string _fileName;
+    private bool _fileChosen;
+    private bool _uploading;
+    private bool _error;
 
     protected void ProfileNameKey(KeyboardEventArgs args)
     {
@@ -43,6 +68,37 @@
 
     protected void CreateProfile(MouseEventArgs args)
     {
-        Navigation.NavigateTo(QueryHelpers.AddQueryString("/new", "name", _profileName));
+        if (!String.IsNullOrWhiteSpace(_profileName))
+        {
+            Navigation.NavigateTo(QueryHelpers.AddQueryString("/new", "name", _profileName));
+        }
+    }
+
+    protected async void UploadFile(InputFileChangeEventArgs args)
+    {
+        var file = args.File;
+        _fileName = file.Name;
+        _uploading = true;
+        _fileChosen = true;
+
+        try
+        {
+            string json = await new StreamReader(file.OpenReadStream()).ReadToEndAsync();
+            Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+            profile = await ProfileStore.Insert(profile);
+            await Task.Delay(1000);
+
+            _uploading = false;
+            StateHasChanged();
+
+            await Task.Delay(2000);
+            Navigation.NavigateTo($"/edit/{profile.Id}");
+        }
+        catch (Exception ex)
+        {
+            _error = true;
+            _uploading = false;
+            StateHasChanged();
+        }
     }
 }

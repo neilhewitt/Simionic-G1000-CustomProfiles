@@ -1,14 +1,24 @@
 ﻿@page "/profile/{Id}"
 @page "/edit/{Id}"
 @page "/new"
+
+@using Newtonsoft.Json
+@using System.IO
+@using System.Text
+
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthState
+@inject IJSRuntime JS
 
 <section class="pt-5">
     <div class="text-center @(ProfileData == null ? "mb-4" : "")"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")@TitleWarts()</h3></div>
     @if (ProfileData is not null)
     {
         <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
+        @if (ProfileData.Id is not null)
+        {
+            <div class="text-center mb-4"><button class="btn-primary btn-sm border-0 shadow-none" @onclick="Export">Export as JSON</button></div>
+        }
         <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
             <div class="row justify-content-center">
                 @if (ProfileData.Id == null)
@@ -639,6 +649,22 @@
     protected void GoToEditMode()
     {
         Navigation.NavigateTo($"/edit/{Id}", true);
+    }
+
+    protected async Task Export(MouseEventArgs args)
+    {
+        string json = JsonConvert.SerializeObject(ProfileData, Formatting.Indented);
+        
+        // need to remove owner details
+        string ownerPattern = @$"""Id"": ""{ProfileData.Owner.Id}""";
+        string namePattern = @$"""Name"": ""{ProfileData.Owner.Name}""";
+        string idPattern = @$"""id"": ""{ProfileData.Id}""";
+        json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
+
+        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        
+        using var streamRef = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"{ProfileData.Name}.json", streamRef);
     }
 
     protected async override Task OnInitializedAsync()

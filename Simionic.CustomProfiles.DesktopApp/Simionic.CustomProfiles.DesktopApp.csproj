@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Bokehlicia-Captiva-Accessories-text-editor.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="iMobileDevice-net" Version="1.3.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simonic.CustomProfiles.ImportExport.csproj" />
+    <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
   </ItemGroup>
 
 </Project>

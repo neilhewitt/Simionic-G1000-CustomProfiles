@@ -1,7 +1,17 @@
-﻿namespace Simonic.CustomProfiles.ImportExport
+﻿using Simionic.CustomProfiles.Core;
+
+namespace Simionic.CustomProfiles.ImportExport
 {
     public class AircraftConfig
     {
+        public static AircraftConfig FromProfile(Profile profile)
+        {
+
+
+
+            return null;
+        }
+
         public int Id { get; init; }
         public string Name { get; set; }
         public IEnumerable<ConfigItem> ConfigItems { get; private set; }

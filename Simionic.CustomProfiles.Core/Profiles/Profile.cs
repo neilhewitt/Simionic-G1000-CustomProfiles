@@ -25,7 +25,7 @@ namespace Simionic.CustomProfiles.Core
         private bool _constantSpeed;
 
         [JsonIgnore]
-        public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };
+        public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, Load, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };
 
         public string ForkedFrom { get; set; }
 
@@ -65,7 +65,7 @@ namespace Simionic.CustomProfiles.Core
 
         public override string ToString()
         {
-            return $"{Name} ({AircraftType}) LastUpdated: {LastUpdated}";
+            return $"{Name}";
         }
 
         public Profile()

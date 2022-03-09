@@ -1,4 +1,4 @@
-﻿namespace Simonic.CustomProfiles.ImportExport
+﻿namespace Simionic.CustomProfiles.ImportExport
 {
     public class ConfigItem
     {

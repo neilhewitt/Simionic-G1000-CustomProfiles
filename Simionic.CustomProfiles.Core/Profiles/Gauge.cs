@@ -13,7 +13,7 @@ namespace Simionic.CustomProfiles.Core
         public double? MaxPower { get; set; }
         public GaugeRange[] Ranges { get; init; }
 
-        public Gauge(string name, double? min = null, double? max = null, bool? fuelInGallons = null, double? capacityForSingleTank = null, bool? torqueInFootPounds = null)
+        public Gauge(string name, double? min = null, double? max = null, bool? fuelInGallons = null, double? capacityForSingleTank = null, bool? torqueInFootPounds = null, double? maxPower = null)
         {
             Name = name;
             Min = min;
@@ -21,6 +21,7 @@ namespace Simionic.CustomProfiles.Core
             FuelInGallons = fuelInGallons;
             CapacityForSingleTank = capacityForSingleTank;
             TorqueInFootPounds = torqueInFootPounds;
+            MaxPower = maxPower;
 
             Ranges = new GaugeRange[4];
             for (int i = 0; i < 4; i++)

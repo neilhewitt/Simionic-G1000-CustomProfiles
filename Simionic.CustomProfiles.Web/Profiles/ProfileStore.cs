@@ -13,6 +13,9 @@ namespace Simionic.CustomProfiles.Web
         {
             try
             {
+                profile.Owner.Name = User.Name;
+                profile.Owner.Id = User.OwnerId;
+                profile.IsPublished = false;
 
                 HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/insert", profile);
                 if (!response.IsSuccessStatusCode)

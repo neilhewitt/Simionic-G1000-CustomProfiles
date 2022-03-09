@@ -32,7 +32,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             }
             catch (Exception ex)
             {
-                return new ObjectResult(new { Status = 500, Error = ex.Message });
+                return new StatusCodeResult(500);
             }
         }
     }

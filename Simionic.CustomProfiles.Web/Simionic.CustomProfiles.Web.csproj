@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\startbootstrap\css\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Simionic.CustomProfiles.Core\Simionic.CustomProfiles.Core.csproj" />
   </ItemGroup>
 

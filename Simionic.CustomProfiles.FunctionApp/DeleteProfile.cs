@@ -27,7 +27,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             }
             catch (Exception ex)
             {
-                return new ObjectResult(new { Status = 500, Error = ex.Message, Id = profileId });
+                return new StatusCodeResult(500);
             }
 
             return new StatusCodeResult(200);

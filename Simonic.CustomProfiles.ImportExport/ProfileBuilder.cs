@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simonic.CustomProfiles.ImportExport
+namespace Simionic.CustomProfiles.ImportExport
 {
     public class ProfileBuilder
     {
@@ -13,9 +13,9 @@ namespace Simonic.CustomProfiles.ImportExport
 
         public Profile Profile => _profile;
 
-        private Dictionary<Gauge, string> _gaugeToPrefixMap { get; set; }
+        private Dictionary<Gauge, string> _gaugeToPrefixMap;
 
-        private void BuildMap(AircraftConfig config)
+        private void BuildMap()
         {
             _gaugeToPrefixMap = new Dictionary<Gauge, string>()
             {
@@ -41,10 +41,10 @@ namespace Simonic.CustomProfiles.ImportExport
             gauge.Max = GetValue<double>(gauge, config, "Max");
 
             // special cases - if no key, ignored
-            gauge.MaxPower = GetValue<double>(gauge, config, "MaxKw");
-            gauge.TorqueInFootPounds = GetValue<double>(gauge, config, "TorqueStyle") == 0;
-            gauge.FuelInGallons = GetValue<double>("", config, "FuelUnit") == 0;
-            gauge.CapacityForSingleTank = GetValue<double>("", config, "FuelQty");
+            if (gauge == _profile.Load) gauge.MaxPower = GetValue<double>(gauge, config, "MaxKw");
+            if (gauge == _profile.Torque) gauge.TorqueInFootPounds = GetValue<double>(gauge, config, "TorqueStyle") == 0;
+            if (gauge == _profile.Fuel) gauge.FuelInGallons = GetValue<double>("Gauge", config, "FuelUnit") == 0;
+            if (gauge == _profile.Fuel) gauge.CapacityForSingleTank = GetValue<double>("Gauge", config, "FuelQty");
 
             for (int i = 0; i < 4; i++)
             {
@@ -125,7 +125,7 @@ namespace Simonic.CustomProfiles.ImportExport
         {
             _profile = new Profile();
             _profile.Name = config.Name;
-            BuildMap(config);
+            BuildMap();
             SetProfile(config);
         }
     }
