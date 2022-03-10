@@ -73,13 +73,13 @@ namespace Simionic.CustomProfiles.ImportExport
 
             // elevator trim
             _profile.DisplayElevatorTrim = GetValue<int>("Gauge", config, "Trim") == 1;
-            _profile.ElevatorTrimTakeOffRange.Min = GetValue<double>("GaugeTrimGreen", config, "Min");
-            _profile.ElevatorTrimTakeOffRange.Max = GetValue<double>("GaugeTrimGreen", config, "Max");
+            _profile.ElevatorTrimTakeOffRange.Min = GetValue<int>("GaugeTrimGreen", config, "Min");
+            _profile.ElevatorTrimTakeOffRange.Max = GetValue<int>("GaugeTrimGreen", config, "Max");
 
             // rudder trim
             _profile.DisplayRudderTrim = GetValue<int>("GaugeRudder", config, "Trim") == 1;
-            _profile.RudderTrimTakeOffRange.Min = GetValue<double>("GaugeRudderTrimGreen", config, "Min");
-            _profile.RudderTrimTakeOffRange.Max = GetValue<double>("GaugeRudderTrimGreen", config, "Max");
+            _profile.RudderTrimTakeOffRange.Min = GetValue<int>("GaugeRudderTrimGreen", config, "Min");
+            _profile.RudderTrimTakeOffRange.Max = GetValue<int>("GaugeRudderTrimGreen", config, "Max");
 
             // flaps
             _profile.DisplayFlapsIndicator = GetValue<int>("Gauge", config, "Flaps") == 1;

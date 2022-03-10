@@ -68,6 +68,20 @@ namespace Simionic.CustomProfiles.Core
             ManifoldPressure.AllowDecimals = true;
             FuelFlow.AllowDecimals = true;
             OilPressure.AllowDecimals = true;
+
+            FixRanges(ManifoldPressure);
+            FixRanges(FuelFlow);
+            FixRanges(OilPressure);
+
+
+
+            void FixRanges(Gauge gauge)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    gauge.Ranges[i].AllowDecimals = true;
+                }
+            }
         }
 
         public override string ToString()

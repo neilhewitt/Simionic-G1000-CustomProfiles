@@ -4,7 +4,7 @@ namespace Simionic.CustomProfiles.Core
 {
     public class SettingRange
     {
-        public double Min { get; set; }
-        public double Max { get; set; }
+        public int Min { get; set; }
+        public int Max { get; set; }
     }
 }
