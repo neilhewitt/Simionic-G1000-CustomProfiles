@@ -32,7 +32,7 @@ namespace Simionic.CustomProfiles.ImportExport
                 {  _profile.OilPressure, "OilPress" },
                 {  _profile.CHT, "CHT" },
                 {  _profile.EGT, "EGT" },
-                {  _profile.NG, "NG" },
+                {  _profile.NG, "Ng" }, // note lower-case 'g'
             };
         }
 
@@ -40,7 +40,7 @@ namespace Simionic.CustomProfiles.ImportExport
         {
             // basic info
             _config.Add(Config("engineType", (int)_profile.AircraftType));
-            _config.Add(Config("engineNum", _profile.Engines));
+            _config.Add(Config("engineNum", _profile.Engines - 1));
             _config.Add(Config("cylinderCount", _profile.Cylinders));
             _config.Add(Config("FEDEC", _profile.FADEC ? 1 : 0));
             _config.Add(Config("Turbocharged", _profile.Turbocharged ? 1 : 0));

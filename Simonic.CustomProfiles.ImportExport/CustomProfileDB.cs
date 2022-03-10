@@ -203,7 +203,7 @@ namespace Simionic.CustomProfiles.ImportExport
                     }
                 }
 
-                _maxId = _aircraft.Max(x => x.Id);
+                _maxId = (_aircraft.Count > 0) ? _aircraft.Max(x => x.Id) : 0;
 
                 List<Profile> profiles = new();
                 foreach (AircraftConfig aircraft in _aircraft)

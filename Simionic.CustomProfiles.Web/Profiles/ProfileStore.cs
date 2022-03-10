@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Simionic.CustomProfiles.Web
@@ -60,6 +62,7 @@ namespace Simionic.CustomProfiles.Web
             try
             {
                 Profile profile = await HttpClientFactory.Client.GetFromJsonAsync<Profile>($"/api/profile/{id}");
+                profile.FixUpGauges(); // HACK, but we cannot remove without amending all existing profile JSON in the DB - job TODO
                 return profile;
             }
             catch (HttpRequestException ex)

@@ -35,7 +35,7 @@ namespace Simionic.CustomProfiles.Core
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get { return _constantSpeed; } set { _constantSpeed = value; } }
         public VacuumPSIRange VacuumPSIRange { get; set; } = new VacuumPSIRange();
-        public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure (inHg)", 0, 0);
+        public Gauge ManifoldPressure { get; set; } = new Gauge("Manifold Pressure (inHg)", 0, 0, allowDecimals: true);
         public Gauge CHT { get; set; } = new Gauge("CHT (°F)", 0, 0);
         public Gauge EGT { get; set; } = new Gauge("EGT (°F)", 0, 0);
         public Gauge TIT { get; set; } = new Gauge("TIT (°F)", 0, 0);
@@ -52,8 +52,8 @@ namespace Simionic.CustomProfiles.Core
         public bool TemperaturesInFahrenheit { get; set; } = true;
         public Gauge RPM { get; set; } = new Gauge("RPM", null, 0); // not jet
         public Gauge Fuel { get; set; } = new Gauge("Fuel", fuelInGallons: true, capacityForSingleTank: 0);
-        public Gauge FuelFlow { get; set; } = new Gauge("Fuel Flow (GPH)", null, 0);
-        public Gauge OilPressure { get; set; } = new Gauge("Oil Pressure (PSI)", null, 0);
+        public Gauge FuelFlow { get; set; } = new Gauge("Fuel Flow (GPH)", null, 0, allowDecimals: true);
+        public Gauge OilPressure { get; set; } = new Gauge("Oil Pressure (PSI)", null, 0, allowDecimals: true);
         public Gauge OilTemperature { get; set; } = new Gauge("Oil Temp (°F)", 0, 0);
         public bool DisplayElevatorTrim { get; set; }
         public SettingRange ElevatorTrimTakeOffRange { get; set; } = new SettingRange();
@@ -62,6 +62,13 @@ namespace Simionic.CustomProfiles.Core
         public bool DisplayFlapsIndicator { get; set; }
         public FlapsRange FlapsRange { get; set; } = new FlapsRange();
         public VSpeeds VSpeeds { get; set; } = new VSpeeds();
+
+        public void FixUpGauges()
+        {
+            ManifoldPressure.AllowDecimals = true;
+            FuelFlow.AllowDecimals = true;
+            OilPressure.AllowDecimals = true;
+        }
 
         public override string ToString()
         {

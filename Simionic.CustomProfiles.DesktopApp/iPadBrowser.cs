@@ -39,7 +39,7 @@ namespace Simionic.CustomProfiles.DesktopApp
             {
                 DeviceList.Items.Add(device);
             }
-
+            ExtractButton.Enabled = false;
 
             base.OnShown(e);
         }
@@ -47,6 +47,18 @@ namespace Simionic.CustomProfiles.DesktopApp
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void DeviceList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DeviceList.SelectedIndex >= 0)
+            {
+                ExtractButton.Enabled = true;
+            }
+            else
+            {
+                ExtractButton.Enabled = false;
+            }
         }
 
         private void ExtractButton_Click(object sender, EventArgs e)
@@ -59,7 +71,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 }
                 return;
             }
-            else if (DeviceList.SelectedIndex == -1)
+            else if (DeviceList.SelectedIndex == -1 && DeviceList.Items.Count > 0)
             {
                 DeviceList.SelectedIndex = 0;
             }

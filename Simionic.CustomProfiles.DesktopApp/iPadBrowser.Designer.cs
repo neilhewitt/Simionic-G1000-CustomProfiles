@@ -43,6 +43,7 @@
             this.DeviceList.Name = "DeviceList";
             this.DeviceList.Size = new System.Drawing.Size(405, 404);
             this.DeviceList.TabIndex = 0;
+            this.DeviceList.SelectedIndexChanged += DeviceList_SelectedIndexChanged;
             // 
             // ListBoxLabel
             // 

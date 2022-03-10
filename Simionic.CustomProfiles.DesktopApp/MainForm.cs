@@ -14,6 +14,8 @@ namespace Simionic.CustomProfiles.DesktopApp
         private List<int> _selectedProfileIndexes = new List<int>();
         private bool _showAlerts = true;
 
+        private const string NO_PROFILE_MSG = "-- This database has no profiles --";
+
         public MainForm()
         {
             InitializeComponent();
@@ -88,7 +90,6 @@ namespace Simionic.CustomProfiles.DesktopApp
             UpdateProfileList();
 
             ImportButton.Enabled = true;
-            SaveChangesButton.Enabled = true;
             OpenDatabaseButton.Enabled = false;
             ExtractButton.Enabled = false;
         }
@@ -228,6 +229,15 @@ namespace Simionic.CustomProfiles.DesktopApp
             foreach (Profile profile in _profileDB.Profiles.OrderBy(x => x.Name))
             {
                 ProfileList.Items.Add(profile);
+                ProfileList.Enabled = true;
+                SaveChangesButton.Enabled = true;
+            }
+
+            if (_profileDB.Profiles.Count() == 0)
+            {
+                ProfileList.Items.Add(NO_PROFILE_MSG);
+                ProfileList.Enabled = false;
+                SaveChangesButton.Enabled = false;
             }
         }
 

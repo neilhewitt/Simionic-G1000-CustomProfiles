@@ -1,4 +1,6 @@
-﻿namespace Simionic.CustomProfiles.Core
+﻿using Newtonsoft.Json;
+
+namespace Simionic.CustomProfiles.Core
 {
     public class SettingRange
     {
