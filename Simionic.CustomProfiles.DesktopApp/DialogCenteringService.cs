@@ -1,158 +1,20 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
+// this class adapted from Stackoverflow answer - original copyright acknowledged and used under general 
+// some naming here is Win32-style because P/Invoke
+
 public class DialogCenteringService : IDisposable
 {
-    private readonly IWin32Window owner;
-    private readonly HookProc hookProc;
-    private readonly IntPtr hHook = IntPtr.Zero;
+    private const int WH_CALLWNDPROCRET = 12;
+    
+    private readonly IWin32Window _owner;
+    private readonly HookProc _hook;
+    private readonly IntPtr _hookPtr = IntPtr.Zero;
 
-    public DialogCenteringService(IWin32Window owner)
-    {
-        if (owner == null) throw new ArgumentNullException("owner");
-
-        this.owner = owner;
-        hookProc = DialogHookProc;
-
-        hHook = SetWindowsHookEx(WH_CALLWNDPROCRET, hookProc, IntPtr.Zero, GetCurrentThreadId());
-    }
-
-    private IntPtr DialogHookProc(int nCode, IntPtr wParam, IntPtr lParam)
-    {
-        if (nCode < 0)
-        {
-            return CallNextHookEx(hHook, nCode, wParam, lParam);
-        }
-
-        CWPRETSTRUCT msg = (CWPRETSTRUCT)Marshal.PtrToStructure(lParam, typeof(CWPRETSTRUCT));
-        IntPtr hook = hHook;
-
-        if (msg.message == (int)CbtHookAction.HCBT_ACTIVATE)
-        {
-            try
-            {
-                CenterWindow(msg.hwnd);
-            }
-            finally
-            {
-                UnhookWindowsHookEx(hHook);
-            }
-        }
-
-        return CallNextHookEx(hook, nCode, wParam, lParam);
-    }
-
-    public void Dispose()
-    {
-        UnhookWindowsHookEx(hHook);
-    }
-
-    private void CenterWindow(IntPtr hChildWnd)
-    {
-        Rectangle? recParent = GetWindowRect(owner.Handle);
-
-        if (recParent == null)
-        {
-            return;
-        }
-
-        CenterWindow(hChildWnd, recParent.Value);
-    }
-
-    public static Rectangle? GetWindowRect(IntPtr hWnd)
-    {
-        Rectangle rect = new Rectangle(0, 0, 0, 0);
-        bool success = GetWindowRect(hWnd, ref rect);
-
-        if (!success)
-        {
-            return null;
-        }
-
-        return rect;
-    }
-
-    public static Rectangle GetCenterRectangle(Rectangle recParent, Rectangle recChild)
-    {
-        int width = recChild.Width - recChild.X;
-        int height = recChild.Height - recChild.Y;
-
-        Point ptCenter = new Point(0, 0);
-        ptCenter.X = recParent.X + ((recParent.Width - recParent.X) / 2);
-        ptCenter.Y = recParent.Y + ((recParent.Height - recParent.Y) / 2);
-
-        Point ptStart = new Point(0, 0);
-        ptStart.X = (ptCenter.X - (width / 2));
-        ptStart.Y = (ptCenter.Y - (height / 2));
-
-        // get centered rectangle
-        Rectangle centeredRectangle = new Rectangle(ptStart.X, ptStart.Y, width, height);
-
-        // fit the window to the screen
-        Screen parentScreen = Screen.FromRectangle(recParent);
-        Rectangle workingArea = parentScreen.WorkingArea;
-
-        // various collision checks
-        if (workingArea.X > centeredRectangle.X)
-        {
-            centeredRectangle = new Rectangle(workingArea.X, centeredRectangle.Y, centeredRectangle.Width, centeredRectangle.Height);
-        }
-        if (workingArea.Y > centeredRectangle.Y)
-        {
-            centeredRectangle = new Rectangle(centeredRectangle.X, workingArea.Y, centeredRectangle.Width, centeredRectangle.Height);
-        }
-        if (workingArea.Right < centeredRectangle.Right)
-        {
-            centeredRectangle = new Rectangle(workingArea.Right - centeredRectangle.Width, centeredRectangle.Y, centeredRectangle.Width, centeredRectangle.Height);
-        }
-        if (workingArea.Bottom < centeredRectangle.Bottom)
-        {
-            centeredRectangle = new Rectangle(centeredRectangle.X, workingArea.Bottom - centeredRectangle.Height, centeredRectangle.Width, centeredRectangle.Height);
-        }
-
-        return centeredRectangle;
-    }
-
-    public static void CenterWindow(IntPtr hChildWnd, Rectangle recParent)
-    {
-        Rectangle? recChild = GetWindowRect(hChildWnd);
-
-        if (recChild == null)
-        {
-            return;
-        }
-
-        Rectangle centerRectangle = GetCenterRectangle(recParent, recChild.Value);
-
-        Task.Factory.StartNew(() => SetWindowPos(hChildWnd, (IntPtr)0, centerRectangle.X, centerRectangle.Y, centerRectangle.Width, centerRectangle.Height, SetWindowPosFlags.SWP_ASYNCWINDOWPOS | SetWindowPosFlags.SWP_NOSIZE | SetWindowPosFlags.SWP_NOACTIVATE | SetWindowPosFlags.SWP_NOOWNERZORDER | SetWindowPosFlags.SWP_NOZORDER));
-    }
-
-    // some p/invoke
-
-    // ReSharper disable InconsistentNaming
     public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
     public delegate void TimerProc(IntPtr hWnd, uint uMsg, UIntPtr nIDEvent, uint dwTime);
-
-    private const int WH_CALLWNDPROCRET = 12;
-
-    // ReSharper disable EnumUnderlyingTypeIsInt
-    private enum CbtHookAction : int
-    // ReSharper restore EnumUnderlyingTypeIsInt
-    {
-        // ReSharper disable UnusedMember.Local
-        HCBT_MOVESIZE = 0,
-        HCBT_MINMAX = 1,
-        HCBT_QS = 2,
-        HCBT_CREATEWND = 3,
-        HCBT_DESTROYWND = 4,
-        HCBT_ACTIVATE = 5,
-        HCBT_CLICKSKIPPED = 6,
-        HCBT_KEYSKIPPED = 7,
-        HCBT_SYSCOMMAND = 8,
-        HCBT_SETFOCUS = 9
-        // ReSharper restore UnusedMember.Local
-    }
 
     [DllImport("kernel32.dll")]
     static extern int GetCurrentThreadId();
@@ -191,6 +53,140 @@ public class DialogCenteringService : IDisposable
     [DllImport("user32.dll")]
     public static extern int EndDialog(IntPtr hDlg, IntPtr nResult);
 
+    public static Rectangle? GetWindowRect(IntPtr hWnd)
+    {
+        Rectangle rectangle = new Rectangle(0, 0, 0, 0);
+        bool success = GetWindowRect(hWnd, ref rectangle);
+
+        if (!success)
+        {
+            return null;
+        }
+
+        return rectangle;
+    }
+
+    public static Rectangle GetCenterRectangle(Rectangle parent, Rectangle child)
+    {
+        int width = child.Width - child.X;
+        int height = child.Height - child.Y;
+
+        Point center = new Point(0, 0);
+        center.X = parent.X + ((parent.Width - parent.X) / 2);
+        center.Y = parent.Y + ((parent.Height - parent.Y) / 2);
+
+        Point start = new Point(0, 0);
+        start.X = (center.X - (width / 2));
+        start.Y = (center.Y - (height / 2));
+
+        // get centered rectangle
+        Rectangle centeredRectangle = new Rectangle(start.X, start.Y, width, height);
+
+        // fit the window to the screen
+        Screen parentScreen = Screen.FromRectangle(parent);
+        Rectangle workingArea = parentScreen.WorkingArea;
+
+        // various collision checks
+        if (workingArea.X > centeredRectangle.X)
+        {
+            centeredRectangle = new Rectangle(workingArea.X, centeredRectangle.Y, centeredRectangle.Width, centeredRectangle.Height);
+        }
+        if (workingArea.Y > centeredRectangle.Y)
+        {
+            centeredRectangle = new Rectangle(centeredRectangle.X, workingArea.Y, centeredRectangle.Width, centeredRectangle.Height);
+        }
+        if (workingArea.Right < centeredRectangle.Right)
+        {
+            centeredRectangle = new Rectangle(workingArea.Right - centeredRectangle.Width, centeredRectangle.Y, centeredRectangle.Width, centeredRectangle.Height);
+        }
+        if (workingArea.Bottom < centeredRectangle.Bottom)
+        {
+            centeredRectangle = new Rectangle(centeredRectangle.X, workingArea.Bottom - centeredRectangle.Height, centeredRectangle.Width, centeredRectangle.Height);
+        }
+
+        return centeredRectangle;
+    }
+
+    public static void CenterWindow(IntPtr childWindow, Rectangle parent)
+    {
+        Rectangle? child = GetWindowRect(childWindow);
+
+        if (child == null)
+        {
+            return;
+        }
+
+        Rectangle centerRectangle = GetCenterRectangle(parent, child.Value);
+
+        Task.Factory.StartNew(() => SetWindowPos(childWindow, (IntPtr)0, centerRectangle.X, centerRectangle.Y, centerRectangle.Width, centerRectangle.Height, SetWindowPosFlags.SWP_ASYNCWINDOWPOS | SetWindowPosFlags.SWP_NOSIZE | SetWindowPosFlags.SWP_NOACTIVATE | SetWindowPosFlags.SWP_NOOWNERZORDER | SetWindowPosFlags.SWP_NOZORDER));
+    }
+
+    public void Dispose()
+    {
+        UnhookWindowsHookEx(_hookPtr);
+    }
+
+    private IntPtr DialogHookProc(int nCode, IntPtr wParam, IntPtr lParam)
+    {
+        if (nCode < 0)
+        {
+            return CallNextHookEx(_hookPtr, nCode, wParam, lParam);
+        }
+
+        CWPRETSTRUCT msg = (CWPRETSTRUCT)Marshal.PtrToStructure(lParam, typeof(CWPRETSTRUCT));
+        IntPtr hook = _hookPtr;
+
+        if (msg.message == (int)CbtHookAction.HCBT_ACTIVATE)
+        {
+            try
+            {
+                CenterWindow(msg.hwnd);
+            }
+            finally
+            {
+                UnhookWindowsHookEx(_hookPtr);
+            }
+        }
+
+        return CallNextHookEx(hook, nCode, wParam, lParam);
+    }
+
+    private void CenterWindow(IntPtr hChildWnd)
+    {
+        Rectangle? recParent = GetWindowRect(_owner.Handle);
+
+        if (recParent == null)
+        {
+            return;
+        }
+
+        CenterWindow(hChildWnd, recParent.Value);
+    }
+
+    public DialogCenteringService(IWin32Window owner)
+    {
+        if (owner == null) throw new ArgumentNullException("owner");
+
+        _owner = owner;
+        _hook = DialogHookProc;
+
+        _hookPtr = SetWindowsHookEx(WH_CALLWNDPROCRET, _hook, IntPtr.Zero, GetCurrentThreadId());
+    }
+
+    public enum CbtHookAction : int
+    {
+        HCBT_MOVESIZE = 0,
+        HCBT_MINMAX = 1,
+        HCBT_QS = 2,
+        HCBT_CREATEWND = 3,
+        HCBT_DESTROYWND = 4,
+        HCBT_ACTIVATE = 5,
+        HCBT_CLICKSKIPPED = 6,
+        HCBT_KEYSKIPPED = 7,
+        HCBT_SYSCOMMAND = 8,
+        HCBT_SETFOCUS = 9
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct CWPRETSTRUCT
     {
@@ -200,13 +196,10 @@ public class DialogCenteringService : IDisposable
         public uint message;
         public IntPtr hwnd;
     };
-    // ReSharper restore InconsistentNaming
 
     [Flags]
     public enum SetWindowPosFlags : uint
     {
-        // ReSharper disable InconsistentNaming
-
         /// <summary>
         ///     If the calling thread and the thread that owns the window are attached to different input queues, the system posts the request to the thread that owns the window. This prevents the calling thread from blocking its execution while other threads process the request.
         /// </summary>
@@ -281,7 +274,5 @@ public class DialogCenteringService : IDisposable
         ///     Displays the window.
         /// </summary>
         SWP_SHOWWINDOW = 0x0040,
-
-        // ReSharper restore InconsistentNaming
     }
 }

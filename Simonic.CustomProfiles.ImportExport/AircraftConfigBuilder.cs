@@ -42,9 +42,9 @@ namespace Simionic.CustomProfiles.ImportExport
             _config.Add(Config("engineType", (int)_profile.AircraftType));
             _config.Add(Config("engineNum", _profile.Engines - 1));
             _config.Add(Config("cylinderCount", _profile.Cylinders));
-            _config.Add(Config("FEDEC", _profile.FADEC ? 1 : 0));
+            _config.Add(Config("FEDEC", _profile.FADEC ? 1 : 0)); // note spelling error
             _config.Add(Config("Turbocharged", _profile.Turbocharged ? 1 : 0));
-            _config.Add(Config("ContantSpeed", _profile.ConstantSpeed ? 1 : 0));
+            _config.Add(Config("ContantSpeed", _profile.ConstantSpeed ? 1 : 0)); // note spelling error
             _config.Add(Config("GaugeTempUnit", _profile.TemperaturesInFahrenheit ? 0 : 1));
             _config.Add(Config("GaugeStyle", "0"));
 

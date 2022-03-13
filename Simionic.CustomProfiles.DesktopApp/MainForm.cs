@@ -72,9 +72,9 @@ namespace Simionic.CustomProfiles.DesktopApp
                     {
                         LoadDatabase(path); 
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        ShowMessageBox("An unexpected error occurred reading the database file. Please check the file and try again.", "Error");
+                        ShowMessageBox($"An unexpected error occurred reading the database file. Please check the file and try again. Error details:\n\n{ ex.Message }", "Error");
                     }
                 }
                 else
@@ -181,7 +181,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                         UpdateProfileList();
                         if (_showAlerts) ShowMessageBox($"Added profile '{profile.Name}'.\n\nNote that this will not be written to the custom profile database until you click 'Save changes', and if you exit the program without doing so, these changes will be lost.", "Profile imported");
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         ShowMessageBox("An unexpected error occurred reading the database file. Please check the file and try again.", "Error");
                     }

@@ -71,6 +71,7 @@ namespace Simionic.CustomProfiles.ImportExport
                     {
                         // new
                         ExecuteCommand($"INSERT INTO Aircraft (ACNum, ACName) VALUES ({aircraftId},'{profile.Name.Escape()}')", connection);
+                        _maxId = aircraftId;
 
                         // build SQL
                         StringBuilder sql = new StringBuilder("INSERT INTO ConfigItems (ACNum, ConfigName, ConfigValue) VALUES \n");
