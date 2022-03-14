@@ -7,6 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</ApplicationIcon>
+    <PackageIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Bokehlicia-Captiva-Accessories-text-editor.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
