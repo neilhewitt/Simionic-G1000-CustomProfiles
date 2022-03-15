@@ -117,7 +117,9 @@ namespace Simionic.CustomProfiles.ImportExport
         {
             name = $"{prefix}{name}";
             object value = config[name];
-            if (value == null) return default(T);
+            if (value is null) return default(T);
+            if (value is string && String.IsNullOrWhiteSpace((string)value)) return default(T);
+
             return (T)Convert.ChangeType(value, typeof(T));
         }
 

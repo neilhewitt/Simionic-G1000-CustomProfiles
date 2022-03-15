@@ -13,6 +13,7 @@ namespace Simionic.CustomProfiles.DesktopApp
         private CustomProfileDB _profileDB;
         private List<int> _selectedProfileIndexes = new List<int>();
         private bool _showAlerts = true;
+        private bool _removedLastProfile = false;
 
         private const string NO_PROFILE_MSG = "-- This database has no profiles --";
 
@@ -200,6 +201,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 foreach (int selectedIndex in _selectedProfileIndexes)
                 {
                     _profileDB.RemoveProfile((Profile)ProfileList.Items[selectedIndex]);
+                    if (_profileDB.Profiles.Count() == 0) _removedLastProfile = true;
                 }
 
                 UpdateProfileList();
@@ -217,7 +219,8 @@ namespace Simionic.CustomProfiles.DesktopApp
                 SaveChangesButton.Text = saveText;
 
                 _profileDB.SaveToDatabase();
-                SaveChangesButton.Enabled = true;
+                if (!_removedLastProfile) SaveChangesButton.Enabled = true;
+                _removedLastProfile = false;
 
                 if (_showAlerts) ShowMessageBox("Changes saved to database.", "Saved");
             }
@@ -237,7 +240,7 @@ namespace Simionic.CustomProfiles.DesktopApp
             {
                 ProfileList.Items.Add(NO_PROFILE_MSG);
                 ProfileList.Enabled = false;
-                SaveChangesButton.Enabled = false;
+                if (!_removedLastProfile) SaveChangesButton.Enabled = false;
             }
         }
 

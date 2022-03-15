@@ -36,6 +36,7 @@ namespace Simionic.CustomProfiles.ImportExport
         private List<(int AircraftId, Profile Profile)> _removed;
         
         private int _maxId;
+        private int _newId;
         private string _dbPath;
 
         public string DatabasePath => _dbPath;
@@ -161,7 +162,7 @@ namespace Simionic.CustomProfiles.ImportExport
         private void AddProfile(string name = null, Profile profile = null)
         {
             if (profile == null) profile = new Profile() { Name = name ?? "New Profile" };
-            AircraftConfig config = new AircraftConfigBuilder(profile, _maxId + 1).AircraftConfig;
+            AircraftConfig config = new AircraftConfigBuilder(profile, _newId++).AircraftConfig;
             _aircraft.Add(config);
             _profiles.Add(profile);
             _configsByProfile.Add(profile, config);
@@ -205,6 +206,7 @@ namespace Simionic.CustomProfiles.ImportExport
                 }
 
                 _maxId = (_aircraft.Count > 0) ? _aircraft.Max(x => x.Id) : 0;
+                _newId = _maxId + 1;
 
                 List<Profile> profiles = new();
                 foreach (AircraftConfig aircraft in _aircraft)
