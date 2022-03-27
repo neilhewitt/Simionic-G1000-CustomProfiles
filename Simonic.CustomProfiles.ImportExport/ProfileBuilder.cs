@@ -43,8 +43,8 @@ namespace Simionic.CustomProfiles.ImportExport
             // special cases - if no key, ignored
             if (gauge == _profile.Load) gauge.MaxPower = GetValue<double>(gauge, config, "MaxKw");
             if (gauge == _profile.Torque) gauge.TorqueInFootPounds = GetValue<double>(gauge, config, "TorqueStyle") == 0;
-            if (gauge == _profile.Fuel) gauge.FuelInGallons = GetValue<double>("Gauge", config, "FuelUnit") == 0;
-            if (gauge == _profile.Fuel) gauge.CapacityForSingleTank = GetValue<double>("Gauge", config, "FuelQty");
+            if (gauge == _profile.Fuel) gauge.FuelInGallons = GetValue<double>(config, "GaugeFuelUnit") == 0;
+            if (gauge == _profile.Fuel) gauge.CapacityForSingleTank = GetValue<double>(config, "GaugeFuelQty");
 
             for (int i = 0; i < 4; i++)
             {
@@ -57,48 +57,48 @@ namespace Simionic.CustomProfiles.ImportExport
         private void SetProfile(AircraftConfig config)
         {
             // basic info
-            _profile.AircraftType = (AircraftType)GetValue<int>("", config, "engineType");
-            _profile.Engines = GetValue<int>("", config, "engineNum") + 1;
-            _profile.Cylinders = GetValue<int>("", config, "cylinderCount");
-            _profile.FADEC = GetValue<int>("", config, "FEDEC") == 1; // NOTE: spelling mistake is in DB
-            _profile.Turbocharged = GetValue<int>("", config, "Turbocharged") == 1;
-            _profile.ConstantSpeed = GetValue<int>("", config, "ContantSpeed") == 1; // another spelling mistake in DB
-            _profile.TemperaturesInFahrenheit = GetValue<int>("", config, "GaugeTempUnit") == 1;
+            _profile.AircraftType = (AircraftType)GetValue<int>(config, "engineType");
+            _profile.Engines = GetValue<int>(config, "engineNum") + 1;
+            _profile.Cylinders = GetValue<int>(config, "cylinderCount");
+            _profile.FADEC = GetValue<int>(config, "FEDEC") == 1; // NOTE: spelling mistake is in DB
+            _profile.Turbocharged = GetValue<int>(config, "Turbocharged") == 1;
+            _profile.ConstantSpeed = GetValue<int>(config, "ContantSpeed") == 1; // another spelling mistake in DB
+            _profile.TemperaturesInFahrenheit = GetValue<int>(config, "GaugeTempUnit") == 1;
 
             // vacuum
-            _profile.VacuumPSIRange.Min = GetValue<double>("GaugeVac", config, "Min");
-            _profile.VacuumPSIRange.Min = GetValue<double>("GaugeVac", config, "Max");
-            _profile.VacuumPSIRange.GreenStart = GetValue<double>("GaugeVac", config, "GreenMin");
-            _profile.VacuumPSIRange.GreenEnd = GetValue<double>("GaugeVac", config, "GreenMax");
+            _profile.VacuumPSIRange.Min = GetValue<double>(config, "GaugeVacMin");
+            _profile.VacuumPSIRange.Min = GetValue<double>(config, "GaugeVac");
+            _profile.VacuumPSIRange.GreenStart = GetValue<double>(config, "GaugeVacGreenMin");
+            _profile.VacuumPSIRange.GreenEnd = GetValue<double>(config, "GaugeVacGreenMax");
 
             // elevator trim
-            _profile.DisplayElevatorTrim = GetValue<int>("Gauge", config, "Trim") == 1;
-            _profile.ElevatorTrimTakeOffRange.Min = GetValue<int>("GaugeTrimGreen", config, "Min");
-            _profile.ElevatorTrimTakeOffRange.Max = GetValue<int>("GaugeTrimGreen", config, "Max");
+            _profile.DisplayElevatorTrim = GetValue<int>(config, "GaugeTrim") == 1;
+            _profile.ElevatorTrimTakeOffRange.Min = GetValue<int>(config, "GaugeTrimGreenMin");
+            _profile.ElevatorTrimTakeOffRange.Max = GetValue<int>(config, "GaugeTrimGreenMax");
 
             // rudder trim
-            _profile.DisplayRudderTrim = GetValue<int>("GaugeRudder", config, "Trim") == 1;
-            _profile.RudderTrimTakeOffRange.Min = GetValue<int>("GaugeRudderTrimGreen", config, "Min");
-            _profile.RudderTrimTakeOffRange.Max = GetValue<int>("GaugeRudderTrimGreen", config, "Max");
+            _profile.DisplayRudderTrim = GetValue<int>(config, "GaugeRudderTrim") == 1;
+            _profile.RudderTrimTakeOffRange.Min = GetValue<int>(config, "GaugeRudderTrimGreenMin");
+            _profile.RudderTrimTakeOffRange.Max = GetValue<int>(config, "GaugeRudderTrimGreenMax");
 
             // flaps
-            _profile.DisplayFlapsIndicator = GetValue<int>("Gauge", config, "Flaps") == 1;
+            _profile.DisplayFlapsIndicator = GetValue<int>(config, "GaugeFlaps") == 1;
             for (int i = 0; i < 6; i++)
             {
-                _profile.FlapsRange.Markings[i] = GetValue<string>("GaugeFlapsNotch", config, $"Text{i}");
-                if (i > 0 && i < 5) _profile.FlapsRange.Positions[i] = GetValue<int>("GaugeFlapsNotch", config, $"Pos{i}");
+                _profile.FlapsRange.Markings[i] = GetValue<string>(config, $"GaugeFlapsNotchText{i}");
+                if (i > 0 && i < 5) _profile.FlapsRange.Positions[i] = GetValue<int>(config, $"GaugeFlapsNotchPos{i}");
             }
 
             // v-speeds
-            _profile.VSpeeds.Vs0 = GetValue<int>("", config, "Vs0");
-            _profile.VSpeeds.Vs1 = GetValue<int>("", config, "Vs1");
-            _profile.VSpeeds.Vfe = GetValue<int>("", config, "Vfe");
-            _profile.VSpeeds.Vno = GetValue<int>("", config, "Vno");
-            _profile.VSpeeds.Vne = GetValue<int>("", config, "Vne");
-            _profile.VSpeeds.Vglide = GetValue<int>("", config, "Vglide");
-            _profile.VSpeeds.Vr = GetValue<int>("", config, "Vr");
-            _profile.VSpeeds.Vx = GetValue<int>("", config, "Vx");
-            _profile.VSpeeds.Vy = GetValue<int>("", config, "Vy");
+            _profile.VSpeeds.Vs0 = GetValue<int>(config, "Vs0");
+            _profile.VSpeeds.Vs1 = GetValue<int>(config, "Vs1");
+            _profile.VSpeeds.Vfe = GetValue<int>(config, "Vfe");
+            _profile.VSpeeds.Vno = GetValue<int>(config, "Vno");
+            _profile.VSpeeds.Vne = GetValue<int>(config, "Vne");
+            _profile.VSpeeds.Vglide = GetValue<int>(config, "Vglide");
+            _profile.VSpeeds.Vr = GetValue<int>(config, "Vr");
+            _profile.VSpeeds.Vx = GetValue<int>(config, "Vx");
+            _profile.VSpeeds.Vy = GetValue<int>(config, "Vy");
 
             // other gauges
             foreach (Gauge gauge in _profile.Gauges)
@@ -110,12 +110,12 @@ namespace Simionic.CustomProfiles.ImportExport
         private T GetValue<T>(Gauge gauge, AircraftConfig config, string name)
         {
             string prefix = $"Gauge{_gaugeToPrefixMap[gauge]}";
-            return GetValue<T>(prefix, config, name);
+            return GetValue<T>(config, name, prefix);
         }
 
-        private T GetValue<T>(string prefix, AircraftConfig config, string name)
+        private T GetValue<T>(AircraftConfig config, string name, string prefix = null)
         {
-            name = $"{prefix}{name}";
+            name = $"{prefix ?? ""}{name}";
             object value = config[name];
             if (value is null) return default(T);
             if (value is string && String.IsNullOrWhiteSpace((string)value)) return default(T);

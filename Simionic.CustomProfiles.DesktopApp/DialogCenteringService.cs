@@ -153,14 +153,21 @@ public class DialogCenteringService : IDisposable
 
     private void CenterWindow(IntPtr hChildWnd)
     {
-        Rectangle? recParent = GetWindowRect(_owner.Handle);
-
-        if (recParent == null)
+        try
         {
-            return;
-        }
+            Rectangle? recParent = GetWindowRect(_owner.Handle);
 
-        CenterWindow(hChildWnd, recParent.Value);
+            if (recParent == null)
+            {
+                return;
+            }
+
+            CenterWindow(hChildWnd, recParent.Value);
+        }
+        catch
+        {
+            // if cross-thread exception (from version check) ignore and fail silently
+        }
     }
 
     public DialogCenteringService(IWin32Window owner)

@@ -50,7 +50,7 @@
             this.OpenDatabaseButton.Name = "OpenDatabaseButton";
             this.OpenDatabaseButton.Size = new System.Drawing.Size(162, 60);
             this.OpenDatabaseButton.TabIndex = 0;
-            this.OpenDatabaseButton.Text = "Open DB file";
+            this.OpenDatabaseButton.Text = "Open from disk";
             this.OpenDatabaseButton.UseVisualStyleBackColor = true;
             this.OpenDatabaseButton.Click += new System.EventHandler(this.OpenDatabaseButton_Click);
             // 
@@ -60,7 +60,7 @@
             this.SaveChangesButton.Name = "SaveChangesButton";
             this.SaveChangesButton.Size = new System.Drawing.Size(162, 60);
             this.SaveChangesButton.TabIndex = 1;
-            this.SaveChangesButton.Text = "Save changes";
+            this.SaveChangesButton.Text = "Save to disk";
             this.SaveChangesButton.UseVisualStyleBackColor = true;
             this.SaveChangesButton.Click += new System.EventHandler(this.SaveChangesButton_Click);
             // 

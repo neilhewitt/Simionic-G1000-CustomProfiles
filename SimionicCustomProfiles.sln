@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Des
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Simionic.CustomProfiles.DesktopApp.Installer", "Simionic.CustomProfiles.DesktopApp.Installer\Simionic.CustomProfiles.DesktopApp.Installer.vdproj", "{838FDAC4-3016-4A84-9E85-9FE8DAB45330}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.MAUI", "Simionic.CustomProfiles.MAUI\Simionic.CustomProfiles.MAUI.csproj", "{C233F625-5F24-4381-8B3A-4F5781B14FAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IniFileManager", "IniFileReader\IniFileManager.csproj", "{888C2FBD-3A97-47E9-BC91-AF864D25A873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,16 @@ Global
 		{71AC915D-65EE-4E52-993A-140746FC7F27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{838FDAC4-3016-4A84-9E85-9FE8DAB45330}.Debug|Any CPU.ActiveCfg = Debug
 		{838FDAC4-3016-4A84-9E85-9FE8DAB45330}.Release|Any CPU.ActiveCfg = Release
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C233F625-5F24-4381-8B3A-4F5781B14FAE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{888C2FBD-3A97-47E9-BC91-AF864D25A873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{888C2FBD-3A97-47E9-BC91-AF864D25A873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{888C2FBD-3A97-47E9-BC91-AF864D25A873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{888C2FBD-3A97-47E9-BC91-AF864D25A873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

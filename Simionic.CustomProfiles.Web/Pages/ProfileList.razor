@@ -1,5 +1,10 @@
 ﻿@page "/profiles"
+@using Newtonsoft.Json
+@using System.IO
+@using System.Text
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthState
+@inject IJSRuntime JS
 
 <section class="py-5">
     <div class="container px-5 my-5">
@@ -55,8 +60,9 @@
                                 <h5 class="card-title mb-3">
                                 @profileSummary.Name
                                 @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
-                                    <span><button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                    <span><button class="btn-sm btn-primary border-0 float-right shadow-none ml-1" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
                                 }
+                                <button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Export(profileSummary.Id)">Export</button>
                                 </h5>
                                 <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
                             </div>
@@ -71,7 +77,7 @@
                                                     <span class="text-black">&nbsp;|&nbsp;</span><span class="text-black-50 fw-bold">Draft</span>
                                                 }
                                             </div>
-                                            <div class="text"><b>Updated:</b> @profileSummary.LastUpdated</div>                                
+                                            <div class="text float-left"><b>Updated:</b> @profileSummary.LastUpdated</div>
                                         </div>
                                     </div>
                                 </div>
@@ -108,6 +114,7 @@
     private string _searchTerm;
     private bool _onlyShowDrafts;
     private bool _onlyShowMine;
+    private bool _exported;
     private string _errorMessage;
 
     public ProfileSummaryList ProfileSummaries { get; set; }
@@ -144,7 +151,14 @@
 
     protected void Profile(string id)
     {
-        Navigation.NavigateTo($"/profile/{ id }");
+        if (!_exported)
+        {
+            Navigation.NavigateTo($"/profile/{ id }");
+        }
+        else
+        {
+            _exported = false;
+        }
     }
 
     protected string GetButtonState(bool test)
@@ -212,6 +226,26 @@
         _onlyShowDrafts = false;
         if (resetSearch) _searchTerm = null;
     }
+
+    protected async Task Export(string id)
+    {
+        _exported = true;
+
+        Profile profile = await ProfileStore.GetAsync(id);
+        string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
+        
+        // need to remove owner details
+        string ownerPattern = @$"""Id"": ""{profile.Owner.Id}""";
+        string namePattern = @$"""Name"": ""{profile.Owner.Name}""";
+        string idPattern = @$"""id"": ""{profile.Id}""";
+        json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
+
+        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        
+        using var streamRef = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"{profile.Name}.json", streamRef);
+    }
+
 
     protected override void OnAfterRender(bool firstRender)
     {

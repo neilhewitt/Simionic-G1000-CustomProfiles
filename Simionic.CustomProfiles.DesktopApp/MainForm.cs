@@ -5,17 +5,21 @@ using Simionic.CustomProfiles.Core;
 using Simionic.CustomProfiles.ImportExport;
 using System;
 using System.Collections.ObjectModel;
+using IniFileManager;
+using System.Security.Principal;
 
 namespace Simionic.CustomProfiles.DesktopApp
 {
     public partial class MainForm : Form
     {
+        private const string CURRENT_VERSION = "1.0.0";
+        private const string NO_PROFILE_MSG = "-- This database has no profiles --";
+        private const string SETTINGS_FILE_NAME = "settings.ini";
+
         private CustomProfileDB _profileDB;
         private List<int> _selectedProfileIndexes = new List<int>();
         private bool _showAlerts = true;
         private bool _removedLastProfile = false;
-
-        private const string NO_PROFILE_MSG = "-- This database has no profiles --";
 
         public MainForm()
         {
@@ -46,6 +50,10 @@ namespace Simionic.CustomProfiles.DesktopApp
             PushButton.Enabled = false;
 
             NativeLibraries.Load();
+
+            this.Enabled = false;
+            CheckForNewVersion();
+            this.Enabled = true;
 
             base.OnLoad(e);
         }
@@ -81,6 +89,59 @@ namespace Simionic.CustomProfiles.DesktopApp
                 else
                 {
                     return;
+                }
+            }
+        }
+
+        private void CheckForNewVersion()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    //string version = await client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt");
+                    string version = CURRENT_VERSION;
+                    if (1 == 1 || version != CURRENT_VERSION)
+                    {
+                        DialogResult result = ShowMessageBox($"A new version ({version}) is available. Download it?", "New version available", MessageBoxButtons.YesNoCancel);
+                        if (result == DialogResult.Yes)
+                        {
+                            using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
+                            {
+                                folderBrowseDialog.InitialDirectory = $"{Environment.SpecialFolder.UserProfile}/downloads";
+                                if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
+                                {
+                                    string folderPath = folderBrowseDialog.SelectedPath;
+
+                                    try
+                                    {
+                                        string fileName = $"https://g1000profiledb.com/files/SimionicCustomProfileManager-{version}.zip";
+                                        Task<byte[]> task = client.GetByteArrayAsync(fileName);
+                                        byte[] data = task.Result;
+                                        File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
+                                        ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
+                                        Application.Exit();
+                                    }
+                                    catch
+                                    {
+                                        ShowMessageBox("Could not download the file. An unexpected error occurred. Check https://g1000profiledb.com/downloads for manual download.", "Error");
+                                    }
+                                    finally
+                                    {
+                                        ExportButton.Enabled = true;
+                                    }
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                   }
+                }
+                catch
+                {
+                    // ignore, site may be unavailable or retired
                 }
             }
         }
