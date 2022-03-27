@@ -14,7 +14,6 @@ namespace Simionic.CustomProfiles.DesktopApp
     {
         private const string CURRENT_VERSION = "1.0.0";
         private const string NO_PROFILE_MSG = "-- This database has no profiles --";
-        private const string SETTINGS_FILE_NAME = "settings.ini";
 
         private CustomProfileDB _profileDB;
         private List<int> _selectedProfileIndexes = new List<int>();
@@ -51,11 +50,15 @@ namespace Simionic.CustomProfiles.DesktopApp
 
             NativeLibraries.Load();
 
+            base.OnLoad(e);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
             this.Enabled = false;
             CheckForNewVersion();
             this.Enabled = true;
-
-            base.OnLoad(e);
         }
 
         protected override void OnLocationChanged(EventArgs e)
@@ -99,9 +102,8 @@ namespace Simionic.CustomProfiles.DesktopApp
             {
                 try
                 {
-                    //string version = await client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt");
-                    string version = CURRENT_VERSION;
-                    if (1 == 1 || version != CURRENT_VERSION)
+                    string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
+                    if (version != CURRENT_VERSION)
                     {
                         DialogResult result = ShowMessageBox($"A new version ({version}) is available. Download it?", "New version available", MessageBoxButtons.YesNoCancel);
                         if (result == DialogResult.Yes)
@@ -115,8 +117,8 @@ namespace Simionic.CustomProfiles.DesktopApp
 
                                     try
                                     {
-                                        string fileName = $"https://g1000profiledb.com/files/SimionicCustomProfileManager-{version}.zip";
-                                        Task<byte[]> task = client.GetByteArrayAsync(fileName);
+                                        string fileName = $"SimionicCustomProfileManager-{version}.zip";
+                                        Task<byte[]> task = client.GetByteArrayAsync($"https://g1000profiledb.com/files/{fileName}");
                                         byte[] data = task.Result;
                                         File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
                                         ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
