@@ -57,14 +57,22 @@
                         <div class="card h-100 border-1 shadow-sm @(profileSummary.IsPublished ? "" : "bg-mid")">
                             <img class="card-img-top" src="@GetImageUri(profileSummary)" alt="Simionic custom profile screen" />
                             <div class="card-body p-4">
-                                <h5 class="card-title mb-3">
-                                @profileSummary.Name
-                                @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
-                                    <span><button class="btn-sm btn-primary border-0 float-right shadow-none ml-1" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
-                                }
-                                <button class="btn-sm btn-primary border-0 float-right shadow-none" @onclick="() => Export(profileSummary.Id)">Export</button>
-                                </h5>
-                                <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
+                                <div class="container p-0 m-0">
+                                    <div class="row p-0 m-0">
+                                        <div class="col-8 p-0">
+                                            <h5 class="card-title mb-3">@profileSummary.Name</h5>
+                                        </div>
+                                        <div class="col-4 p-0">
+                                            @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
+                                            <span><button class="btn-sm btn-primary border-0 shadow-none mr-2" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                            }
+                                            <button class="btn-sm btn-primary border-0 shadow-none" @onclick="() => Export(profileSummary.Id)">Export</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
+                                </div>
                             </div>
                             <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                                 <div class="d-flex align-items-end justify-content-between">
