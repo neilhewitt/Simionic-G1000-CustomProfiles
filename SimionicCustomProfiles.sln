@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport", "Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{932DC54F-31BC-4FE4-BEEE-7325573F1466}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport.ConsoleApp", "Simionic.CustomProfiles.ImportExport.ConsoleApp\Simionic.CustomProfiles.ImportExport.ConsoleApp.csproj", "{35448A9F-0BE0-4CA2-8CA9-D4536A44CBF3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.DesktopApp", "Simionic.CustomProfiles.DesktopApp\Simionic.CustomProfiles.DesktopApp.csproj", "{71AC915D-65EE-4E52-993A-140746FC7F27}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Simionic.CustomProfiles.DesktopApp.Installer", "Simionic.CustomProfiles.DesktopApp.Installer\Simionic.CustomProfiles.DesktopApp.Installer.vdproj", "{838FDAC4-3016-4A84-9E85-9FE8DAB45330}"
@@ -43,10 +41,6 @@ Global
 		{932DC54F-31BC-4FE4-BEEE-7325573F1466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{932DC54F-31BC-4FE4-BEEE-7325573F1466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{932DC54F-31BC-4FE4-BEEE-7325573F1466}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35448A9F-0BE0-4CA2-8CA9-D4536A44CBF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35448A9F-0BE0-4CA2-8CA9-D4536A44CBF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35448A9F-0BE0-4CA2-8CA9-D4536A44CBF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35448A9F-0BE0-4CA2-8CA9-D4536A44CBF3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71AC915D-65EE-4E52-993A-140746FC7F27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71AC915D-65EE-4E52-993A-140746FC7F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71AC915D-65EE-4E52-993A-140746FC7F27}.Release|Any CPU.ActiveCfg = Release|Any CPU

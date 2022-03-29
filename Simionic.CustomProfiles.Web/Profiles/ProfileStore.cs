@@ -44,6 +44,16 @@ namespace Simionic.CustomProfiles.Web
             }
         }
 
+        public static async Task Delete(Profile profile)
+        {
+            profile.LastUpdated = DateTime.Now;
+            HttpResponseMessage response = await HttpClientFactory.Client.GetAsync($"/api/delete/{profile.Id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ProfileDeleteException($"Unable to delete profile. See ResponseMessage for details.", response);
+            }
+        }
+
         public static async Task<ProfileSummaryList> GetProfileSummaries()
         {
             try

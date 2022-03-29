@@ -22,4 +22,17 @@ namespace Simionic.CustomProfiles.Web
             ResponseMessage = response;
         }
     }
+
+    public class ProfileDeleteException : ProfileStoreException
+    {
+        public HttpResponseMessage ResponseMessage { get; init; }
+
+        public ProfileDeleteException() : base() { }
+        public ProfileDeleteException(string message) : base(message) { }
+        public ProfileDeleteException(string message, Exception innerException) : base(message, innerException) { }
+        public ProfileDeleteException(string message, HttpResponseMessage response) : base(message)
+        {
+            ResponseMessage = response;
+        }
+    }
 }

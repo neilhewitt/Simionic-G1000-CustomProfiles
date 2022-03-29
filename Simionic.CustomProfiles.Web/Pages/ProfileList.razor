@@ -7,21 +7,21 @@
 @inject IJSRuntime JS
 
 <section class="py-5">
-    <div class="container px-5 my-5">
+    <div class="container px-5 my-3">
         <div class="row gx-5 justify-content-center">
             <div class="col-md-auto">
                 <div class="text-center">
                     @if (User.IsLoggedIn && _onlyShowMine)
                     {
-                        <h2 class="fw-bolder">@(User.Name)'s @(_onlyShowDrafts ? "drafts" : "profiles")</h2>
+                        <h3 class="fw-bolder">@(User.Name)'s @(_onlyShowDrafts ? "drafts" : "profiles")</h3>
                     }
                     else if (!String.IsNullOrWhiteSpace(_searchTerm))
                     {
-                        <h2 class="fw-bolder">Search results</h2>
+                        <h3 class="fw-bolder">Search results</h3>
                     }
                     else
                     {
-                        <h2 class="fw-bolder">Browse profiles</h2>
+                        <h3 class="fw-bolder">Browse profiles</h3>
                     }
                     <div class="text-center"><label for="search-box" class="form-label text-black font-weight-bold">Filter: <input class="input-text" type="text" id="search-box" @bind="_searchTerm" @bind:event="oninput" /></label></div>
                     <div class="btn-group">
