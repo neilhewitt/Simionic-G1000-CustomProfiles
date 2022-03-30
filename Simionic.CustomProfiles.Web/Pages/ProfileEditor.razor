@@ -54,6 +54,12 @@
                              <b>Author note:</b> @ProfileData.Notes
                         </div>
                     }
+                    @if (Editing && ProfileData.Id != null) 
+                    { 
+                        <div class="alert alert-danger" role="alert">
+                            <b>Changes made here do not take effect until you click 'save changes'.</b>
+                        </div>
+                    }
                     <div class="col">
                         <div class="form-group">
                             <label class="form-label text-black font-weight-bold mr-2">Type</label>
@@ -72,10 +78,7 @@
                     @if (CanEdit && !Editing)
                     {
                         <div class="col">
-                            @if (ProfileData.IsPublished == false)
-                            {
-                                <button class="btn btn-large btn-danger mt-1 mb-1 ml-2 shadow-none float-end" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await DeleteDraft(); }">Delete this profile</button>
-                            }
+                             <button class="btn btn-large btn-danger mt-1 mb-1 ml-2 shadow-none float-end" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete this profile</button>
                             <button class="btn btn-large btn-primary mt-1 mb-1 shadow-none float-end" @onclick="GoToEditMode">Edit this profile</button>
                         </div>
                     }
@@ -88,10 +91,7 @@
                                     <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)">Draft</button>
                                     <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)">Published</button>
                                 </div>
-                                @if (!ProfileData.IsPublished)
-                                {
-                                    <button class="btn btn-large btn-danger mt-1 mb-1 ml-2 shadow-none float-end" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await DeleteDraft(); }">Delete this profile</button>
-                                }
+                                <button class="btn btn-large btn-danger mt-1 mb-1 ml-2 shadow-none float-end" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete this profile</button>
                             </div>
                         </div>
                     }
@@ -503,12 +503,12 @@
                         <div class="modal-footer">
                             @if (_saveWarning)
                             {
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Save(); }">Save</button>
+                                <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Save(); }">Save</button>
                                 <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _saveWarning = false; _saved = false; _saving = false; }">Cancel</button>
                             }
                             else if (_deleteWarning)
                             {
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await DeleteDraft(); }">Delete</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Delete(); }">Delete</button>
                                 <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _deleteWarning = false; _saved = false; _saving = false; }">Cancel</button>
                             }
                             else
@@ -537,12 +537,14 @@
     private bool _saved;
     private bool _error;
     private bool _alert;
-    private string _alertMessage;
-    private string _errorMessage;
     private bool _saveWarning;
     private bool _deleteWarning;
     private bool _deleted;
     private bool _deleting;
+    private string _alertMessage;
+    private string _errorMessage;
+
+    private bool _profileWasPublishedAtPageLoad = false;
 
     [Parameter] public string Id { get; set; }
 
@@ -616,6 +618,8 @@
                         await ProfileStore.Update(ProfileData);
                     }
 
+                    _profileWasPublishedAtPageLoad = ProfileData.IsPublished;
+
                     _saving = false;
                     _saved = true;
                     _alert = true;
@@ -638,14 +642,21 @@
         }
     }
 
-    protected async Task DeleteDraft()
+    protected async Task Delete()
     {
         if (!_deleteWarning)
         {
             _saving = false;
             _alert = true;
             _errorMessage = "";
-            _alertMessage = "This will delete the profile permanently. This action cannot be undone. Are you sure?";
+            if (_profileWasPublishedAtPageLoad)
+            {
+                _alertMessage = "This is a published profile. If you delete it, it will no longer be available to users of the site. This action cannot be undone. Are you absolutely sure?";
+            }
+            else
+            {
+                _alertMessage = "This will delete the draft profile permanently. This action cannot be undone. Are you sure?";
+            }
             _deleteWarning = true;
             StateHasChanged();
         }
@@ -735,7 +746,7 @@
     protected async Task Export(MouseEventArgs args)
     {
         string json = JsonConvert.SerializeObject(ProfileData, Formatting.Indented);
-        
+
         // need to remove owner details
         string ownerPattern = @$"""Id"": ""{ProfileData.Owner.Id}""";
         string namePattern = @$"""Name"": ""{ProfileData.Owner.Name}""";
@@ -743,7 +754,7 @@
         json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
 
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-        
+
         using var streamRef = new DotNetStreamReference(stream: stream);
         await JS.InvokeVoidAsync("downloadFileFromStream", $"{ProfileData.Name}.json", streamRef);
     }
@@ -777,6 +788,7 @@
             try
             {
                 ProfileData = await ProfileStore.GetAsync(Id);
+                _profileWasPublishedAtPageLoad = ProfileData.IsPublished;
             }
             catch (ProfileStoreException ex)
             {
