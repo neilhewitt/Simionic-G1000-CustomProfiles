@@ -1,0 +1,47 @@
+@page "/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+
+<RemoteAuthenticatorView Action="@Action" LogInFailed="LogInFailedFragment" OnLogInSucceeded="LoggedIn">
+    <LoggingIn>
+        <Notice ShowSearch="false" ShowLinks="false" Headline="Logging in" />
+    </LoggingIn>
+    <CompletingLoggingIn>
+        <Notice ShowSearch="false" ShowLinks="true" Headline="Welcome!" StrapLine="Just finishing up..." 
+        CustomLinks="@((MarkupString)@"<p class=""lead fw-normal text-white-50 mt-4"">If you're not re-directed in a few seconds, click <a href=""/"">here</a> to continue.</p>")" />
+    </CompletingLoggingIn>
+</RemoteAuthenticatorView>
+
+@code{
+    [Parameter] public string Action { get; set; }
+    [Parameter] public string ReturnUrl { get; set; }
+
+    private void LoggedIn(RemoteAuthenticationState state)
+    {
+        if (ReturnUrl != null)
+        {
+            state.ReturnUrl = ReturnUrl;
+        }
+    }
+
+    private static RenderFragment LogInFailedFragment(string message)
+    {
+        return builder =>
+        {
+            builder.OpenElement(0, "div");
+            builder.AddAttribute(1, "class", "alert alert-danger");
+            builder.AddAttribute(2, "role", "alert");
+            builder.OpenElement(3, "p");
+            builder.AddContent(4, "There was an error trying to log you in.");
+            builder.CloseElement();
+            if (!string.IsNullOrEmpty(message))
+            {
+                builder.OpenElement(5, "p");
+                builder.AddContent(6, $"Error: {message}");
+                builder.CloseElement();
+            }
+            builder.CloseElement();
+        };
+    }
+}

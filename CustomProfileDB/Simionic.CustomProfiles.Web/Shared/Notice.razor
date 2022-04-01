@@ -1,0 +1,67 @@
+﻿@inject NavigationManager Navigation
+
+<header class="bg-dark py-5">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 class="display-5 fw-bolder text-white mb-2">@Headline</h1>
+                    @if (!String.IsNullOrWhiteSpace(StrapLine))
+                    {
+                        <p class="lead fw-normal text-white-50 mb-4">@StrapLine</p>
+                    }
+                    @if (ShowSearch)
+                    {
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                            <input class="px-4 rounded border-0" @bind="_searchTerm" @bind:event="oninput" @onkeydown="SearchKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3 shadow-none" @onclick="Search">Search</button>
+                        </div>
+                    }
+                </div>
+                @if (ShowLinks)
+                {
+                    <div class="my-5 text-center text-xl-start pt-4">
+                        @if (CustomLinks.Value != null)
+                        {
+                            <span>Hello! @CustomLinks</span>
+                        }
+                        else
+                        {
+                            <p class="lead fw-normal text-white-50 mt-4">You can <a href="/profiles">browse profiles</a>, <a href="/import">import</a> or <a href="/create">create</a> a profile,<br /><a href="/downloads">download tools</a>, or <a href="/faq">read frequently asked questions</a>.</p>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center img-fluid"><img class="img-fluid rounded-3 my-5" src="/img/G1000_screen.jpg" alt="G1000 MFD & PFD set into a cockpit instrument panel" /></div>
+        </div>
+    </div>
+</header>
+
+@code
+{
+    [Parameter] public string Headline { get; set; } 
+    [Parameter] public string StrapLine { get; set; }
+    [Parameter] public bool ShowSearch { get; set; } 
+    [Parameter] public bool ShowLinks { get; set; }
+    [Parameter] public MarkupString CustomLinks { get; set; }
+
+    private string _searchTerm;
+
+    protected void SearchKey(KeyboardEventArgs args)
+    {
+        if (!String.IsNullOrWhiteSpace(_searchTerm))
+        {
+            if (args.Code == "Enter" || args.Code == "NumpadEnter")
+            {
+                Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", _searchTerm));
+            }
+        }
+    }
+
+    protected void Search(MouseEventArgs args)
+    {
+        if (!String.IsNullOrWhiteSpace(_searchTerm))
+        {
+            Navigation.NavigateTo(QueryHelpers.AddQueryString("/profiles", "search", _searchTerm));
+        }
+    }
+}

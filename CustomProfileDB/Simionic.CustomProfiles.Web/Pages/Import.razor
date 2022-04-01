@@ -1,0 +1,79 @@
+﻿@page "/import"
+@using System.IO
+@using Newtonsoft.Json
+@inject NavigationManager Navigation
+
+<header class="bg-dark py-5">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h3 class="fw-bolder text-white mb-2">Import a profile...</h3>
+                    @if (!User.IsLoggedIn)
+                    {
+                        <p class="lead fw-normal text-white-50 mb-4">To import a profile, you must be logged in with a Microsoft Account. You can log in <a href="/authentication/login?returnUrl=@Navigation.Uri">here</a>.</p> 
+                        <p class="fw-normal text-white-50 mb-4">You will be asked to give this site permissions to see your name and email address the first time you log in. You can find out about how we use your information <a href="/privacy">here</a>.</p>
+                    }
+                    else
+                    {
+                        <p class="lead fw-normal text-white-50 mb-4">If you have an exported profile (.json file) obtained from the Simionic Custom Profile Manager, you can import it directly to the site. The imported file will be saved to the database as a draft immediately.</p>
+                        @if (!_fileChosen && !_error)
+                        {
+                            <InputFile OnChange="UploadFile" class="form-control form-control-lg" />
+                        }
+                        else if (!_error && _uploading)
+                        {
+                            <h4 class="text-white">Importing '@_fileName'...</h4>
+                        }
+                        else if (!_error && !_uploading)
+                        {
+                            <h4 class="text-success">Imported successfully. Opening editor...</h4>
+                        }
+                        else
+                        {
+                            <p class="lead fw-normal text-danger">An error occurred uploading the file. Are you sure this is a valid profile JSON file?</p>
+                            <p class="lead fw-normal text-white-50 mb-4">You can <a href="/import" @onclick="() => { _error = false; _uploading = false; _fileChosen = false; }">try again.</a></p>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="/img/G1000_screen.jpg" alt="G1000 MFD & PFD set into a cockpit instrument panel" /></div>
+        </div>
+    </div>
+</header>
+
+@code
+{
+    private string _fileName;
+    private bool _fileChosen;
+    private bool _uploading;
+    private bool _error;
+
+    protected async void UploadFile(InputFileChangeEventArgs args)
+    {
+        var file = args.File;
+        _fileName = file.Name;
+        _uploading = true;
+        _fileChosen = true;
+
+        try
+        {
+            string json = await new StreamReader(file.OpenReadStream()).ReadToEndAsync();
+            Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+            profile = await ProfileStore.Insert(profile);
+            await Task.Delay(1000);
+
+            _uploading = false;
+            StateHasChanged();
+
+            await Task.Delay(2000);
+            Navigation.NavigateTo($"/edit/{profile.Id}");
+        }
+        catch (Exception ex)
+        {
+            _error = true;
+            _uploading = false;
+            StateHasChanged();
+        }
+    }
+}

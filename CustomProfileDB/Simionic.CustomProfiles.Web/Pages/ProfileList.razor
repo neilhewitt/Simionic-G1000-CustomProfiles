@@ -1,0 +1,274 @@
+﻿@page "/profiles"
+@using Newtonsoft.Json
+@using System.IO
+@using System.Text
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthState
+@inject IJSRuntime JS
+
+<section class="py-5">
+    <div class="container px-5 my-3">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-md-auto">
+                <div class="text-center">
+                    @if (User.IsLoggedIn && _onlyShowMine)
+                    {
+                        <h3 class="fw-bolder">@(User.Name)'s @(_onlyShowDrafts ? "drafts" : "profiles")</h3>
+                    }
+                    else if (!String.IsNullOrWhiteSpace(_searchTerm))
+                    {
+                        <h3 class="fw-bolder">Search results</h3>
+                    }
+                    else
+                    {
+                        <h3 class="fw-bolder">Browse profiles</h3>
+                    }
+                    <div class="text-center"><label for="search-box" class="form-label text-black font-weight-bold">Filter: <input class="input-text" type="text" id="search-box" @bind="_searchTerm" @bind:event="oninput" /></label></div>
+                    <div class="btn-group">
+                        <button class="btn btn-large @GetAircraftTypeButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterType()">All</button>
+                        @foreach(AircraftType type in Enum.GetValues<AircraftType>())
+                        {
+                          <button class="btn btn-large @GetAircraftTypeButtonState(type) mt-1 mb-4 shadow-none" @onclick="() => FilterType(type)">@type</button>  
+                        }
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-large @GetEngineCountButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(null)">Both</button>
+                        <button class="btn btn-large @GetEngineCountButtonState(1) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(1)">Single</button>
+                        <button class="btn btn-large @GetEngineCountButtonState(2) mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(2)">Twin</button>
+                    </div>
+                    @if (User.IsLoggedIn)
+                    {
+                        <div class="btn-group ml-1">
+                            <button class="btn btn-large @GetButtonState(!_onlyShowMine) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = false; _onlyShowDrafts = false; }">All</button>
+                            <button class="btn btn-large @GetButtonState(_onlyShowMine && !_onlyShowDrafts) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = true; _onlyShowDrafts = false; }">Just mine</button>
+                            <button class="btn btn-large @GetButtonState(_onlyShowMine && _onlyShowDrafts) mt-1 mb-4 shadow-none" @onclick="() => { _onlyShowMine = true; _onlyShowDrafts = true; }">Just drafts</button>
+                        </div>
+                    }
+                    <button class="btn btn-large btn-primary mt-1 ml-1 mb-4 shadow-none" @onclick="() => Reset()">Reset</button>
+                </div>
+            </div>
+        </div>
+        @if (ProfileSummaries != null)
+        {
+            <div class="row gx-5">
+                @foreach (ProfileSummary profileSummary in Filtered)
+                {
+                    <div class="col-lg-4 mb-5" style="cursor: pointer" @onclick="() => Profile(profileSummary.Id)">
+                        <div class="card h-100 border-1 shadow-sm @(profileSummary.IsPublished ? "" : "bg-mid")">
+                            <img class="card-img-top" src="@GetImageUri(profileSummary)" alt="Simionic custom profile screen" />
+                            <div class="card-body p-4">
+                                <div class="container p-0 m-0">
+                                    <div class="row p-0 m-0">
+                                        <div class="col-8 p-0">
+                                            <h5 class="card-title mb-3">@profileSummary.Name</h5>
+                                        </div>
+                                        <div class="col-4 p-0">
+                                            @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
+                                            <span><button class="btn-sm btn-primary border-0 shadow-none mr-2" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                            }
+                                            <button class="btn-sm btn-primary border-0 shadow-none" @onclick="() => Export(profileSummary.Id)">Export</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
+                                <div class="d-flex align-items-end justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="small">
+                                            <div class="text">
+                                                <b>By:</b> @(profileSummary.Owner.Name ?? "Unknown")
+                                                @if (User.IsLoggedIn && User.Owns(profileSummary) && !profileSummary.IsPublished)
+                                                {
+                                                    <span class="text-black">&nbsp;|&nbsp;</span><span class="text-black-50 fw-bold">Draft</span>
+                                                }
+                                            </div>
+                                            <div class="text float-left"><b>Updated:</b> @profileSummary.LastUpdated</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                <h5>Loading...</h5>
+                @if (!String.IsNullOrEmpty(_errorMessage))
+                {
+                    <p class="text-danger">@_errorMessage</p>
+                    <p>Try again later, or if this persists, contact <a href="/contact">the site admin</a></p>
+                }
+            </div>
+        }
+        @if (Filtered?.Count() == 0)
+        {
+            <div class="text-center">
+                <h5>Nothing to see here... try changing the filter.</h5>
+            </div>
+        }
+    </div>
+</section>
+
+@code
+{
+    private AircraftType? _typeFilter;
+    private int? _engineFilter;
+    private string _searchTerm;
+    private bool _onlyShowDrafts;
+    private bool _onlyShowMine;
+    private bool _exported;
+    private string _errorMessage;
+
+    public ProfileSummaryList ProfileSummaries { get; set; }
+    public ProfileSummaryList Filtered
+    {
+        get
+        {
+            PublishedStatus status = (User.IsLoggedIn, _onlyShowDrafts) switch
+            {
+                (true, false) => PublishedStatus.PublishedOwner,
+                (true, true) => PublishedStatus.UnpublishedOwner,
+                (_, _) => PublishedStatus.Published
+            };
+
+            return ProfileSummaries?.Filter(status, _typeFilter, _engineFilter, (User.IsLoggedIn ? User.OwnerId : null), _onlyShowMine, _searchTerm);
+        }
+    }
+
+    protected string GetImageUri(ProfileSummary profileSummary)
+    {
+        return profileSummary.AircraftType switch
+        {
+            AircraftType.Piston => "/img/piston.jpg",
+            AircraftType.Turboprop => "/img/turboprop.jpg",
+            AircraftType.Jet => "/img/jet.jpg",
+            _ => ""
+        };
+    }
+
+    protected void Edit(string id)
+    {
+        Navigation.NavigateTo($"/edit/{ id }");
+    }
+
+    protected void Profile(string id)
+    {
+        if (!_exported)
+        {
+            Navigation.NavigateTo($"/profile/{ id }");
+        }
+        else
+        {
+            _exported = false;
+        }
+    }
+
+    protected string GetButtonState(bool test)
+    {
+        return test ? "btn-primary" : "btn-secondary";
+    }
+
+    protected string GetEngineCountButtonState(int? engines = null)
+    {
+        if (_engineFilter == engines)
+        {
+            return "btn-primary";
+        }
+        else
+        {
+            return "btn-secondary";
+        }
+    }
+
+    protected string GetAircraftTypeButtonState(AircraftType? type = null)
+    {
+        if (_typeFilter == type)
+        {
+            return "btn-primary";
+        }
+        else
+        {
+            return "btn-secondary";
+        }
+    }
+
+    protected void FilterEngine(int? engines)
+    {
+        _engineFilter = engines;
+    }
+
+    protected void FilterType(AircraftType? type = null)
+    {
+        _typeFilter = type;
+    }
+
+    protected void BackToAll(MouseEventArgs args)
+    {
+        Navigation.NavigateTo("/profiles");
+    }
+
+    protected async Task Reset(bool resetSearch = true)
+    {
+        try
+        {
+            ProfileSummaries = await ProfileStore.GetProfileSummaries();
+        }
+        catch (ProfileStoreException ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        catch
+        {
+            _errorMessage = $"Unable to load profiles. Unknown error.";        
+        }
+
+        _typeFilter = null;
+        _engineFilter = null;
+        _onlyShowMine = false;
+        _onlyShowDrafts = false;
+        if (resetSearch) _searchTerm = null;
+    }
+
+    protected async Task Export(string id)
+    {
+        _exported = true;
+
+        Profile profile = await ProfileStore.GetAsync(id);
+        string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
+        
+        // need to remove owner details
+        string ownerPattern = @$"""Id"": ""{profile.Owner.Id}""";
+        string namePattern = @$"""Name"": ""{profile.Owner.Name}""";
+        string idPattern = @$"""id"": ""{profile.Id}""";
+        json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
+
+        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        
+        using var streamRef = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"{profile.Name}.json", streamRef);
+    }
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (Navigation.IsAt("profiles"))
+        {
+            _onlyShowMine = false;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
+        StringValues values = String.Empty;
+        if (query.TryGetValue("search", out values)) _searchTerm = values.SingleOrDefault()?.ToLower();
+
+        await Reset(false);
+    }
+}
