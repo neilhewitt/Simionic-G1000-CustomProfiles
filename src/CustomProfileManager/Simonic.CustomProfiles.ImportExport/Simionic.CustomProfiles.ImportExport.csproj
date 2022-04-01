@@ -14,7 +14,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.2" />
-    <PackageReference Include="Simionic.Core" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,9 +12,12 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.1" />
     <PackageReference Include="Microsoft.Graph" Version="4.17.0" />
-    <PackageReference Include="Simionic.Core" Version="1.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     <PackageReference Include="TimeZoneConverter" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
