@@ -8,8 +8,8 @@ namespace Simionic.Core
         private double _max;
 
         public RangeColour Colour { get; set; }
-        public double Min { get { return _min; } set { _min = AllowDecimals ? _min : Math.Truncate(_min); } }
-        public double Max { get { return _max; } set { _max = AllowDecimals ? _max : Math.Truncate(_max); } }
+        public double Min { get { return _min; } set { _min = AllowDecimals ? value : Math.Truncate(value); } }
+        public double Max { get { return _max; } set { _max = AllowDecimals ? value : Math.Truncate(value); } }
         
         public bool AllowDecimals { get; set; }
 

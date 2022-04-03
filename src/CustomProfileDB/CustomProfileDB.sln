@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Fun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Core\Simionic.Core\Simionic.Core.csproj", "{FB697205-38F3-4759-BA66-932CD7EC02AB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Editor", "Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj", "{4D8232B0-36F0-4CC8-A36F-93B21A20612D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FB697205-38F3-4759-BA66-932CD7EC02AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB697205-38F3-4759-BA66-932CD7EC02AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB697205-38F3-4759-BA66-932CD7EC02AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D8232B0-36F0-4CC8-A36F-93B21A20612D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D8232B0-36F0-4CC8-A36F-93B21A20612D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D8232B0-36F0-4CC8-A36F-93B21A20612D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D8232B0-36F0-4CC8-A36F-93B21A20612D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

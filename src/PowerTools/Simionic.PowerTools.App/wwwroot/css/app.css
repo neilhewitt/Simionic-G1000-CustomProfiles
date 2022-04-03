@@ -1,3 +1,4 @@
+ï»¿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 /*!
 * Start Bootstrap - Modern Business v5.0.5 (https://startbootstrap.com/template-overviews/modern-business)
@@ -616,7 +617,7 @@ progress {
 }
 
     .blockquote-footer::before {
-        content: "— ";
+        content: "â€”Â ";
     }
 
 .img-fluid {
@@ -2610,11 +2611,11 @@ textarea.form-control-lg {
     .form-check-input:disabled {
         pointer-events: none;
         filter: none;
-        opacity: 1;
+        opacity: 0.5;
     }
 
         .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
-            opacity: 1;
+            opacity: 0.5;
         }
 
 .form-switch {
@@ -11935,6 +11936,7 @@ html {
     background-repeat: no-repeat;
     min-height: 15rem;
 }
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -11988,6 +11990,7 @@ html {
     background-color: white;
     cursor: pointer;
 }
+
     .profile-indicator.empty {
         background-size: auto;
         background-color: white;
@@ -12012,9 +12015,3 @@ html {
 .card.bg-mid {
     background-color: #b0b0b0;
 }
-
-.form-check-input {
-    margin-left:0px !important;
-}
-
-
