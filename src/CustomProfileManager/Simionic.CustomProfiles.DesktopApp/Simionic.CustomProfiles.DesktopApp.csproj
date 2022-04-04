@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\IniFileReader\src\IniFileReader\IniFileManager.csproj" />
     <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
     <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
   </ItemGroup>

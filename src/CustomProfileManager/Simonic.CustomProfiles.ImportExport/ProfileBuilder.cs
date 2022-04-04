@@ -119,6 +119,14 @@ namespace Simionic.CustomProfiles.ImportExport
             object value = config[name];
             if (value is null) return default(T);
             if (value is string && String.IsNullOrWhiteSpace((string)value)) return default(T);
+            if (typeof(T) == typeof(int) && value is string)
+            {
+                if (double.TryParse((string)value, out double valueDouble))
+                { 
+                    // force the value into an int
+                    value = (int)Math.Floor(valueDouble);
+                }
+            }
 
             return (T)Convert.ChangeType(value, typeof(T));
         }
