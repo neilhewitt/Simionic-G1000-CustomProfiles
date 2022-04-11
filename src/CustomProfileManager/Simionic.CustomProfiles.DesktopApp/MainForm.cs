@@ -14,6 +14,7 @@ namespace Simionic.CustomProfiles.DesktopApp
     {
         private const string CURRENT_VERSION = "1.0.0";
         private const string NO_PROFILE_MSG = "-- This database has no profiles --";
+        private const string LOG_PATH = "logfile.txt";
 
         private CustomProfileDB _profileDB;
         private List<int> _selectedProfileIndexes = new List<int>();
@@ -53,13 +54,13 @@ namespace Simionic.CustomProfiles.DesktopApp
             base.OnLoad(e);
         }
 
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-            this.Enabled = false;
-            CheckForNewVersion();
-            this.Enabled = true;
-        }
+        //protected override void OnShown(EventArgs e)
+        //{
+        //    base.OnShown(e);
+        //    this.Enabled = false;
+        //    CheckForNewVersion();
+        //    this.Enabled = true;
+        //}
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -296,7 +297,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 Task.Delay(1000).Wait();
                 SaveChangesButton.Text = saveText;
 
-                _profileDB.SaveToDatabase(false);
+                _profileDB.SaveToDatabase(false, LOG_PATH);
                 if (!_removedLastProfile) SaveChangesButton.Enabled = true;
                 _removedLastProfile = false;
 
@@ -343,7 +344,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 this.Enabled = false;
                 try
                 {
-                    byte[] data = _profileDB.SaveToDatabase(false);
+                    byte[] data = _profileDB.SaveToDatabase(false, LOG_PATH);
                     iPadFileManager iPadFileManager = new iPadFileManager();
                     iPadFileManager.PushAppSharedFileToiPad(iPadName.Text, "ACCustom.db", data);
 

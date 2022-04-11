@@ -55,7 +55,7 @@ namespace Simionic.CustomProfiles.ImportExport
             }
         }
 
-        public byte[] SaveToDatabase(bool updateExistingProfiles = true)
+        public byte[] SaveToDatabase(bool updateExistingProfiles = true, string logPath = null)
         {
             // make a backup first...
             string backupFolder = Path.GetDirectoryName(_dbPath);
@@ -64,6 +64,8 @@ namespace Simionic.CustomProfiles.ImportExport
 
             using (SqliteConnection connection = new SqliteConnection($"Data Source={_dbPath}"))
             {
+                List<string> log = new();
+
                 connection.Open();
                 foreach (Profile profile in _profiles)
                 {
@@ -71,7 +73,7 @@ namespace Simionic.CustomProfiles.ImportExport
                     if (aircraftId > _maxId)
                     {
                         // new
-                        ExecuteCommand($"INSERT INTO Aircraft (ACNum, ACName) VALUES ({aircraftId},'{profile.Name.Escape()}')", connection);
+                        ExecuteCommand($"INSERT INTO Aircraft (ACNum, ACName) VALUES ({aircraftId},'{profile.Name.Escape()}')", connection, log);
                         _maxId = aircraftId;
 
                         // build SQL
@@ -82,23 +84,25 @@ namespace Simionic.CustomProfiles.ImportExport
                             sql.Append($"({aircraftId}, '{configItem.Name}', '{Convert.ToString(configItem.Value).Escape()}'),\n");
                         }
 
-                        ExecuteCommand(sql.ToString().Substring(0, sql.Length - 2), connection);
+                        ExecuteCommand(sql.ToString().Substring(0, sql.Length - 2), connection, log);
                     }
                     else if (updateExistingProfiles)
                     {
                         AircraftConfig config = new AircraftConfigBuilder(profile, aircraftId).AircraftConfig;
                         foreach (ConfigItem configItem in config.ConfigItems)
                         {
-                            ExecuteCommand($"UPDATE ConfigItems SET ConfigValue = '{Convert.ToString(configItem.Value).Escape()}' WHERE ACNum = {aircraftId} AND ConfigName = '{configItem.Name.Escape()}'", connection);
+                            ExecuteCommand($"UPDATE ConfigItems SET ConfigValue = '{Convert.ToString(configItem.Value).Escape()}' WHERE ACNum = {aircraftId} AND ConfigName = '{configItem.Name.Escape()}'", connection, log);
                         }
                     }
                 }
 
                 foreach (var removedProfile in _removed)
                 {
-                    ExecuteCommand($"DELETE FROM ConfigItems WHERE ACNum = {removedProfile.AircraftId}", connection);
-                    ExecuteCommand($"DELETE FROM Aircraft WHERE ACNum = {removedProfile.AircraftId}", connection);
+                    ExecuteCommand($"DELETE FROM ConfigItems WHERE ACNum = {removedProfile.AircraftId}", connection, log);
+                    ExecuteCommand($"DELETE FROM Aircraft WHERE ACNum = {removedProfile.AircraftId}", connection, log);
                 }
+
+                File.WriteAllLines(logPath, log);
             }
 
             string tempFileName = _dbPath + ".temp";
@@ -114,10 +118,11 @@ namespace Simionic.CustomProfiles.ImportExport
             }
         }
 
-        private void ExecuteCommand(string commandText, SqliteConnection connection)
+        private void ExecuteCommand(string commandText, SqliteConnection connection, IList<string> log)
         {
             using (SqliteCommand command = new SqliteCommand(commandText, connection))
             {
+                log.Add(commandText);
                 command.ExecuteNonQuery();
             }
         }
@@ -167,9 +172,11 @@ namespace Simionic.CustomProfiles.ImportExport
 
         public void RemoveProfile(Profile profile)
         {
-            _removed.Add((_configsByProfile[profile].Id, profile));
+            int id = _configsByProfile[profile].Id;
+            _removed.Add((id, profile));
             _configsByProfile.Remove(profile);
             _profiles.Remove(profile);
+            if (_maxId == id) _maxId = _configsByProfile.Max(x => x.Value.Id);
         }
 
         public void RemoveProfile(string name)
