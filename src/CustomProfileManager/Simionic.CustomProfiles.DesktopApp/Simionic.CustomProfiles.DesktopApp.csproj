@@ -8,6 +8,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</ApplicationIcon>
     <PackageIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</PackageIcon>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
+	<VersionPrefix>1.0.1</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

@@ -816,7 +816,7 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Simionic Custom Profile Manager"
-        "ProductCode" = "8:{6068B053-3CAE-4A7A-8E2A-13C20C4C3F49}"
+        "ProductCode" = "8:{CCB34548-FCE5-40FF-9C0F-237DBF47D5C2}"
         "PackageCode" = "8:{824C4B96-B34E-4CF0-A0CE-C39DC12F023F}"
         "UpgradeCode" = "8:{233C7630-642A-4DB1-9A37-04615263C032}"
         "AspNetVersion" = "8:4.0.30319.0"

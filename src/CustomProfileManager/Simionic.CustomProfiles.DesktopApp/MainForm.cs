@@ -235,20 +235,35 @@ namespace Simionic.CustomProfiles.DesktopApp
                 openFileDialog.Filter = "JSON files (*.json)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string path = openFileDialog.FileName;
-                    try
+                    List<string> profileNames = new();
+                    foreach (string path in openFileDialog.FileNames)
                     {
-                        Profile profile = _profileDB.ImportProfileFromJson(path);
-                        UpdateProfileList();
-                        if (_showAlerts) ShowMessageBox($"Added profile '{profile.Name}'.\n\nNote that this will not be written to the custom profile database until you click 'Save changes', and if you exit the program without doing so, these changes will be lost.", "Profile imported");
+                        if (!_profileDB.FileIsValid(path))
+                        {
+                            ShowMessageBox($"An unexpected error occurred parsing the file '{Path.GetFileName(path)}'. All imports cancelled. Please check the file and try again.", "Error");
+                            return;
+                        }
                     }
-                    catch (Exception ex)
+
+                    foreach (string path in openFileDialog.FileNames)
                     {
-                        ShowMessageBox("An unexpected error occurred reading the database file. Please check the file and try again.", "Error");
+                        try
+                        {
+                            Profile profile = _profileDB.ImportProfileFromJson(path);
+                            profileNames.Add(profile.Name); 
+                            UpdateProfileList();
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowMessageBox($"An unexpected error occurred reading the file '{Path.GetFileName(path)}'. Please check the file and try again.", "Error");
+                        }
                     }
+                    
+                    if (_showAlerts) ShowMessageBox($"Added profile{ (profileNames.Count > 1 ? "s" : "") } '{String.Join(", ", profileNames)}'.\n\nNote that these will not be written to the custom profile database until you click 'Save changes', and if you exit the program without doing so, these changes will be lost.", "Profile imported");
                 }
                 else
                 {
@@ -281,7 +296,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 Task.Delay(1000).Wait();
                 SaveChangesButton.Text = saveText;
 
-                _profileDB.SaveToDatabase();
+                _profileDB.SaveToDatabase(false);
                 if (!_removedLastProfile) SaveChangesButton.Enabled = true;
                 _removedLastProfile = false;
 
@@ -328,7 +343,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 this.Enabled = false;
                 try
                 {
-                    byte[] data = _profileDB.SaveToDatabase();
+                    byte[] data = _profileDB.SaveToDatabase(false);
                     iPadFileManager iPadFileManager = new iPadFileManager();
                     iPadFileManager.PushAppSharedFileToiPad(iPadName.Text, "ACCustom.db", data);
 

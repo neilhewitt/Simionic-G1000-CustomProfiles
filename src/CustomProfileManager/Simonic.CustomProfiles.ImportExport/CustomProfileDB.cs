@@ -55,7 +55,7 @@ namespace Simionic.CustomProfiles.ImportExport
             }
         }
 
-        public byte[] SaveToDatabase()
+        public byte[] SaveToDatabase(bool updateExistingProfiles = true)
         {
             // make a backup first...
             string backupFolder = Path.GetDirectoryName(_dbPath);
@@ -84,7 +84,7 @@ namespace Simionic.CustomProfiles.ImportExport
 
                         ExecuteCommand(sql.ToString().Substring(0, sql.Length - 2), connection);
                     }
-                    else
+                    else if (updateExistingProfiles)
                     {
                         AircraftConfig config = new AircraftConfigBuilder(profile, aircraftId).AircraftConfig;
                         foreach (ConfigItem configItem in config.ConfigItems)
@@ -130,6 +130,24 @@ namespace Simionic.CustomProfiles.ImportExport
         public void AddProfile(Profile profile)
         {
             AddProfile(null, profile);
+        }
+
+        public bool FileIsValid(string jsonPath)
+        {
+            if (File.Exists(jsonPath))
+            {
+                try
+                {
+                    string json = File.ReadAllText(jsonPath);
+                    Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+                    return true;
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
         }
 
         public Profile ImportProfileFromJson(string jsonPath)

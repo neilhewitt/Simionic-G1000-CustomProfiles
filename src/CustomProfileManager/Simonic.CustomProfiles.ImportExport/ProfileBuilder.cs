@@ -63,7 +63,7 @@ namespace Simionic.CustomProfiles.ImportExport
             _profile.FADEC = GetValue<int>(config, "FEDEC") == 1; // NOTE: spelling mistake is in DB
             _profile.Turbocharged = GetValue<int>(config, "Turbocharged") == 1;
             _profile.ConstantSpeed = GetValue<int>(config, "ContantSpeed") == 1; // another spelling mistake in DB
-            _profile.TemperaturesInFahrenheit = GetValue<int>(config, "GaugeTempUnit") == 1;
+            _profile.TemperaturesInFahrenheit = GetValue<int>(config, "GaugeTempUnit") == 0;
 
             // vacuum
             _profile.VacuumPSIRange.Min = GetValue<double>(config, "GaugeVacMin");
