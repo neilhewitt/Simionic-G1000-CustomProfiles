@@ -102,7 +102,7 @@ namespace Simionic.CustomProfiles.ImportExport
                     ExecuteCommand($"DELETE FROM Aircraft WHERE ACNum = {removedProfile.AircraftId}", connection, log);
                 }
 
-                File.WriteAllLines(logPath, log);
+                //File.WriteAllLines(logPath, log);
             }
 
             string tempFileName = _dbPath + ".temp";
