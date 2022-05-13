@@ -23,6 +23,7 @@ namespace Simionic.Core
     {
         private bool _fadec;
         private bool _constantSpeed;
+        private int _cylinders;
 
         [JsonIgnore]
         public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, Load, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };
@@ -30,7 +31,7 @@ namespace Simionic.Core
         public string ForkedFrom { get; set; }
 
         // Piston only
-        public int Cylinders { get; set; } = 4;
+        public int Cylinders { get { return _cylinders; } set { _cylinders = (value is 0 or 4 or 6) ? value : throw new ArgumentException("Attempt to set Cylinders to invalid value. Please report this to admin@g1000profiledb.com."); } }
         public bool FADEC { get { return _fadec; } set { _fadec = value; if (value) _constantSpeed = false; } }
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get { return _constantSpeed; } set { _constantSpeed = value; } }
@@ -72,8 +73,6 @@ namespace Simionic.Core
             FixRanges(ManifoldPressure);
             FixRanges(FuelFlow);
             FixRanges(OilPressure);
-
-
 
             void FixRanges(Gauge gauge)
             {

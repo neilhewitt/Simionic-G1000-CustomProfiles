@@ -176,7 +176,10 @@ namespace Simionic.CustomProfiles.ImportExport
             _removed.Add((id, profile));
             _configsByProfile.Remove(profile);
             _profiles.Remove(profile);
-            if (_maxId == id) _maxId = _configsByProfile.Max(x => x.Value.Id);
+            if (_maxId == id && _configsByProfile.Count > 0)
+            {
+                _maxId = _configsByProfile.Max(x => x.Value.Id);
+            }
         }
 
         public void RemoveProfile(string name)

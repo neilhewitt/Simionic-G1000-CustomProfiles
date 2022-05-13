@@ -9,15 +9,14 @@ namespace Simionic.PowerTools.App
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .RegisterBlazorMauiWebView()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
-            builder.Services.AddBlazorWebView();
             builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddMauiBlazorWebView();
 
             return builder.Build();
         }

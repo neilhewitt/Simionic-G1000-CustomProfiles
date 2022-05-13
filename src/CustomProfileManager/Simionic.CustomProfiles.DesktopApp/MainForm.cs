@@ -12,7 +12,6 @@ namespace Simionic.CustomProfiles.DesktopApp
 {
     public partial class MainForm : Form
     {
-        private const string CURRENT_VERSION = "1.0.0";
         private const string NO_PROFILE_MSG = "-- This database has no profiles --";
         private const string LOG_PATH = "logfile.txt";
 
@@ -21,9 +20,12 @@ namespace Simionic.CustomProfiles.DesktopApp
         private bool _showAlerts = true;
         private bool _removedLastProfile = false;
 
+        private string _currentVersion => Application.ProductVersion;
+
         public MainForm()
         {
             InitializeComponent();
+            this.Text += $" {_currentVersion}";
         }
 
         public void NotifyDBExportedTo(string path)
@@ -54,13 +56,13 @@ namespace Simionic.CustomProfiles.DesktopApp
             base.OnLoad(e);
         }
 
-        //protected override void OnShown(EventArgs e)
-        //{
-        //    base.OnShown(e);
-        //    this.Enabled = false;
-        //    CheckForNewVersion();
-        //    this.Enabled = true;
-        //}
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            this.Enabled = false;
+            CheckForNewVersion();
+            this.Enabled = true;
+        }
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -73,7 +75,7 @@ namespace Simionic.CustomProfiles.DesktopApp
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.InitialDirectory = RegistryManager.LastFolderPath ?? "c:\\";
                 openFileDialog.Filter = "Sqlite DB files (*.db)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
@@ -81,6 +83,7 @@ namespace Simionic.CustomProfiles.DesktopApp
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     path = openFileDialog.FileName;
+                    RegistryManager.LastFolderPath = Path.GetFullPath(path);
                     try
                     {
                         LoadDatabase(path); 
@@ -99,53 +102,59 @@ namespace Simionic.CustomProfiles.DesktopApp
 
         private void CheckForNewVersion()
         {
-            using (HttpClient client = new HttpClient())
+            DateTime now = DateTime.Now;
+            if (now.Subtract(RegistryManager.LastCheckForUpdate) > TimeSpan.FromDays(7))
             {
-                try
+                using (HttpClient client = new HttpClient())
                 {
-                    string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
-                    if (version != CURRENT_VERSION)
+                    try
                     {
-                        DialogResult result = ShowMessageBox($"A new version ({version}) is available. Download it?", "New version available", MessageBoxButtons.YesNoCancel);
-                        if (result == DialogResult.Yes)
+                        string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
+                        if (version != _currentVersion)
                         {
-                            using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
+                            DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
+                            if (result == DialogResult.Yes)
                             {
-                                folderBrowseDialog.InitialDirectory = $"{Environment.SpecialFolder.UserProfile}/downloads";
-                                if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
+                                using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
                                 {
-                                    string folderPath = folderBrowseDialog.SelectedPath;
+                                    folderBrowseDialog.InitialDirectory = $"{Environment.SpecialFolder.UserProfile}/downloads";
+                                    if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
+                                    {
+                                        string folderPath = folderBrowseDialog.SelectedPath;
 
-                                    try
-                                    {
-                                        string fileName = $"SimionicCustomProfileManager-{version}.zip";
-                                        Task<byte[]> task = client.GetByteArrayAsync($"https://g1000profiledb.com/files/{fileName}");
-                                        byte[] data = task.Result;
-                                        File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
-                                        ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
-                                        Application.Exit();
+                                        try
+                                        {
+                                            string fileName = $"SimionicCustomProfileManager-{version}.zip";
+                                            Task<byte[]> task = client.GetByteArrayAsync($"https://g1000profiledb.com/files/{fileName}");
+                                            byte[] data = task.Result;
+                                            File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
+                                            ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
+                                            Application.Exit();
+                                        }
+                                        catch
+                                        {
+                                            ShowMessageBox("Could not download the file. An unexpected error occurred. Check https://g1000profiledb.com/downloads for manual download.", "Error");
+                                        }
+                                        finally
+                                        {
+                                            ExportButton.Enabled = true;
+                                        }
                                     }
-                                    catch
+                                    else
                                     {
-                                        ShowMessageBox("Could not download the file. An unexpected error occurred. Check https://g1000profiledb.com/downloads for manual download.", "Error");
+                                        return;
                                     }
-                                    finally
-                                    {
-                                        ExportButton.Enabled = true;
-                                    }
-                                }
-                                else
-                                {
-                                    return;
                                 }
                             }
                         }
-                   }
+                    }
+                    catch
+                    {
+                        // ignore, site may be unavailable or retired
+                    }
                 }
-                catch
-                {
-                    // ignore, site may be unavailable or retired
-                }
+
+                RegistryManager.LastCheckForUpdate = now;
             }
         }
 
@@ -188,10 +197,11 @@ namespace Simionic.CustomProfiles.DesktopApp
             {
                 using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
                 {
-                    folderBrowseDialog.InitialDirectory = Environment.CurrentDirectory;
+                    folderBrowseDialog.InitialDirectory = RegistryManager.LastFolderPath ?? Environment.CurrentDirectory;
                     if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
                     {
                         string folderPath = folderBrowseDialog.SelectedPath;
+                        RegistryManager.LastFolderPath = folderPath;
                         
                         ExportButton.Enabled = false;
                         string exportText = ExportButton.Text;
@@ -232,7 +242,7 @@ namespace Simionic.CustomProfiles.DesktopApp
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.InitialDirectory = RegistryManager.LastFolderPath ?? "c:\\";
                 openFileDialog.Filter = "JSON files (*.json)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
@@ -240,6 +250,8 @@ namespace Simionic.CustomProfiles.DesktopApp
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
+                    RegistryManager.LastFolderPath = Path.GetFullPath(openFileDialog.FileNames.FirstOrDefault());
+
                     List<string> profileNames = new();
                     foreach (string path in openFileDialog.FileNames)
                     {
