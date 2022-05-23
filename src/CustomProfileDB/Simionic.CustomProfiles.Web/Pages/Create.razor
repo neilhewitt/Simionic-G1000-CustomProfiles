@@ -3,12 +3,12 @@
 @using Newtonsoft.Json
 @inject NavigationManager Navigation
 
-<header class="bg-dark py-5">
+<main class="bg-dark py-5">
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center">
             <div class="col-lg-8 col-xl-7 col-xxl-6">
                 <div class="my-5 text-center text-xl-start">
-                    <h3 class="fw-bolder text-white mb-2">Create a profile...</h3>
+                    <h3 class="fw-bolder text-white mb-2">Create a profile</h3>
                     @if (!User.IsLoggedIn)
                     {
                         <p class="lead fw-normal text-white-50 mb-4">To create a profile, you must be logged in with a Microsoft Account. You can log in <a href="/authentication/login?returnUrl=@Navigation.Uri">here</a>.</p> 
@@ -16,17 +16,19 @@
                     }
                     else
                     {
-                        <p class="lead fw-normal text-white-50 mb-4">Choose a name for your new profile, then click Create.</p>
+                        <p class="lead fw-normal text-white-50">Choose a name for your new profile</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start mb-5">
-                            <input class="px-4 rounded border-0 shadow-none" placeholder="Your new profile's name" @bind="_profileName" @bind:event="oninput" @onkeydown="ProfileNameKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3" @onclick="CreateProfile">Create</button>
+                            <input class="px-4 rounded border-0 shadow-none form-control form-control-lg" placeholder="Your new profile's name" @bind="_profileName" @bind:event="oninput" @onkeydown="ProfileNameKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3" @onclick="CreateProfile">Create</button>
                         </div>
+
+                        <p class="lead fw-normal text-white-50 mb-4">This creates <b>a new empty profile</b> that you must fill out manually,<br />but you can also <a href="/import">import</a> a profile that you have exported from your iPad.</p>
                     }
                 </div>
             </div>
             <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="/img/G1000_screen.jpg" alt="G1000 MFD & PFD set into a cockpit instrument panel" /></div>
         </div>
     </div>
-</header>
+</main>
 
 @code
 {

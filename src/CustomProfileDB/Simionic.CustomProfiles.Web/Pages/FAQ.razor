@@ -1,13 +1,13 @@
 ﻿@page "/faq"
 
-<header class="bg-dark py-5">
+<main class="bg-dark py-5">
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center">
             <div class="col-10">
                 <div class="my-5 text-body fw-normal">
-                    <h3 class="fw-bolder text-white mb-5">Frequently Asked Questions</h3>
                     <img class="img-fluid rounded-3 ml-5 mb-5 float-end" src="/img/G1000_screen.jpg" width="300" alt="G1000 MFD & PFD set into a cockpit instrument panel" />
-                    
+                    <h3 class="fw-bolder text-white mb-5">Frequently Asked Questions</h3>
+
                     @Entry(1, "How do I use these profiles with my Simionic apps?", new string[] { 
                     @"To use the profiles stored here with your apps, you need to first make sure you're on the latest version of the app. Some older iPads cannot run the latest versions
                       and may not be able to use custom profile data. Once you have this, touch the spot at the top-right of the PFD / MFD screen to access the settings. You should 
@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-</header>
+</main>
 
 @code {
     MarkupString Entry(int number, string headline, string[] paras)
