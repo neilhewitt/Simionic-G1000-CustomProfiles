@@ -31,7 +31,7 @@ namespace Simionic.Core
         public string ForkedFrom { get; set; }
 
         // Piston only
-        public int Cylinders { get { return _cylinders; } set { _cylinders = (value is 0 or 4 or 6) ? value : throw new ArgumentException("Attempt to set Cylinders to invalid value. Please report this to admin@g1000profiledb.com."); } }
+        public int Cylinders { get { return _cylinders; } set { _cylinders = (value is 0 or 4 or 6) ? value : 0; } } // ensure only valid values allowed - older versions of Simionic defaulted the value to 1
         public bool FADEC { get { return _fadec; } set { _fadec = value; if (value) _constantSpeed = false; } }
         public bool Turbocharged { get; set; } = false;
         public bool ConstantSpeed { get { return _constantSpeed; } set { _constantSpeed = value; } }

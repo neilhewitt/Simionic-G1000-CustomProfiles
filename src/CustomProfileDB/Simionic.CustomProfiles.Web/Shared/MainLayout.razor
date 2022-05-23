@@ -76,4 +76,12 @@
     {
         base.OnAfterRender(firstRender);
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // this will 'wake up' the function app and CosmosDB - so that the profiles page always responds quickly
+        // it does cost RUs, so this may not be the right way to go once the free 12 months has expired...
+        await ProfileStore.GetProfileSummaries();
+        await base.OnInitializedAsync();
+    }
 }

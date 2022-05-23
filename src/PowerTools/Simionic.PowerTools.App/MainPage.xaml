@@ -7,10 +7,10 @@
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              MinimumWidthRequest="800" MinimumHeightRequest="600">
 
-    <b:BlazorWebView HostPage="wwwroot/index.html">
-        <b:BlazorWebView.RootComponents>
-            <b:RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
-        </b:BlazorWebView.RootComponents>
-    </b:BlazorWebView>
+    <BlazorWebView HostPage="wwwroot/index.html">
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
 
 </ContentPage>
