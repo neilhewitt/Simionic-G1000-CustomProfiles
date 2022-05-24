@@ -64,9 +64,8 @@
                                         </div>
                                         <div class="col-4 p-0">
                                             @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
-                                            <span><button class="btn-sm btn-primary border-0 shadow-none mr-2" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
+                                            <span><button class="btn-sm btn-primary float-right border-0 shadow-none mr-2" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
                                             }
-                                            <button class="btn-sm btn-primary border-0 shadow-none" @onclick="() => Export(profileSummary.Id)">Export</button>
                                         </div>
                                     </div>
                                 </div>
@@ -234,26 +233,6 @@
         _onlyShowDrafts = false;
         if (resetSearch) _searchTerm = null;
     }
-
-    protected async Task Export(string id)
-    {
-        _exported = true;
-
-        Profile profile = await ProfileStore.GetAsync(id);
-        string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
-        
-        // need to remove owner details
-        string ownerPattern = @$"""Id"": ""{profile.Owner.Id}""";
-        string namePattern = @$"""Name"": ""{profile.Owner.Name}""";
-        string idPattern = @$"""id"": ""{profile.Id}""";
-        json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
-
-        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-        
-        using var streamRef = new DotNetStreamReference(stream: stream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", $"{profile.Name}.json", streamRef);
-    }
-
 
     protected override void OnAfterRender(bool firstRender)
     {

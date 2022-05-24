@@ -39,7 +39,14 @@
             <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
             @if (ProfileData.Id is not null)
             {
-                <div class="text-center mb-4"><button class="btn-primary btn-sm border-0 shadow-none" @onclick="Export">Export</button></div>
+                <div class="text-center mb-4">
+                    <button class="btn-primary btn-sm border-0 shadow-none" @onclick="Export">Export</button>
+                    @if (CanEdit && !Editing)
+                    {
+                        <button class="btn-primary btn-sm border-0 shadow-none ml-4" @onclick="GoToEditMode">Edit</button>
+                        <button class="btn-danger btn-sm border-0 shadow-none" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete</button>
+                    }
+                </div>
             }
             <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
                 <div class="row justify-content-center">
@@ -63,14 +70,7 @@
                     }
                 </div>
                 <div class="row justify-content-center">
-                @if (CanEdit && !Editing)
-                {
-                    <div class="col">
-                        <button class="btn btn-large btn-danger mt-1 mb-1 ml-2 shadow-none float-end" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete this profile</button>
-                        <button class="btn btn-large btn-primary mt-1 mb-1 shadow-none float-end" @onclick="GoToEditMode">Edit this profile</button>
-                    </div>
-                }
-                else if (CanEdit && Editing && ProfileData.Id != null)
+                @if (CanEdit && Editing && ProfileData.Id != null)
                 {
                     <div class="col">
                         <div class="form-group">
@@ -118,8 +118,8 @@
                             }
                             else if (_deleteWarning)
                             {
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Delete(); }">Delete</button>
                                 <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _deleteWarning = false; _saved = false; _saving = false; }">Cancel</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Delete(); }">Delete</button>
                             }
                             else
                             {

@@ -8,18 +8,18 @@
     <header class="flex-shrink-0">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5">
-                <a class="navbar-brand" href="/">Simionic G1000 Profile DB</a>
+                <a class="navbar-brand pt-0" href="/">Simionic G1000 Profile DB</a>
                 <div class="navbar navbar-expand">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link pointer" @onclick="Profiles">Browse profiles</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/import">Import a profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/create">Create a profile</a></li>
+                    <ul class="navbar-nav ms-auto mb-lg-0">
+                        <li class="nav-item"><a class="nav-link pointer" @onclick="Profiles">Browse<span class="d-none d-lg-inline"> profiles</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/import">Import<span class="d-none d-lg-inline"> a profile</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/create">Create<span class="d-none d-lg-inline"> a profile</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/downloads">Downloads</a></li>
                         @if (User.IsLoggedIn)
                         {
                             <div class="dropdown show">
-                                <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @User.Name
+                                <a class="nav-link pt-0 text-white" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="bi-person-fill" style="font-size: 1.75rem;"/>
                                 </a>
                                 <div class="dropdown-menu">
                                     <h5 class="dropdown-item-text mb-0">@User.Name</h5>
@@ -29,7 +29,7 @@
                         }
                         else
                         {
-                            <li class="nav-item"><a class="nav-link pointer" @onclick="Login">Log in</a></li>
+                            <li class="nav-item"><a class="nav-link pointer text-white" @onclick="Login">Log<span class="d-none d-lg-inline">&nbsp;</span>in</a></li>
                         }
                     </ul>
                 </div>
