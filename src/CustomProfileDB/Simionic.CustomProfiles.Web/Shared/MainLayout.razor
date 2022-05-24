@@ -8,13 +8,13 @@
     <header class="flex-shrink-0">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5">
-                <a class="navbar-brand pt-0" href="/">Simionic G1000 Profile DB</a>
+                <a class="navbar-brand p-0" href="/"><span class="d-none d-lg-inline">Simionic </span>G1000 Profile DB</a>
                 <div class="navbar navbar-expand">
                     <ul class="navbar-nav ms-auto mb-lg-0">
                         <li class="nav-item"><a class="nav-link pointer" @onclick="Profiles">Browse<span class="d-none d-lg-inline"> profiles</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/import">Import<span class="d-none d-lg-inline"> a profile</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/create">Create<span class="d-none d-lg-inline"> a profile</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="/downloads">Downloads</a></li>
+                        <li class="nav-item d-none d-lg-inline"><a class="nav-link" href="/downloads">Downloads</a></li>
                         @if (User.IsLoggedIn)
                         {
                             <div class="dropdown show">
@@ -41,15 +41,18 @@
         <div class="container px-5">
             <div class="row align-items-center justify-content-center flex-column flex-sm-row">
                 <div class="col-auto">
-                    <a class="link-dark small" href="/privacy">Privacy</a>
-                    <span class="text-black mx-1">|</span>
-                    <a class="link-dark small" href="/terms">Terms</a>
+                    <a class="link-dark small" href="/downloads">Downloads</a>
                     <span class="text-black mx-1">|</span>
                     <a class="link-dark small" href="/about">About</a>
                     <span class="text-black mx-1">|</span>
                     <a class="link-dark small" href="/faq">FAQ</a>
                     <span class="text-black mx-1">|</span>
                     <a class="link-dark small" href="/contact">Contact</a>
+                    <span class="text-black mx-1">|</span>
+                    <a class="link-dark small" href="/privacy">Privacy</a>
+                    <span class="text-black mx-1">|</span>
+                    <a class="link-dark small" href="/terms">T&C</a>
+
                 </div>
             </div>
         </div>

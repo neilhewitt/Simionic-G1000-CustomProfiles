@@ -26,10 +26,9 @@
                     <div class="text-center"><label for="search-box" class="form-label text-black font-weight-bold">Filter: <input class="input-text" type="text" id="search-box" @bind="_searchTerm" @bind:event="oninput" /></label></div>
                     <div class="btn-group">
                         <button class="btn btn-large @GetAircraftTypeButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterType()">All</button>
-                        @foreach(AircraftType type in Enum.GetValues<AircraftType>())
-                        {
-                          <button class="btn btn-large @GetAircraftTypeButtonState(type) mt-1 mb-4 shadow-none" @onclick="() => FilterType(type)">@type</button>  
-                        }
+                        <button class="btn btn-large @GetAircraftTypeButtonState(AircraftType.Piston) mt-1 mb-4 shadow-none" @onclick="() => FilterType(AircraftType.Piston)">Piston</button>
+                        <button class="btn btn-large @GetAircraftTypeButtonState(AircraftType.Turboprop) mt-1 mb-4 shadow-none" @onclick="() => FilterType(AircraftType.Turboprop)">Turbo<span class="d-none d-sm-inline">prop</span></button>
+                        <button class="btn btn-large @GetAircraftTypeButtonState(AircraftType.Jet) mt-1 mb-4 shadow-none" @onclick="() => FilterType(AircraftType.Jet)">Jet</button>
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-large @GetEngineCountButtonState() mt-1 mb-4 shadow-none" @onclick="() => FilterEngine(null)">Both</button>

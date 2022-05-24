@@ -13,7 +13,9 @@
                     @if (ShowSearch)
                     {
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                            <input class="px-4 rounded border-0 shadow-none form-control form-control-lg w-50" @bind="_searchTerm" @bind:event="oninput" @onkeydown="SearchKey" /><button class="btn btn-primary btn-lg px-4 me-sm-3 shadow-none" @onclick="Search">Search</button>
+                            <input class="px-4 rounded border-0 shadow-none form-control form-control-lg d-sm-none" @bind="_searchTerm" @bind:event="oninput" @onkeydown="SearchKey" />
+                            <input class="px-4 rounded border-0 shadow-none form-control form-control-lg w-50 d-none d-sm-inline" @bind="_searchTerm" @bind:event="oninput" @onkeydown="SearchKey" />
+                            <button class="btn btn-primary btn-lg px-4 me-sm-3 shadow-none d-inline" @onclick="Search">Search</button>
                         </div>
                     }
                 </div>
