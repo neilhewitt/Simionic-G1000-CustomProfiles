@@ -5,7 +5,6 @@ using Simionic.Core;
 using Simionic.CustomProfiles.ImportExport;
 using System;
 using System.Collections.ObjectModel;
-using IniFileManager;
 using System.Security.Principal;
 
 namespace Simionic.CustomProfiles.DesktopApp
@@ -103,55 +102,52 @@ namespace Simionic.CustomProfiles.DesktopApp
         private void CheckForNewVersion()
         {
             DateTime now = DateTime.Now;
-            if (now.Subtract(RegistryManager.LastCheckForUpdate) > TimeSpan.FromDays(7))
+            using (HttpClient client = new HttpClient())
             {
-                using (HttpClient client = new HttpClient())
+                try
                 {
-                    try
+                    string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
+                    if (version != _currentVersion)
                     {
-                        string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
-                        if (version != _currentVersion)
+                        DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
+                        if (result == DialogResult.Yes)
                         {
-                            DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
-                            if (result == DialogResult.Yes)
+                            using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
                             {
-                                using (FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog())
+                                folderBrowseDialog.InitialDirectory = $"{Environment.SpecialFolder.UserProfile}/downloads";
+                                if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
                                 {
-                                    folderBrowseDialog.InitialDirectory = $"{Environment.SpecialFolder.UserProfile}/downloads";
-                                    if (folderBrowseDialog.ShowDialog() == DialogResult.OK)
-                                    {
-                                        string folderPath = folderBrowseDialog.SelectedPath;
+                                    string folderPath = folderBrowseDialog.SelectedPath;
 
-                                        try
-                                        {
-                                            string fileName = $"SimionicCustomProfileManager-{version}.zip";
-                                            Task<byte[]> task = client.GetByteArrayAsync($"https://g1000profiledb.com/files/{fileName}");
-                                            byte[] data = task.Result;
-                                            File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
-                                            ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
-                                            Application.Exit();
-                                        }
-                                        catch
-                                        {
-                                            ShowMessageBox("Could not download the file. An unexpected error occurred. Check https://g1000profiledb.com/downloads for manual download.", "Error");
-                                        }
-                                        finally
-                                        {
-                                            ExportButton.Enabled = true;
-                                        }
-                                    }
-                                    else
+                                    try
                                     {
-                                        return;
+                                        string fileName = $"SimionicCustomProfileManager-{version}.zip";
+                                        Task<byte[]> task = client.GetByteArrayAsync($"https://g1000profiledb.com/files/{fileName}");
+                                        byte[] data = task.Result;
+                                        File.WriteAllBytes(Path.Combine(folderPath, fileName), data);
+                                        ShowMessageBox("Downloaded new version installer ZIP file. This application will now close. Please un-install the current version from Add/Remove Programs before installing the new version.", "Downloaded");
+                                        Application.Exit();
                                     }
+                                    catch
+                                    {
+                                        ShowMessageBox("Could not download the file. An unexpected error occurred. Check https://g1000profiledb.com/downloads for manual download.", "Error");
+                                    }
+                                    finally
+                                    {
+                                        ExportButton.Enabled = true;
+                                    }
+                                }
+                                else
+                                {
+                                    return;
                                 }
                             }
                         }
                     }
-                    catch
-                    {
-                        // ignore, site may be unavailable or retired
-                    }
+                }
+                catch
+                {
+                    // ignore, site may be unavailable or retired
                 }
 
                 RegistryManager.LastCheckForUpdate = now;

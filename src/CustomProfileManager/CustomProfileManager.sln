@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Imp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Core\Simionic.Core\Simionic.Core.csproj", "{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IniFileManager", "..\..\..\IniFileReader\src\IniFileReader\IniFileManager.csproj", "{68E0886D-1D05-4DB2-B061-AB68899A87E1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68E0886D-1D05-4DB2-B061-AB68899A87E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68E0886D-1D05-4DB2-B061-AB68899A87E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68E0886D-1D05-4DB2-B061-AB68899A87E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68E0886D-1D05-4DB2-B061-AB68899A87E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

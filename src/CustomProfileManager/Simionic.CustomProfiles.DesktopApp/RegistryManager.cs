@@ -12,7 +12,7 @@ namespace Simionic.CustomProfiles.DesktopApp
         private const string KEY_NAME = @"SOFTWARE\Simionic Custom Profile Manager";
 
         public static string Version { get => Read<string>("Version"); set => Write<string>("Version", value); }
-        public static DateTime LastCheckForUpdate { get => DateTime.Parse(Read<string>("Version") ?? DateTime.MinValue.ToString()); set => Write<string>("Version", value.ToString()); }
+        public static DateTime LastCheckForUpdate { get => DateTime.Parse(Read<string>("LastCheckForUpdate") ?? DateTime.MinValue.ToString()); set => Write<string>("LastCheckForUpdate", value.ToString()); }
         public static string LastFolderPath { get => Read<string>("LastFolderPath"); set => Write<string>("LastFolderPath", value); }
 
         private static T Read<T>(string name)

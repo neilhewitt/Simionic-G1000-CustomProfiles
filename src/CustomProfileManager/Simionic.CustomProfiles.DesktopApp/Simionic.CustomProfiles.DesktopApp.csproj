@@ -8,9 +8,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</ApplicationIcon>
     <PackageIcon>Bokehlicia-Captiva-Accessories-text-editor.ico</PackageIcon>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <FileVersion>1.0.2</FileVersion>
-	<VersionPrefix>1.0.2</VersionPrefix>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
+	<VersionPrefix>1.0.3</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\IniFileReader\src\IniFileReader\IniFileManager.csproj" />
     <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
     <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
   </ItemGroup>
