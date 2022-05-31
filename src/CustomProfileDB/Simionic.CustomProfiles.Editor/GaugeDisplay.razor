@@ -69,11 +69,11 @@
                     <label class="form-label text-black font-weight-bold">Max power (watts)
                         @if (Editing)
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" @bind="@ProfileGauge.MaxPower" />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox-wide" @bind="@ProfileGauge.MaxPower" />
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.MaxPower" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox-wide" value="@ProfileGauge.MaxPower" readonly />
                         }
                     </label>
                 </div>

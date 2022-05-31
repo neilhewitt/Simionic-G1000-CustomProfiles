@@ -11975,6 +11975,10 @@ textarea.form-control-lg {
     width: 3em;
 }
 
+.custom-profile-textbox-wide {
+    width: 5em;
+}
+
 .custom-profile-valuebox {
     height: 1.5em;
     background-color: lightgray;
