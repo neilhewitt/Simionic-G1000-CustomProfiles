@@ -13,12 +13,12 @@
             <div class="btn-group">
             @foreach(AircraftType type in Enum.GetValues<AircraftType>())
             {
-                <button class="btn btn-large @IsSelectedButton(type == ProfileData.AircraftType) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.AircraftType = type)" disabled="@(!Editing)">@type</button>
+                <button class="btn btn-large @IsSelectedButton(type == ProfileData.AircraftType) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.AircraftType = type)">@type</button>
             }
             </div>
             <div class="btn-group">
-                <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 1) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 1)" disabled="@(!Editing)">Single</button>
-                <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 2) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 2)" disabled="@(!Editing)">Twin</button>
+                <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 1) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 1)">Single</button>
+                <button class="btn btn-large @IsSelectedButton(ProfileData.Engines == 2) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Engines = 2)">Twin</button>
             </div>
         </div>
     </div>
@@ -32,8 +32,8 @@
         <div class="col-9">
             <div class="form-group">
                 <div class="btn-group">
-                    <button class="btn btn-large @IsSelectedButton(ProfileData.Cylinders == 4) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Cylinders = 4)" disabled="@(!Editing)">4</button>
-                    <button class="btn btn-large @IsSelectedButton(ProfileData.Cylinders == 6) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Cylinders = 6)" disabled="@(!Editing)">6</button>
+                    <button class="btn btn-large @IsSelectedButton(ProfileData.Cylinders == 4) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Cylinders = 4)">4</button>
+                    <button class="btn btn-large @IsSelectedButton(ProfileData.Cylinders == 6) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.Cylinders = 6)">6</button>
                 </div>
             </div>
         </div>
@@ -42,26 +42,27 @@
         <div class="col-3 pt-1">
             <label class="form-label text-black font-weight-bold">FADEC</label>
         </div>
-        <div class="col-9">
+        <div class="col-2">
             <input class="form-check-input custom-profile-checkbox shadow-none" type="checkbox" disabled="@(!Editing)" @bind="ProfileData.FADEC"/>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3 pt-1">
+        <div class="col-2">
             <label class="form-label text-black font-weight-bold">Turbocharged</label>
         </div>
-        <div class="col-9">
+        <div class="col-5">
             <input class="form-check-input custom-profile-checkbox shadow-none" type="checkbox" disabled="@(!Editing)" @bind="ProfileData.Turbocharged"/>
         </div>
     </div>
-    <div class="row">
-        <div class="col-3 pt-1">
-            <label class="form-label text-black font-weight-bold">Constant-speed</label>
+    @if (!ProfileData.FADEC)
+    {
+        <div class="row">
+            <div class="col-3 pt-1">
+                <label class="form-label text-black font-weight-bold">Constant-speed</label>
+            </div>
+            <div class="col-9">
+                <input class="form-check-input custom-profile-checkbox shadow-none" type="checkbox" disabled="@(!Editing)" @bind="ProfileData.ConstantSpeed"/>
+            </div>
         </div>
-        <div class="col-9">
-            <input class="form-check-input custom-profile-checkbox shadow-none" type="checkbox" disabled="@(!Editing || ProfileData.FADEC)" @bind="ProfileData.ConstantSpeed"/>
-        </div>
-    </div>
+    }
 }
 <div class="row pt-3">
     <div class="col-3 pt-3 pt-1">
@@ -70,8 +71,8 @@
     <div class="col-9 pt-2">
         <div class="form-group">
             <div class="btn-group">
-                <button class="btn btn-large @IsSelectedButton(ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(true))" disabled="@(!Editing)">&deg;F</button>
-                <button class="btn btn-large @IsSelectedButton(!ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(false))" disabled="@(!Editing)">&deg;C</button>
+                <button class="btn btn-large @IsSelectedButton(ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(true))">&deg;F</button>
+                <button class="btn btn-large @IsSelectedButton(!ProfileData.TemperaturesInFahrenheit) mt-1 mb-1 shadow-none" @onclick="Edit(() => SetTempScale(false))">&deg;C</button>
             </div>
         </div>
     </div>
@@ -131,7 +132,7 @@
                     }
                     else
                     {
-                        <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Min" disabled /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Max" disabled />
+                        <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.Max" readonly />
                     }
                 </label>
             </div>
@@ -146,7 +147,7 @@
                     }
                     else
                     {
-                        <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenStart" disabled /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenEnd" disabled />
+                        <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenStart" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileData.VacuumPSIRange.GreenEnd" readonly />
                     }
                 </label>
             </div>
@@ -265,31 +266,31 @@
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs0</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs0" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs0" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vs1</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs1" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vs1" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vfe</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vfe" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vfe" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vno</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vno" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vno" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vne</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vne" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vne" />
     </div>
 </div>
 <div class="row mb-4">
@@ -298,25 +299,25 @@
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vg</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vglide" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vglide" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vr</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vr" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vr" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vx</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vx" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vx" />
     </div>
     <div class="col-1 text-end pr-1">
         <label class="form-label text-black font-weight-bold mb-0 mt-1">Vy</label>
     </div>
     <div class="col-1 px-0">
-        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vy" disabled="@(!Editing)" />
+        <input type="text" class="input-text ml-1 custom-profile-textbox" @bind="ProfileData.VSpeeds.Vy" />
     </div>            
 </div>
 @if (Editing)

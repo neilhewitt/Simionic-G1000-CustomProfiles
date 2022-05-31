@@ -1,5 +1,4 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-/*!
+﻿/*!
 * Start Bootstrap - Modern Business v5.0.5 (https://startbootstrap.com/template-overviews/modern-business)
 * Copyright 2013-2021 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-modern-business/blob/master/LICENSE)
@@ -74,6 +73,15 @@
     :root {
         scroll-behavior: smooth;
     }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
 }
 
 body {
@@ -2610,12 +2618,16 @@ textarea.form-control-lg {
     .form-check-input:disabled {
         pointer-events: none;
         filter: none;
-        opacity: 0.5;
+        opacity: 1;
     }
 
-        .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
-            opacity: 0.5;
-        }
+    .form-check-input:not(:checked):disabled {
+        background-color: #efefef4d;
+    }
+
+    .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+        opacity: 1;
+    }
 
 .form-switch {
     padding-left: 2.5em;
@@ -2659,7 +2671,7 @@ textarea.form-control-lg {
     .btn-check[disabled] + .btn, .btn-check:disabled + .btn {
         pointer-events: none;
         filter: none;
-        opacity: 0.65;
+        opacity: 1;
     }
 
 .form-range {
@@ -3174,7 +3186,7 @@ textarea.form-control-lg {
 
 .btn:disabled, .btn.disabled, fieldset:disabled .btn {
     pointer-events: none;
-    opacity: 0.65;
+    opacity: 1;
 }
 
 .btn-primary {
@@ -11913,11 +11925,6 @@ textarea.form-control-lg {
     }
 }
 
-body,
-html {
-    height: 100%;
-}
-
 .feature {
     display: inline-flex;
     align-items: center;
@@ -11934,83 +11941,4 @@ html {
     background-position: center;
     background-repeat: no-repeat;
     min-height: 15rem;
-}
-
-#blazor-error-ui {
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-}
-
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
-
-.nav-profile-photo {
-    width: 24px;
-}
-
-.dropdown-toggle::after {
-    display: none;
-}
-
-.custom-profile-checkbox {
-    width: 2em !important;
-    height: 2em !important;
-}
-
-.custom-profile-textbox {
-    width: 3em;
-}
-
-.custom-profile-valuebox {
-    height: 1.5em;
-    background-color: lightgray;
-    border: 1px solid black;
-    padding: 0px;
-    margin: 0px;
-    width: 50%;
-    text-align: center;
-}
-
-.profile-indicator {
-    width: 100%;
-    height: 1.5em;
-    border: 1px solid black;
-    background-color: white;
-    cursor: pointer;
-}
-
-    .profile-indicator.empty {
-        background-size: auto;
-        background-color: white;
-    }
-
-    .profile-indicator.green {
-        background-color: green;
-    }
-
-    .profile-indicator.yellow {
-        background-color: yellow;
-    }
-
-    .profile-indicator.red {
-        background-color: red;
-    }
-
-.pointer {
-    cursor: pointer;
-}
-
-.card.bg-mid {
-    background-color: #b0b0b0;
 }

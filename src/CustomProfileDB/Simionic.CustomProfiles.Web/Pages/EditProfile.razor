@@ -37,18 +37,28 @@
         @if (ProfileData is not null)
         {
             <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
-            @if (ProfileData.Id is not null)
-            {
-                <div class="text-center mb-4">
-                    <button class="btn-primary btn-sm border-0 shadow-none" @onclick="Export">Export</button>
-                    @if (CanEdit && !Editing)
-                    {
-                        <button class="btn-primary btn-sm border-0 shadow-none ml-4" @onclick="GoToEditMode">Edit</button>
-                        <button class="btn-danger btn-sm border-0 shadow-none" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete</button>
-                    }
-                </div>
-            }
             <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
+                @if (ProfileData.Id != null && !Editing)
+                {
+                    <div class="row mb-5 bg-white rounded-2 py-2 m-0">
+                        <div class="col-5">
+                            @if (CanEdit && !Editing)
+                            {
+                                <button class="btn btn-primary border-0 shadow-none px-4" @onclick="GoToEditMode">Edit</button>
+                            }
+                            
+                        </div>
+                        <div class="col-2 text-center">
+                            <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>                        
+                        </div>
+                        <div class="col-5 text-right">
+                            @if (CanEdit && !Editing)
+                            {
+                                <button class="btn btn-danger border-0 shadow-none" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete</button>
+                            }
+                        </div>
+                    </div>
+                }
                 <div class="row justify-content-center">
                     @if (ProfileData.Id == null)
                     {
@@ -76,8 +86,8 @@
                         <div class="form-group">
                             <label class="form-label text-black font-weight-bold mr-2">Status</label>
                             <div class="btn-group ml-2">
-                                <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)">Draft</button>
-                                <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)">Published</button>
+                                <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)" disabled="@(!Editing)">Draft</button>
+                                <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)" disabled="@(!Editing)">Published</button>
                             </div>
                         </div>
                     </div>
@@ -99,7 +109,7 @@
                     else
                     {
                         <div class="col-md-auto">
-                            <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" readonly/></label>
+                            <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" disabled/></label>
                         </div>
                     }
                 </div>

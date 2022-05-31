@@ -7,8 +7,8 @@
             <div class="col-2">
                 <div class="form-group">
                     <div class="btn-group">
-                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = true">Gal</button>
-                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = false">Lb</button>
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = true" disabled="@(!Editing)">Gal</button>
+                        <button class="btn btn-large @(ProfileGauge.FuelInGallons.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.FuelInGallons = false" disabled="@(!Editing)">Lb</button>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.CapacityForSingleTank" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.CapacityForSingleTank" disabled />
                         }
                     </label>
                 </div>            
@@ -39,7 +39,7 @@
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" disabled /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" disabled />
                         }
                     </label>
                 </div>
@@ -56,7 +56,7 @@
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Max" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Max" disabled />
                         }
                     </label>
                 </div>
@@ -73,7 +73,7 @@
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox-wide" value="@ProfileGauge.MaxPower" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox-wide" value="@ProfileGauge.MaxPower" disabled />
                         }
                     </label>
                 </div>
@@ -90,7 +90,7 @@
                         }
                         else
                         {
-                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" readonly /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" readonly />
+                            <input type="text" class="input-text ml-2 custom-profile-textbox" value="@ProfileGauge.Min" disabled /><span>~</span><input type="text" class="input-text custom-profile-textbox" value="@ProfileGauge.Max" disabled />
                         }
                     </label>
                 </div>
@@ -98,8 +98,8 @@
             <div class="col-3">
                 <div class="form-group">
                     <div class="btn-group">
-                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = true">Value</button>
-                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = false">Percentage</button>
+                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-primary" : "btn-secondary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = true" disabled="@(!Editing)">Value</button>
+                        <button class="btn btn-large @(ProfileGauge.TorqueInFootPounds.Value ? "btn-secondary" : "btn-primary") mt-1 mb-1 shadow-none @Editable()" @onclick="() => ProfileGauge.TorqueInFootPounds = false" disabled="@(!Editing)">Percentage</button>
                     </div>
                 </div>
             </div>
@@ -165,16 +165,16 @@
     {
         <div class="row justify-content-center mb-5">
             <div class="col">
-                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Min" readonly /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Max" readonly />
+                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Min" disabled /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[0].Max" disabled />
             </div>
             <div class="col">
-                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[1].Min" readonly /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[1].Max" readonly />
+                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[1].Min" disabled /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[1].Max" disabled />
             </div>
             <div class="col">
-                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[2].Min" readonly /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[2].Max" readonly />
+                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[2].Min" disabled /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[2].Max" disabled />
             </div>
             <div class="col">
-                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[3].Min" readonly /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[3].Max" readonly />
+                <input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[3].Min" disabled /><input type="text" class="input-text custom-profile-valuebox" value="@ProfileGauge.Ranges[3].Max" disabled />
             </div>
         </div>
     }

@@ -33,6 +33,7 @@ namespace Simionic.PowerTools
             Microsoft.UI.Windowing.AppWindow appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowID);
             appWindow.MoveAndResize(new Windows.Graphics.RectInt32(x, y, width, height));
 #endif
+            // TODO - is there a way to do this on Mac Catalyst?
         }
     }
 }
