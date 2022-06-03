@@ -1,0 +1,23 @@
+﻿@page "/profiles"
+
+@using Simionic.Core
+@using Simionic.CustomProfiles.Editor
+
+<div class="container py-3 bg-dark bg-opacity-25 rounded-3">
+    <div class="row justify-content-center">
+        <ProfileEditor @bind-ProfileData="@ProfileData" CanEdit="true" Editing="true" />
+    </div>
+</div>
+
+@code {
+
+    public Profile ProfileData { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        ProfileData = new Profile();
+        ProfileData.Name = "Test Profile";
+
+        return base.OnInitializedAsync();
+    }
+}

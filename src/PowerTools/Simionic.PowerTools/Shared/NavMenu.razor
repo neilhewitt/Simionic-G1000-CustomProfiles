@@ -1,0 +1,30 @@
+﻿<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+	<nav class="flex-column">
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="" data-toggle="tooltip" data-placement="right" title="Home" Match="NavLinkMatch.All">
+				<span class="oi oi-home" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" data-toggle="tooltip" data-placement="right" title="Custom Profiles" href="editprofile">
+				<span class="oi oi-list" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" data-toggle="tooltip" data-placement="right" title="Flight Plans" href="flightplans">
+				<span class="oi oi-globe" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+	</nav>
+</div>
+
+@code {
+	private bool collapseNavMenu = true;
+
+	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+	private void ToggleNavMenu()
+	{
+		collapseNavMenu = !collapseNavMenu;
+	}
+}
