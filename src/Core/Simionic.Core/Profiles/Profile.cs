@@ -90,6 +90,10 @@ namespace Simionic.Core
 
         public Profile()
         {
+            // special defaults
+            AircraftType = AircraftType.Piston;
+            Engines = 1;
+            Cylinders = 4;
         }
     }
 }
