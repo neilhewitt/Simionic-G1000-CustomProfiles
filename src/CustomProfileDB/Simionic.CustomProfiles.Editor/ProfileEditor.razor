@@ -173,7 +173,7 @@
     </div>
     <div class="col-md-auto pt-1 ml-5">
         <div class="form-group mb-0">
-            <label class="form-label text-black font-weight-bold">T/O Range (0-100)
+            <label class="form-label @(ProfileData.DisplayElevatorTrim ? "text-black" : "text-muted") font-weight-bold">T/O Range (0-100)
                 <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!Editing || !ProfileData.DisplayElevatorTrim)" @bind="ProfileData.ElevatorTrimTakeOffRange.Min" />
                 ~<input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!Editing || !ProfileData.DisplayElevatorTrim)" @bind="@ProfileData.ElevatorTrimTakeOffRange.Max" />
             </label>
@@ -189,7 +189,7 @@
     </div>
     <div class="col-md-auto pt-1 ml-5">
         <div class="form-group mb-0">
-            <label class="form-label text-black font-weight-bold">T/O Range (0-100)
+            <label class="form-label @(ProfileData.DisplayRudderTrim ? "text-black" : "text-muted") font-weight-bold">T/O Range (0-100)
                 <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!Editing || !ProfileData.DisplayRudderTrim)" @bind="@ProfileData.RudderTrimTakeOffRange.Min" />
                 ~<input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!Editing || !ProfileData.DisplayRudderTrim)" @bind="@ProfileData.RudderTrimTakeOffRange.Max" />
             </label>
@@ -207,7 +207,7 @@
 <div class="row">
     <div class="col-2" />
     <div class="col-2 pt-1">
-        <label class="form-label text-black font-weight-bold">Markings</label>
+        <label class="form-label @(ProfileData.DisplayFlapsIndicator ? "text-black" : "text-muted") font-weight-bold">Markings</label>
     </div>
     <div class="col-8 pt-1">
         <div class="form-group mb-0">
@@ -235,7 +235,7 @@
 <div class="row mb-4">
     <div class="col-2" />
     <div class="col-2 pt-1">
-        <label class="form-label text-black font-weight-bold">Positions</label>
+        <label class="form-label @(ProfileData.DisplayFlapsIndicator ? "text-black" : "text-muted") font-weight-bold">Positions</label>
     </div>
     <div class="col-8 pt-1">
         <div class="form-group mb-0">
