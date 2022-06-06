@@ -222,12 +222,12 @@
             }
             else
             {
-                <input type="text" class="input-text custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[0]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[1]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[2]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[3]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[4]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Markings[5]" readonly />
+                <input type="text" class="input-text custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[0]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[1]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[2]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[3]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[4]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Markings[5]" readonly />
             }
         </div>
     </div>
@@ -251,10 +251,10 @@
             else
             {
                 <input type="text" class="input-text custom-profile-textbox" disabled="disabled" value="@ProfileData.FlapsRange.Positions[0]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Positions[1]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Positions[2]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Positions[3]" readonly />
-                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator)" value="@ProfileData.FlapsRange.Positions[4]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Positions[1]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Positions[2]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Positions[3]" readonly />
+                <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="@(!ProfileData.DisplayFlapsIndicator || !Editing)" value="@ProfileData.FlapsRange.Positions[4]" readonly />
                 <input type="text" class="input-text ml-2 custom-profile-textbox" disabled="disabled" value="@ProfileData.FlapsRange.Positions[5]" readonly />
             }
         </div>
