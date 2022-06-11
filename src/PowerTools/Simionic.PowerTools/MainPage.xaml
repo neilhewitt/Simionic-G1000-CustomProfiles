@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:Simionic.PowerTools"
              x:Class="Simionic.PowerTools.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
-             MinimumWidthRequest="800" MinimumHeightRequest="600">
+             MinimumWidthRequest="600" MinimumHeightRequest="600"
+             >
 
     <BlazorWebView HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>

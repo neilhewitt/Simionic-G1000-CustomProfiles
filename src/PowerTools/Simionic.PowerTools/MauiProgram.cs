@@ -5,7 +5,7 @@ namespace Simionic.PowerTools
 {
     public static class MauiProgram
     {
-        public static MauiApp CreateMauiApp()
+        public static MauiAppBuilder CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
             builder
@@ -22,7 +22,7 @@ namespace Simionic.PowerTools
 
             builder.Services.AddSingleton<WeatherForecastService>();
 
-            return builder.Build();
+            return builder;
         }
     }
 }

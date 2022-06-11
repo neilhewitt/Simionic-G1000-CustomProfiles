@@ -54,5 +54,9 @@
 	  <ProjectReference Include="..\..\CustomProfileDB\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\" />
+	</ItemGroup>
+
 
 </Project>
