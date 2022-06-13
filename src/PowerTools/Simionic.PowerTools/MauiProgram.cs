@@ -5,7 +5,12 @@ namespace Simionic.PowerTools
 {
     public static class MauiProgram
     {
-        public static MauiAppBuilder CreateMauiApp()
+        public static MauiApp CreateMauiApp()
+        {
+            return CreateMauiAppBuilder().Build();
+        }
+
+        public static MauiAppBuilder CreateMauiAppBuilder()
         {
             var builder = MauiApp.CreateBuilder();
             builder

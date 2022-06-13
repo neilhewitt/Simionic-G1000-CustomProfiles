@@ -29,7 +29,7 @@ namespace Simionic.PowerTools.WinUI
 
         protected override MauiApp CreateMauiApp()
         {
-            MauiAppBuilder builder = MauiProgram.CreateMauiApp();
+            MauiAppBuilder builder = MauiProgram.CreateMauiAppBuilder();
 
             builder.ConfigureLifecycleEvents(events =>
             {
