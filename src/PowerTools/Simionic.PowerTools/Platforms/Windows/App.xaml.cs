@@ -16,8 +16,6 @@ namespace Simionic.PowerTools.WinUI
     {
         private bool _mainWindowCreated = false;
 
-        public (int X, int Y, int Width, int Height) FixedSize = (100, 100, 1024, 800);
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -42,10 +40,14 @@ namespace Simionic.PowerTools.WinUI
                             IntPtr nativeWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
                             WindowId nativeWindowId = Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
                             AppWindow appWindow = AppWindow.GetFromWindowId(nativeWindowId);
-                            appWindow.SetPresenter(AppWindowPresenterKind.CompactOverlay);
 
-                            appWindow.MoveAndResize(new RectInt32(FixedSize.X, FixedSize.Y, FixedSize.Width, FixedSize.Height));
+                            appWindow.SetPresenter(AppWindowPresenterKind.Overlapped);
+                            OverlappedPresenter presenter = ((OverlappedPresenter)appWindow.Presenter);
+                            presenter.IsResizable = false; // forces no-resize
+                            presenter.IsAlwaysOnTop = true; // stays on top (HACK FOR DEV ONLY: REMOVE)
+
                             _mainWindowCreated = true;
+                            WindowManager.AssignWindowObject(appWindow);
                         }
                     });
                 });

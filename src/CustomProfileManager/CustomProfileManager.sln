@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Des
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Simionic.CustomProfiles.DesktopApp.Installer", "Simionic.CustomProfiles.DesktopApp.Installer\Simionic.CustomProfiles.DesktopApp.Installer.vdproj", "{30FB0ED5-D7E0-4414-BB3F-62DC96243A2D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport", "Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{B2176C10-4FAF-4882-B048-A39694F321C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport", "..\Common\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{B2176C10-4FAF-4882-B048-A39694F321C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Core\Simionic.Core\Simionic.Core.csproj", "{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Common\Simionic.Core\Simionic.Core.csproj", "{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -50,12 +50,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
-	  <ProjectReference Include="..\..\CustomProfileDB\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj" />
+	  <Folder Include="wwwroot\js\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\js\" />
+	  <ProjectReference Include="..\..\Common\Simionic.Core\Simionic.Core.csproj" />
+	  <ProjectReference Include="..\..\Common\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj" />
+	  <ProjectReference Include="..\Simionic.PowerTools.Core\Simionic.PowerTools.Core.csproj" />
 	</ItemGroup>
 
 

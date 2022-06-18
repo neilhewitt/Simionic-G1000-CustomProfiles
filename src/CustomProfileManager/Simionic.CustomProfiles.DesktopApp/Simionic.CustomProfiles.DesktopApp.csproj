@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
-    <ProjectReference Include="..\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
+    <ProjectReference Include="..\..\Common\Simionic.Core\Simionic.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj" />
   </ItemGroup>
 
   <ItemGroup>

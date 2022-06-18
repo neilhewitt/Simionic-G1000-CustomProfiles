@@ -1,9 +1,9 @@
 ﻿@page "/editprofile"
 
 @using Simionic.Core
-@using Simionic.CustomProfiles.Editor
+@using Simionic.CustomProfiles.Editor;
 
-<div class="justify-content-center"><h1>Profile Editor</h1></div>
+<div class="justify-content-center"><h3>Profile Editor</h3></div>
 <div class="container py-3 bg-dark bg-opacity-25 rounded-3">
     <div class="row justify-content-center">
         <ProfileEditor @bind-ProfileData="@ProfileData" CanEdit="true" Editing="true" />
@@ -16,6 +16,8 @@
 
     protected override Task OnInitializedAsync()
     {
+        WindowManager.Resize(1280, 1024);
+
         ProfileData = new Profile();
         ProfileData.Name = "Test Profile";
 

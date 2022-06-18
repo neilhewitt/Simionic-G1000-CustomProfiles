@@ -5,6 +5,10 @@ VisualStudioVersion = 17.2.32314.265
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "Simionic.Core\Simionic.Core.csproj", "{F06B902B-2C8E-4C47-88A8-E6B74468E963}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Editor", "Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj", "{6D1E8E7E-720F-4F74-AE4F-DEB6A4495788}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport", "Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{F1EE60C2-7E7C-4802-A16C-612DF616C703}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F06B902B-2C8E-4C47-88A8-E6B74468E963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F06B902B-2C8E-4C47-88A8-E6B74468E963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F06B902B-2C8E-4C47-88A8-E6B74468E963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D1E8E7E-720F-4F74-AE4F-DEB6A4495788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1E8E7E-720F-4F74-AE4F-DEB6A4495788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1E8E7E-720F-4F74-AE4F-DEB6A4495788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1E8E7E-720F-4F74-AE4F-DEB6A4495788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1EE60C2-7E7C-4802-A16C-612DF616C703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1EE60C2-7E7C-4802-A16C-612DF616C703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1EE60C2-7E7C-4802-A16C-612DF616C703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1EE60C2-7E7C-4802-A16C-612DF616C703}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
+    <ProjectReference Include="..\Simionic.Core\Simionic.Core.csproj" />
   </ItemGroup>
 
 </Project>

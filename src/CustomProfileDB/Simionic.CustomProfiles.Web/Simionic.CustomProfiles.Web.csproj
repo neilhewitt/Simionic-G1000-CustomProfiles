@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Simionic.Core\Simionic.Core.csproj" />
-    <ProjectReference Include="..\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj" />
+    <ProjectReference Include="..\..\Common\Simionic.Core\Simionic.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
