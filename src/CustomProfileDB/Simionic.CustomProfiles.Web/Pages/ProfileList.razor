@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="card-text mb-0"><b>Aircraft type:</b> @profileSummary.AircraftType</p>
+                                    <p class="card-text mb-0"><b>Aircraft type:</b> @(profileSummary.Engines == 2 ? "Twin " : "Single ")@profileSummary.AircraftType</p>
                                 </div>
                             </div>
                             <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
