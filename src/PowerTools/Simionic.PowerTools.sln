@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32314.265
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.PowerTools", "Simionic.PowerTools\Simionic.PowerTools.csproj", "{09AC54D9-85F5-43A1-9840-21712CFC5434}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Common\Simionic.Core\Simionic.Core.csproj", "{3F4CFC5E-12E1-4FE5-A9E7-BB481AF4BE67}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Editor", "..\Common\Simionic.CustomProfiles.Editor\Simionic.CustomProfiles.Editor.csproj", "{D859CA6F-B945-44A7-9978-1E18CF7EF9B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simionic.PowerTools.Core", "Simionic.PowerTools.Core\Simionic.PowerTools.Core.csproj", "{D5A52099-B83A-480B-8BCD-678223BCF77E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.PowerTools.Core", "Simionic.PowerTools.Core\Simionic.PowerTools.Core.csproj", "{D5A52099-B83A-480B-8BCD-678223BCF77E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.PowerTools.App", "Simionic.PowerTools.App\Simionic.PowerTools.App.csproj", "{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09AC54D9-85F5-43A1-9840-21712CFC5434}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{3F4CFC5E-12E1-4FE5-A9E7-BB481AF4BE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F4CFC5E-12E1-4FE5-A9E7-BB481AF4BE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F4CFC5E-12E1-4FE5-A9E7-BB481AF4BE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,6 +29,12 @@ Global
 		{D5A52099-B83A-480B-8BCD-678223BCF77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5A52099-B83A-480B-8BCD-678223BCF77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5A52099-B83A-480B-8BCD-678223BCF77E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9B88C4-6DC6-4963-93E2-BCA864DA1B49}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
