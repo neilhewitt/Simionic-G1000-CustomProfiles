@@ -1,7 +1,19 @@
 ﻿@page "/"
+@using Simionic.PowerTools.App.Shared.CustomProfiles
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="indexpanels">
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="Custom Profiles">
+                <CustomProfilesIndex />
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Flight Plans">
+                <p>This will be the Flight Plans page</p>
+            </RadzenTabsItem>
+            <div>
+                <RadzenTabsItem Text="Nav Data" Disabled="true" title="Not available yet">
+                </RadzenTabsItem>
+            </div>
+        </Tabs>
+    </RadzenTabs>
+</div>

@@ -46,7 +46,7 @@ namespace Simionic.PowerTools.App.WinUI
                             presenter.IsAlwaysOnTop = true; // stays on top (HACK FOR DEV ONLY: REMOVE)
 
                             _mainWindowCreated = true;
-                            WindowManager.AssignWindowObject(appWindow);
+                            WindowManager.AssignWindowObjectAndSetDefaultSize(appWindow);
                         }
                     });
                 });

@@ -21,7 +21,7 @@ namespace Simionic.PowerTools.App
                         if (scene is not null && scene is UIWindowScene)
                         {
                             var windowScene = (UIWindowScene)scene;
-                            WindowManager.AssignWindowObject(windowScene);
+                            WindowManager.AssignWindowObjectAndSetDefaultSize(windowScene);
                         }
                     });
                 });

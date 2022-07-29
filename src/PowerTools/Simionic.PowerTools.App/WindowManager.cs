@@ -10,7 +10,7 @@ namespace Simionic.PowerTools.App
     {
         private static object _window;
 
-        public static (int Width, int Height) DefaultSize { get; private set; } = (1024, 768); // TODO: set via config
+        public static (int Width, int Height) DefaultSize { get; private set; } = (1024, 850); // TODO: set via config
 
         public static int Width { get; private set; }
         public static int Height { get; private set; }
@@ -43,7 +43,7 @@ namespace Simionic.PowerTools.App
             }
         }
 
-        internal static void AssignWindowObject(object windowObject)
+        internal static void AssignWindowObjectAndSetDefaultSize(object windowObject)
         {
             _window = windowObject;
             ResizeToDefaults();
