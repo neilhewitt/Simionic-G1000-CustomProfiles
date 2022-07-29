@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider AuthState
 @inject IJSRuntime JS
 
-<section class="bg-white py-5">
+<section class="bg-white py-5 @(ProfilesLoaded ? "" : "vh-100")">
     <div class="container px-5 my-3">
         <div class="row gx-5 justify-content-center">
             <div class="col-md-auto">
@@ -123,6 +123,7 @@
     private bool _exported;
     private string _errorMessage;
 
+    public bool ProfilesLoaded => ProfileSummaries != null && ProfileSummaries.Count() > 0;
     public ProfileSummaryList ProfileSummaries { get; set; }
     public ProfileSummaryList Filtered
     {
