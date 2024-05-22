@@ -1,5 +1,7 @@
-﻿using Microsoft.Azure.Documents;
+﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Simionic.Core;
 using System;
 using System.Linq;
 using System.Security.Cryptography;

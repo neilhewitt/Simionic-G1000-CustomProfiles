@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.Azure.Documents;
+using Microsoft.Azure.Cosmos;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
@@ -18,23 +19,22 @@ namespace Simionic.CustomProfiles.FunctionApp
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "fork/{profileId}")] HttpRequest req,
             string profileId,
-            [CosmosDB("%ProfileDB%", "%ProfileContainer%", ConnectionStringSetting = "CosmosDBConnection")]
-                DocumentClient client,
+            [CosmosDB("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection")]
+                CosmosClient client,
             ILogger log)
         {
             try
             {
-                Profile profile = await client.ReadDocumentAsync<Profile>(
-                    UriFactory.CreateDocumentUri(Helper.ProfileDB, Helper.ProfileContainer, profileId),
-                    new RequestOptions() { PartitionKey = new PartitionKey(profileId) }
-                    );
+                Profile profile = await client.GetItem<Profile>(profileId);
                 profile.ForkedFrom = profileId;
                 profile.Id = null;
-                var response = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
+                var response = await client.Container().CreateItemAsync(profile);
+                
                 return new OkObjectResult(new { Id = Guid.Parse(response.Resource.Id) });
             }
             catch (Exception ex)
             {
+                log.LogError(ex, "An error occurred while forking the profile.");
                 return new StatusCodeResult(500);
             }
         }

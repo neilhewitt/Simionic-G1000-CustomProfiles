@@ -13,7 +13,7 @@ namespace Simionic.CustomProfiles.FunctionApp
     public static class GetOwnerId
     {
         [FunctionName("GetOwnerId")]
-        public static async Task<IActionResult> Run(
+        public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "ownerid")] HttpRequest req,
             ILogger log)
         {
@@ -21,7 +21,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             {
                 return new BadRequestResult();
             }
-            
+
             string ownerId = Helper.GetOwnerId(email);
             return new OkObjectResult(ownerId);
         }

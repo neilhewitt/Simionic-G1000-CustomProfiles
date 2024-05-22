@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<SimBase.Document Type="AceXML" version="1,0">
+    <Descr>AceXML Document</Descr>
+    <FlightPlan.FlightPlan>
+        <Title>EDDV to EHMZ</Title>
+        <FPType>VFR</FPType>
+        <CruisingAlt>20500.000</CruisingAlt>
+        <DepartureID>EDDV</DepartureID>
+        <DepartureLLA>N52° 27' 36.77",E9° 41' 0.68",+000173.17</DepartureLLA>
+        <DestinationID>EHMZ</DestinationID>
+        <DestinationLLA>N51° 30' 44.00",E3° 43' 52.00",+008900.00</DestinationLLA>
+        <Descr>EDDV to EHMZ</Descr>
+        <DeparturePosition>27R</DeparturePosition>
+        <DepartureName>EDDV</DepartureName>
+        <DestinationName>EHMZ</DestinationName>
+        <AppVersion>
+            <AppVersionMajor>11</AppVersionMajor>
+            <AppVersionBuild>282174</AppVersionBuild>
+        </AppVersion>
+        <ATCWaypoint id="EDDV">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N52° 27' 36.77",E9° 41' 0.68",+000173.17</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <RunwayNumberFP>27</RunwayNumberFP>
+            <RunwayDesignatorFP>RIGHT</RunwayDesignatorFP>
+            <ICAO>
+                <ICAOIdent>EDDV</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="Hermannsdenkmal">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N51° 54' 41.97",E8° 50' 22.10",+009600.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="Bielefeld">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N51° 57' 53.40",E8° 32' 41.40",+011850.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EDLI</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="Dortmund">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N51° 31' 5.93",E7° 36' 44.07",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EDLW</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="Signal Iduna Park">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N51° 29' 33.31",E7° 27' 6.78",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="Cologne-Bonn">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N50° 51' 57.30",E7° 8' 33.88",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EDDK</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="Cologne Cathedral">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N50° 56' 28.47",E6° 57' 28.46",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="Dusseldorf">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N51° 16' 51.33",E6° 45' 26.32",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EDDL</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="Philips Stadion">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N51° 26' 30.06",E5° 28' 2.83",+020500.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="Windmills at Kinderdijk">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N51° 52' 48.62",E4° 38' 40.98",+018300.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="Erasmus Bridge">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N51° 54' 35.33",E4° 29' 5.44",+017050.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+        </ATCWaypoint>
+        <ATCWaypoint id="EHRD">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N51° 57' 25.00",E4° 26' 14.00",+016400.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EHRD</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="EHMZ">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N51° 30' 44.00",E3° 43' 52.00",+008900.00</WorldPosition>
+            <SpeedMaxFP>-1</SpeedMaxFP>
+            <ICAO>
+                <ICAOIdent>EHMZ</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+    </FlightPlan.FlightPlan>
+</SimBase.Document>

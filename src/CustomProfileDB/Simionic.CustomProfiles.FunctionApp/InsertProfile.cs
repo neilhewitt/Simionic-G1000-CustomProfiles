@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
+using Microsoft.Azure.Cosmos;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
@@ -17,8 +18,8 @@ namespace Simionic.CustomProfiles.FunctionApp
         [FunctionName("InsertProfile")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "insert")] HttpRequest req,
-            [CosmosDB("%ProfileDB%", "%ProfileContainer%", ConnectionStringSetting = "CosmosDBConnection")]
-                DocumentClient client,
+            [CosmosDB("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection")]
+                CosmosClient client,
             ILogger log)
         {
             try
@@ -26,13 +27,15 @@ namespace Simionic.CustomProfiles.FunctionApp
                 string body = new StreamReader(req.Body).ReadToEnd();
                 Profile profile = JsonConvert.DeserializeObject<Profile>(body);
                 profile.LastUpdated = DateTime.UtcNow;
+                profile.Id = Guid.NewGuid().ToString(); // Cosmos DB will not generate the ID for us
 
-                var response = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer), profile);
-                profile.Id = response.Resource.Id;
+                await client.Container().CreateItemAsync(profile);
+                
                 return new OkObjectResult(profile);
             }
             catch (Exception ex)
             {
+                log.LogError(ex, "An error occurred while inserting the profile.");
                 return new StatusCodeResult(500);
             }
         }

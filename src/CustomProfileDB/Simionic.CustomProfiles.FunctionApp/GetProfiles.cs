@@ -6,9 +6,12 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Simionic.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
+using Microsoft.Azure.Cosmos;
+using System.Collections.Generic;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
@@ -16,23 +19,20 @@ namespace Simionic.CustomProfiles.FunctionApp
     public static class GetProfiles
     {
         [FunctionName("GetProfiles")]
-        public static async Task<IActionResult> Run(
+        public async static Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "profiles")] HttpRequest req,
-            [CosmosDB("%ProfileDB%", "%ProfileContainer%", ConnectionStringSetting = "CosmosDBConnection")]
-              DocumentClient client,
+            [CosmosDB("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection")] CosmosClient client,
             ILogger log)
         {
             try
             {
-                ProfileSummary[] profiles = client.CreateDocumentQuery<ProfileSummary>(
-                    UriFactory.CreateDocumentCollectionUri(Helper.ProfileDB, Helper.ProfileContainer),
-                    "SELECT c.id, c.AircraftType, c.Engines, c.Name, c.LastUpdated, c.IsPublished, c.Notes, c.Owner FROM c",
-                    new FeedOptions() { EnableCrossPartitionQuery = true }
-                    ).ToArray();
+                ProfileSummary[] profiles = await client.GetItems<ProfileSummary>("SELECT c.id, c.AircraftType, c.Engines, c.Name, c.LastUpdated, c.IsPublished, c.Notes, c.Owner FROM c");
+                
                 return new OkObjectResult(profiles);
             }
             catch (Exception ex)
             {
+                log.LogError(ex, "An error occurred while getting the profile list.");
                 return new StatusCodeResult(500);
             }
         }
