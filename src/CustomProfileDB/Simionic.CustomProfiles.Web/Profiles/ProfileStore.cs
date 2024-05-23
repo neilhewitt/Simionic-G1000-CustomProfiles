@@ -11,46 +11,31 @@ namespace Simionic.CustomProfiles.Web
 {
     public static class ProfileStore
     {
-        public static async Task<Profile> Insert(Profile profile)
+        public static async Task<Profile> Upsert(Profile profile)
         {
             try
             {
                 profile.Owner.Name = User.Name;
                 profile.Owner.Id = User.OwnerId;
-                profile.IsPublished = false;
+                
+                if (profile.Id == null)
+                {
+                    profile.Id = Guid.NewGuid().ToString();
+                    profile.IsPublished = false;
+                }
 
-                HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/insert", profile);
+                HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/upsert/{profile.Id}", profile);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new ProfileUpdateException($"Unable to create profile. See ResponseMessage for details.", response);
                 }
 
-                profile = await response.Content.ReadFromJsonAsync<Profile>();
+                //profile = await response.Content.ReadFromJsonAsync<Profile>();
                 return profile;
             }
             catch (HttpRequestException ex)
             {
                 throw new ProfileStoreException($"Unable to create profile. Cannot fetch new profile Id from database. Status code was { (ex.StatusCode.HasValue ? ex.StatusCode.Value.ToString() : "unknown") }.", ex);
-            }
-        }
-
-        public static async Task Update(Profile profile)
-        {
-            profile.LastUpdated = DateTime.Now;
-            HttpResponseMessage response = await HttpClientFactory.Client.PostAsJsonAsync<Profile>($"/api/update/{profile.Id}", profile);
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ProfileUpdateException($"Unable to update profile. See ResponseMessage for details.", response);
-            }
-        }
-
-        public static async Task Delete(Profile profile)
-        {
-            profile.LastUpdated = DateTime.Now;
-            HttpResponseMessage response = await HttpClientFactory.Client.GetAsync($"/api/delete/{profile.Id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ProfileDeleteException($"Unable to delete profile. See ResponseMessage for details.", response);
             }
         }
 

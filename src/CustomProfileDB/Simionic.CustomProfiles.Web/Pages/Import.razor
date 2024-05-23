@@ -63,7 +63,8 @@
         {
             string json = await new StreamReader(file.OpenReadStream()).ReadToEndAsync();
             Profile profile = JsonConvert.DeserializeObject<Profile>(json);
-            profile = await ProfileStore.Insert(profile);
+            profile.Id = null; // this will make the store create a new unique Id
+            profile = await ProfileStore.Upsert(profile);
             await Task.Delay(1000);
 
             _uploading = false;

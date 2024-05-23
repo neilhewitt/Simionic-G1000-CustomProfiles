@@ -1,27 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Simionic.Core;
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.IO;
 using Microsoft.Azure.Cosmos;
-using System.Collections.Generic;
-using Microsoft.WindowsAzure.Storage;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
 
     public static class GetProfiles
     {
-        [FunctionName("GetProfiles")]
+        [Function("GetProfiles")]
         public async static Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "profiles")] HttpRequest req,
-            [CosmosDB("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection")] CosmosClient client,
+            [CosmosDBInput("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection")] CosmosClient client,
             ILogger log)
         {
             try

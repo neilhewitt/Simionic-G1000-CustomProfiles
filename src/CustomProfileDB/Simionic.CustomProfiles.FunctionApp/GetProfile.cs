@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Simionic.Core;
 using System;
@@ -15,11 +14,11 @@ namespace Simionic.CustomProfiles.FunctionApp
 {
     public static class GetProfile
     {
-        [FunctionName("GetProfile")]
+        [Function("GetProfile")]
         public async static Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "profile/{profileId}")] HttpRequest req,
             string profileId,
-            [CosmosDB("%ProfileDB%", "%ProfileContainer%", Id = "{profileId}", PartitionKey = "{profileId}", Connection = "CosmosDBConnection")] CosmosClient client,
+            [CosmosDBInput("%ProfileDB%", "%ProfileContainer%", Id = "{profileId}", PartitionKey = "{profileId}", Connection = "CosmosDBConnection")] CosmosClient client,
             ILogger log)
         {
             try

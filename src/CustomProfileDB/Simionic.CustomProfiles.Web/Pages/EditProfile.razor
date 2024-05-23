@@ -52,10 +52,6 @@
                             <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>                        
                         </div>
                         <div class="col-5 text-right">
-                            @if (CanEdit && !Editing)
-                            {
-                                <button class="btn btn-danger border-0 shadow-none" data-toggle="modal" data-target="#alertModal" @onclick="async () => { await Delete(); }">Delete</button>
-                            }
                         </div>
                     </div>
                 }
@@ -129,7 +125,7 @@
                             else if (_deleteWarning)
                             {
                                 <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _deleteWarning = false; _saved = false; _saving = false; }">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Delete(); }">Delete</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; /*await Delete(); */}">Delete</button>
                             }
                             else
                             {
@@ -229,14 +225,7 @@
 
                 try
                 {
-                    if (ProfileData.Id == null) // it's new
-                    {
-                        ProfileData = await ProfileStore.Insert(ProfileData);
-                    }
-                    else
-                    {
-                        await ProfileStore.Update(ProfileData);
-                    }
+                    ProfileData = await ProfileStore.Upsert(ProfileData);
 
                     _profileWasPublishedAtPageLoad = ProfileData.IsPublished;
 
@@ -262,55 +251,55 @@
         }
     }
 
-    protected async Task Delete()
-    {
-        if (!_deleteWarning)
-        {
-            _saving = false;
-            _alert = true;
-            _errorMessage = "";
-            if (_profileWasPublishedAtPageLoad)
-            {
-                _alertMessage = "This is a published profile. If you delete it, it will no longer be available to users of the site. This action cannot be undone. Are you absolutely sure?";
-            }
-            else
-            {
-                _alertMessage = "This will delete the draft profile permanently. This action cannot be undone. Are you sure?";
-            }
-            _deleteWarning = true;
-            StateHasChanged();
-        }
-        else
-        {
-            _alert = false;
-            _saving = true;
-            _deleteWarning = false;
-            _deleting = true;
-            StateHasChanged();
+    // protected async Task Delete()
+    // {
+    //     if (!_deleteWarning)
+    //     {
+    //         _saving = false;
+    //         _alert = true;
+    //         _errorMessage = "";
+    //         if (_profileWasPublishedAtPageLoad)
+    //         {
+    //             _alertMessage = "This is a published profile. If you delete it, it will no longer be available to users of the site. This action cannot be undone. Are you absolutely sure?";
+    //         }
+    //         else
+    //         {
+    //             _alertMessage = "This will delete the draft profile permanently. This action cannot be undone. Are you sure?";
+    //         }
+    //         _deleteWarning = true;
+    //         StateHasChanged();
+    //     }
+    //     else
+    //     {
+    //         _alert = false;
+    //         _saving = true;
+    //         _deleteWarning = false;
+    //         _deleting = true;
+    //         StateHasChanged();
 
-            await Task.Delay(1000);
+    //         await Task.Delay(1000);
 
-            try
-            {
-                await ProfileStore.Delete(ProfileData);
-                ProfileData = null;
-            }
-            catch (ProfileDeleteException ex)
-            {
-                _errorMessage = ex.Message;
-                _deleted = false;
-                _error = true;
-                StateHasChanged();
-                return;
-            }
+    //         try
+    //         {
+    //             await ProfileStore.Delete(ProfileData);
+    //             ProfileData = null;
+    //         }
+    //         catch (ProfileDeleteException ex)
+    //         {
+    //             _errorMessage = ex.Message;
+    //             _deleted = false;
+    //             _error = true;
+    //             StateHasChanged();
+    //             return;
+    //         }
 
-            _saving = false;
-            _saveWarning = false;
-            _deleting = false;
-            _deleted = true;
-            StateHasChanged();
-        }
-    }
+    //         _saving = false;
+    //         _saveWarning = false;
+    //         _deleting = false;
+    //         _deleted = true;
+    //         StateHasChanged();
+    //     }
+    // }
 
     protected string GetSaveButtonClasses(string active, string inactive)
     {
