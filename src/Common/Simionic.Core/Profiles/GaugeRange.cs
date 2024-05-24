@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Simionic.Core
+﻿namespace Simionic.Core
 {
     public class GaugeRange
     {

@@ -12,20 +12,19 @@ using Microsoft.Azure.Cosmos;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
-    public static class GetProfile
+    public static class DeleteProfile
     {
-        [Function("GetProfile")]
+        [Function("DeleteProfile")]
         public async static Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "profile/{profileId}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "delete/{profileId}")] HttpRequest req,
             string profileId,
             [CosmosDBInput("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection", PartitionKey = "/id")] CosmosClient client,
             ILogger log)
         {
             try
             {
-                Profile profile = await client.GetItem<Profile>(profileId);
-                
-                return new OkObjectResult(profile);
+                await client.Container().DeleteItemAsync<Profile>(profileId, new PartitionKey(profileId));
+                return new OkResult();
             }
             catch (Exception ex)
             {

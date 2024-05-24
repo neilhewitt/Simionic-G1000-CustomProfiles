@@ -1,6 +1,6 @@
 ﻿@page "/import"
 @using System.IO
-@using Newtonsoft.Json
+@using System.Text.Json
 @inject NavigationManager Navigation
 
 <main class="bg-dark py-5">
@@ -62,7 +62,7 @@
         try
         {
             string json = await new StreamReader(file.OpenReadStream()).ReadToEndAsync();
-            Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+            Profile profile = JsonSerializer.Deserialize<Profile>(json);
             profile.Id = null; // this will make the store create a new unique Id
             profile = await ProfileStore.Upsert(profile);
             await Task.Delay(1000);

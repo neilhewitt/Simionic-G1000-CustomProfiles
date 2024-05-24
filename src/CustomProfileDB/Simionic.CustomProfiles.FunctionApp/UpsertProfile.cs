@@ -6,34 +6,38 @@ using Microsoft.Extensions.Logging;
 using Simionic.Core;
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.IO;
 using Microsoft.Azure.Cosmos;
+using System.Text.Json;
 
 namespace Simionic.CustomProfiles.FunctionApp
 {
     public static class UpsertProfile
     {
         [Function("UpsertProfile")]
-        [CosmosDBOutput("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection", PartitionKey = "/id")]
-        public static async Task<string> Run(
+        public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "upsert/{profileId}")] HttpRequest req,
+            [CosmosDBInput("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection", PartitionKey = "/id")] CosmosClient client,
             ILogger log)
         {
             try
             {
+                // this function can be used to clone a profile by specifying a new profileId
                 string body = await new StreamReader(req.Body).ReadToEndAsync();
                 
-                Profile profile = JsonConvert.DeserializeObject<Profile>(body);
+                Profile profile = JsonSerializer.Deserialize<Profile>(body);
                 profile.LastUpdated = DateTime.UtcNow;
                 profile.Id = (string)req.RouteValues["profileId"];
 
-                return JsonConvert.SerializeObject(profile);
-            }
+                var response = await client.Container().UpsertItemAsync(profile, new PartitionKey(profile.Id));
+
+                return new OkObjectResult(response.Resource);
+                            }
             catch (Exception ex)
             {
                 log.LogError(ex, "An error occurred while inserting the profile.");
-                return "Error!";
+                return new StatusCodeResult(500);
             }
         }
     }

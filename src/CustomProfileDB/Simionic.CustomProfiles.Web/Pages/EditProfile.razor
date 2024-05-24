@@ -2,10 +2,10 @@
 @page "/edit/{Id}"
 @page "/new"
 
-@using Newtonsoft.Json
 @using System.IO
 @using System.Text
 @using Simionic.CustomProfiles.Editor
+@using System.Text.Json
 
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthState
@@ -354,7 +354,7 @@
 
     protected async Task Export(MouseEventArgs args)
     {
-        string json = JsonConvert.SerializeObject(ProfileData, Formatting.Indented);
+        string json = JsonSerializer.Serialize(ProfileData, new JsonSerializerOptions { WriteIndented = true });
 
         // need to remove owner details
         string ownerPattern = @$"""Id"": ""{ProfileData.Owner.Id}""";
