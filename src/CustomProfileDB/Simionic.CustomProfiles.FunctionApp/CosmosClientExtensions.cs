@@ -9,13 +9,11 @@ namespace Simionic.CustomProfiles.FunctionApp
 {
     public static class CosmosClientExtensions
     {
-        public static Container Container(this CosmosClient client) => client.GetDatabase(Helper.ProfileDB).GetContainer(Helper.ProfileContainer);
+        public static Container ProfileContainer(this CosmosClient client) => client.GetDatabase(Helper.ProfileDB).GetContainer(Helper.ProfileContainer);
         
         public async static Task<T[]> GetItems<T>(this CosmosClient client, string query) where T : class
         {
-            using (var iterator = client.Container().GetItemQueryIterator<T>(
-                    "SELECT c.id, c.AircraftType, c.Engines, c.Name, c.LastUpdated, c.IsPublished, c.Notes, c.Owner FROM c"
-                    ))
+            using (var iterator = client.ProfileContainer().GetItemQueryIterator<T>(query))
             {
                 if (iterator.HasMoreResults)
                 {
@@ -29,7 +27,7 @@ namespace Simionic.CustomProfiles.FunctionApp
 
         public async static Task<T> GetItem<T>(this CosmosClient client, string id) where T : class
         {
-            var itemResult = await client.Container().ReadItemAsync<T>(id, new PartitionKey(id));
+            var itemResult = await client.ProfileContainer().ReadItemAsync<T>(id, new PartitionKey(id));
             return itemResult.Resource;
         }
     }

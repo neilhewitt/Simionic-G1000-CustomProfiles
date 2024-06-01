@@ -23,7 +23,7 @@ namespace Simionic.CustomProfiles.FunctionApp
         {
             try
             {
-                await client.Container().DeleteItemAsync<Profile>(profileId, new PartitionKey(profileId));
+                await client.ProfileContainer().DeleteItemAsync<Profile>(profileId, new PartitionKey(profileId));
                 return new OkResult();
             }
             catch (Exception ex)

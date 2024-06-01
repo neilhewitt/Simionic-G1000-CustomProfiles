@@ -30,7 +30,7 @@ namespace Simionic.CustomProfiles.FunctionApp
                 profile.LastUpdated = DateTime.UtcNow;
                 profile.Id = (string)req.RouteValues["profileId"];
 
-                var response = await client.Container().UpsertItemAsync(profile, new PartitionKey(profile.Id));
+                var response = await client.ProfileContainer().UpsertItemAsync(profile, new PartitionKey(profile.Id));
 
                 return new OkObjectResult(response.Resource);
                             }
