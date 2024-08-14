@@ -10,8 +10,8 @@ namespace Simionic.CustomProfiles.Web
         public const string BaseAddress = "http://localhost:7071";
         public const string ApiHostKey = null;
 #else
-        public const string BaseAddress = "https://simionic-g1000-profile-database-functions.azurewebsites.net/";
-        public const string ApiHostKey = "RdyGRIvTPLAkTlJGe8f8hOaFtdmZSK3sdcFCeKHf0239EqqwzsUc3w==";
+        public const string BaseAddress = "https://simionic-functions.azurewebsites.net/";
+        public const string ApiHostKey = "EGwwcYzIxh1Y7rpLRfCDZyyLJvz8UyBeUbryUsg21BZQAzFuPlZf8g==";
 #endif
         private static HttpClient _httpClient;
 
