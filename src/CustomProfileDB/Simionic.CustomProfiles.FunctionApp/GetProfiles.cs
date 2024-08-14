@@ -15,7 +15,7 @@ namespace Simionic.CustomProfiles.FunctionApp
         [Function("GetProfiles")]
         public async static Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "profiles")] HttpRequest req,
-            [CosmosDBInput("G1000ProfileStore", "Profiles", Connection = "CosmosDBConnection", PartitionKey = "/id")] CosmosClient client, 
+            [CosmosDBInput("%ProfileDB%", "%ProfileContainer%", Connection = "CosmosDBConnection", PartitionKey = "/id")] CosmosClient client, 
             ILogger log)
         {
             try
