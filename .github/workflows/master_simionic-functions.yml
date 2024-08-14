@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '/src/CustomProfileDB/Simionic.CustomProfiles.FunctionApp' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
 
 jobs:
@@ -38,9 +38,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4C7A7BB7E4504CCB823A58287BCFADC5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0EB40764152B4A20A721F7E3F3B0281D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BD893AB82F0A445DA303C63CE5486EAE }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8E1B518360B45F483597B86BFDDE40B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_408B37AAFA9D4461B77751C44FC35A5E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_288762072E0145C19442EC12411AA4DD }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
