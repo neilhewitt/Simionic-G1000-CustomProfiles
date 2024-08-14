@@ -6,7 +6,7 @@ name: Build and deploy dotnet core app to Azure Function App - simionic-g1000-pr
 on:
   push:
     branches:
-      - net8-develop
+      - master
   workflow_dispatch:
 
 env:
