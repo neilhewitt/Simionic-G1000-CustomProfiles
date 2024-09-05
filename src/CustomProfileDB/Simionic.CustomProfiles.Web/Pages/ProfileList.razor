@@ -61,7 +61,7 @@
                                             <h5 class="card-title mb-3">@profileSummary.Name</h5>
                                         </div>
                                         <div class="col-4 p-0">
-                                            @if (User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
+                                            @if (CanEdit && User.IsLoggedIn && User.OwnerId == profileSummary.Owner.Id) { 
                                             <span><button class="btn-sm btn-primary float-right border-0 shadow-none mr-2" @onclick="() => Edit(profileSummary.Id)">Edit</button></span> 
                                             }
                                         </div>
@@ -122,6 +122,7 @@
     private bool _exported;
     private string _errorMessage;
 
+    public bool CanEdit = false;
     public bool ProfilesLoaded => ProfileSummaries != null && ProfileSummaries.Count() > 0;
     public ProfileSummaryList ProfileSummaries { get; set; }
     public ProfileSummaryList Filtered

@@ -69,11 +69,11 @@
 @code {
     MarkupString Entry(int number, string headline, string[] paras)
     {
-        string markup = @$"<h5 class=""text-white mt-2""><a class=""text-decoration-none text-white"" href=""#faq{ number }"" data-toggle=""collapse"" role=""button"" aria-expanded=""false"">{ headline }</a></h5>";
-        markup += @$"<div class=""collapse"" id=""faq{ number }"">";
+        string markup = $@"<h5 class=""text-white mt-2""><a class=""text-decoration-none text-white"" href=""#faq{ number }"" data-toggle=""collapse"" role=""button"" aria-expanded=""false"">{ headline }</a></h5>";
+        markup += $@"<div class=""collapse"" id=""faq{ number }"">";
         foreach(string para in paras)
         {
-            markup += @$"<p class=""text-white"">{ para }</p>";
+            markup += $@"<p class=""text-white"">{ para }</p>";
         }
         markup += "</div>";
 

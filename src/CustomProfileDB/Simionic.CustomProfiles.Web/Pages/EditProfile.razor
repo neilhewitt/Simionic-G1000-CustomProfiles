@@ -12,151 +12,121 @@
 @inject IJSRuntime JS
 
 <section class="bg-white pt-5">
-    @if (_deleting)
+    <div class="text-center @(ProfileData == null ? "mb-4" : "")"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")@TitleWarts()</h3></div>
+    @if (ProfileData is not null)
     {
-        @if (_error)
-        {
-            <h4 class="text-center fw-bold text-danger mb-2")">An error occurred</h4>
-            <p class="text-center text-danger">@_errorMessage</p>
-            <p class="text-center mb-5"><a href="@Navigation.Uri" @onclick="() => _deleting = false">Reload profile</a> | <a href="/profiles">Back to profile list</a></p>
-        }
-        else
-        {
-            <h4 class="text-center fw-bold mb-2">Deleting profile</h4>
-            <p class="text-center mb-5">Please wait...</p>
-        }
-    }
-    else if (_deleted)
-    {
-        <h4 class="text-center fw-bold text-success mb-2">Profile was deleted successfully</h4>
-        <p class="text-center mb-5"><a href="/profiles">Back to profile list</a></p>
-    }
-    else
-    {
-        <div class="text-center @(ProfileData == null ? "mb-4" : "")"><h3 class="fw-bolder">@(ProfileData?.Name ?? "Loading...")@TitleWarts()</h3></div>
-        @if (ProfileData is not null)
-        {
-            <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
-            <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
-                @if (ProfileData.Id != null && !Editing)
-                {
-                    <div class="row mb-5 bg-white rounded-2 py-2 m-0">
-                        <div class="col-5">
-                            @if (CanEdit && !Editing)
-                            {
-                                <button class="btn btn-primary border-0 shadow-none px-4" @onclick="GoToEditMode">Edit</button>
-                            }
-                            
-                        </div>
-                        <div class="col-2 text-center">
-                            <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>                        
-                        </div>
-                        <div class="col-5 text-right">
-                        </div>
-                    </div>
-                }
-                <div class="row justify-content-center">
-                    @if (ProfileData.Id == null)
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            <b>If you leave this page without saving your new profile as a draft, it will be lost.</b>
-                        </div>
-                    }
-                    else if (!String.IsNullOrWhiteSpace(ProfileData.Notes ?? ""))
-                    {
-                        <div class="alert alert-secondary" role="alert">
-                             <b>Author note:</b> @ProfileData.Notes
-                        </div>
-                    }
-                    @if (Editing && ProfileData.Id != null) 
-                    { 
-                        <div class="alert alert-danger" role="alert">
-                            <b>Changes made here do not take effect until you click 'save changes'.</b>
-                        </div>
-                    }
-                </div>
-                <div class="row justify-content-center">
-                @if (CanEdit && Editing && ProfileData.Id != null)
-                {
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="form-label text-black font-weight-bold mr-2">Status</label>
-                            <div class="btn-group ml-2">
-                                <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)" disabled="@(!Editing)">Draft</button>
-                                <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)" disabled="@(!Editing)">Published</button>
-                            </div>
-                        </div>
-                    </div>
-                }
-                </div>
-                <ProfileEditor @bind-ProfileData="@ProfileData" @bind-CanEdit="@CanEdit" @bind-Editing="@Editing" />
-                <div class="row">
-                    @if (Editing)
-                    {
-                        <div class="col-md-auto">
-                            <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" @bind="ProfileData.Name" @bind:event="oninput"/></label>
-                        </div>
-                        <div class="col">
-                                <button class="btn btn-sm @GetSaveButtonClasses("btn-primary", "btn-secondary") @GetSaveButtonClasses("", ":disabled") shadow-none" 
-                                    data-toggle="modal" data-target="#alertModal"
-                                    @onclick="async () => await Save()">@GetSaveButtonText()</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-auto">
-                            <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" disabled/></label>
-                        </div>
-                    }
-                </div>
-            </div>
-            <div class="modal" id="alertModal" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body @(_error ? "text-danger" : "")">
-                            @((_error ? _errorMessage : _alertMessage) ?? "Please wait...")
-                        </div>
-                        <div class="modal-footer">
-                            @if (_saveWarning)
-                            {
-                                <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Save(); }">Save</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _saveWarning = false; _saved = false; _saving = false; }">Cancel</button>
-                            }
-                            else if (_deleteWarning)
-                            {
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _deleteWarning = false; _saved = false; _saving = false; }">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; /*await Delete(); */}">Delete</button>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false; StateHasChanged(); }">OK</button>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            @if (_error)
+        <div class="text-center mb-4"><h5>By @ProfileData.Owner.Name</h5></div>
+        <div class="container px-5 py-3 mb-5 vw-100 bg-dark bg-opacity-25 rounded-3">
+            @if (ProfileData.Id != null && !Editing)
             {
-                <p class="text-center text-danger">@_errorMessage</p>
-                <p class="text-center">Please try again later, or if this persists, contact <a href="/contact">the site admin</a>.</p>
+                <div class="row mb-5 bg-white rounded-2 py-2 m-0">
+                    <div class="col-5">
+                        @if (CanEdit && !Editing)
+                        {
+                            <button class="btn btn-primary border-0 shadow-none px-4" @onclick="GoToEditMode">Edit</button>
+                        }
+                            
+                    </div>
+                    <div class="col-2 text-center">
+                        <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>                        
+                    </div>
+                    <div class="col-5 text-right">
+                    </div>
+                </div>
             }
-        }
-        <p class="text-center"><a href="/profiles">Back to profile list</a></p>
+            <div class="row justify-content-center">
+                @if (ProfileData.Id == null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <b>If you leave this page without saving your new profile as a draft, it will be lost.</b>
+                    </div>
+                }
+                else if (!String.IsNullOrWhiteSpace(ProfileData.Notes ?? ""))
+                {
+                    <div class="alert alert-secondary" role="alert">
+                            <b>Author note:</b> @ProfileData.Notes
+                    </div>
+                }
+                @if (Editing && ProfileData.Id != null) 
+                { 
+                    <div class="alert alert-danger" role="alert">
+                        <b>Changes made here do not take effect until you click 'save changes'.</b>
+                    </div>
+                }
+            </div>
+            <div class="row justify-content-center">
+            @if (CanEdit && Editing && ProfileData.Id != null)
+            {
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label text-black font-weight-bold mr-2">Status</label>
+                        <div class="btn-group ml-2">
+                            <button class="btn btn-large @IsSelectedButton(!ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = false)" disabled="@(!Editing)">Draft</button>
+                            <button class="btn btn-large @IsSelectedButton(ProfileData.IsPublished) mt-1 mb-1 shadow-none" @onclick="Edit(() => ProfileData.IsPublished = true)" disabled="@(!Editing)">Published</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+            <ProfileEditor @bind-ProfileData="@ProfileData" @bind-CanEdit="@CanEdit" @bind-Editing="@Editing" />
+            <div class="row">
+                @if (Editing)
+                {
+                    <div class="col-md-auto">
+                        <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" @bind="ProfileData.Name" @bind:event="oninput"/></label>
+                    </div>
+                    <div class="col">
+                            <button class="btn btn-sm @GetSaveButtonClasses("btn-primary", "btn-secondary") @GetSaveButtonClasses("", ":disabled") shadow-none" 
+                                data-toggle="modal" data-target="#alertModal"
+                                @onclick="async () => await Save()">@GetSaveButtonText()</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-auto">
+                        <label class="form-label text-black font-weight-bold">Profile name <input type="text" class="input-text ml-2" value="@ProfileData.Name" disabled/></label>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="modal" id="alertModal" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body @(_error ? "text-danger" : "")">
+                        @((_error ? _errorMessage : _alertMessage) ?? "Please wait...")
+                    </div>
+                    <div class="modal-footer">
+                        @if (_saveWarning)
+                        {
+                            <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="async () => { _alert = false; _error = false; await Save(); }">Save</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false;  _saveWarning = false; _saved = false; _saving = false; }">Cancel</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="() => { _alert = false; _error = false; StateHasChanged(); }">OK</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     }
+
+    @if (_error)
+    {
+        <p class="text-center text-danger">@_errorMessage</p>
+        <p class="text-center">Please try again later, or if this persists, contact <a href="/contact">the site admin</a>.</p>
+    }
+
+    <p class="text-center"><a href="/profiles">Back to profile list</a></p>
 </section>
 
-@code {
+@code 
+{
     private bool _saving;
     private bool _saved;
     private bool _error;
     private bool _alert;
     private bool _saveWarning;
-    private bool _deleteWarning;
-    private bool _deleted;
-    private bool _deleting;
     private string _alertMessage;
     private string _errorMessage;
 
@@ -251,56 +221,6 @@
         }
     }
 
-    // protected async Task Delete()
-    // {
-    //     if (!_deleteWarning)
-    //     {
-    //         _saving = false;
-    //         _alert = true;
-    //         _errorMessage = "";
-    //         if (_profileWasPublishedAtPageLoad)
-    //         {
-    //             _alertMessage = "This is a published profile. If you delete it, it will no longer be available to users of the site. This action cannot be undone. Are you absolutely sure?";
-    //         }
-    //         else
-    //         {
-    //             _alertMessage = "This will delete the draft profile permanently. This action cannot be undone. Are you sure?";
-    //         }
-    //         _deleteWarning = true;
-    //         StateHasChanged();
-    //     }
-    //     else
-    //     {
-    //         _alert = false;
-    //         _saving = true;
-    //         _deleteWarning = false;
-    //         _deleting = true;
-    //         StateHasChanged();
-
-    //         await Task.Delay(1000);
-
-    //         try
-    //         {
-    //             await ProfileStore.Delete(ProfileData);
-    //             ProfileData = null;
-    //         }
-    //         catch (ProfileDeleteException ex)
-    //         {
-    //             _errorMessage = ex.Message;
-    //             _deleted = false;
-    //             _error = true;
-    //             StateHasChanged();
-    //             return;
-    //         }
-
-    //         _saving = false;
-    //         _saveWarning = false;
-    //         _deleting = false;
-    //         _deleted = true;
-    //         StateHasChanged();
-    //     }
-    // }
-
     protected string GetSaveButtonClasses(string active, string inactive)
     {
         if (_saving || _saved) return inactive;
@@ -310,7 +230,6 @@
     protected string GetSaveButtonText()
     {
         if (_saving && _saveWarning) return "Saving changes";
-        if (_saving && _deleteWarning) return "Deleting profile";
         if (_saved) return "Changes saved";
         if (ProfileData.Id == null) return "Save as draft";
 
@@ -357,9 +276,9 @@
         string json = JsonSerializer.Serialize(ProfileData, new JsonSerializerOptions { WriteIndented = true });
 
         // need to remove owner details
-        string ownerPattern = @$"""Id"": ""{ProfileData.Owner.Id}""";
-        string namePattern = @$"""Name"": ""{ProfileData.Owner.Name}""";
-        string idPattern = @$"""id"": ""{ProfileData.Id}""";
+        string ownerPattern = $@"""Id"": ""{ProfileData.Owner.Id}""";
+        string namePattern = $@"""Name"": ""{ProfileData.Owner.Name}""";
+        string idPattern = $@"""id"": ""{ProfileData.Id}""";
         json = json.Replace(ownerPattern, @"""Id"": null").Replace(namePattern, @"""Name"": null").Replace(idPattern, @"""id"": null");
 
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
@@ -413,6 +332,9 @@
                 CanEdit = true;
             }
         }
+
+        // turn editing off (remove later)
+        CanEdit = false;
 
         if (CanEdit && (Navigation.IsAt("edit") || Navigation.IsAt("new")))
         {
