@@ -2,14 +2,17 @@
 
 namespace Simionic.Core
 {
-    public class ProfileId
+    public class ProfileBase
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
     }
 
-    public class ProfileSummary : ProfileId
+    public class ProfileSummary
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
         public OwnerInfo Owner { get; set; } = new OwnerInfo();
         public DateTime LastUpdated { get; set; }
         public string Name { get; set; }
@@ -19,11 +22,22 @@ namespace Simionic.Core
         public string Notes { get; set; }
     }
 
-    public class Profile : ProfileSummary
+    public class Profile
     {
         private bool _fadec;
         private bool _constantSpeed;
         private int _cylinders;
+
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        public OwnerInfo Owner { get; set; } = new OwnerInfo();
+        public DateTime LastUpdated { get; set; }
+        public string Name { get; set; }
+        public AircraftType AircraftType { get; set; }
+        public int Engines { get; set; } = 1;
+        public bool IsPublished { get; set; }
+        public string Notes { get; set; }
 
         [JsonIgnore]
         public Gauge[] Gauges => new Gauge[] { CHT, EGT, Torque, NG, ITT, ManifoldPressure, Load, RPM, Fuel, TIT, FuelFlow, OilPressure, OilTemperature };

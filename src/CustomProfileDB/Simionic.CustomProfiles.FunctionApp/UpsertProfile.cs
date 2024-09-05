@@ -25,15 +25,15 @@ namespace Simionic.CustomProfiles.FunctionApp
             {
                 // this function can be used to clone a profile by specifying a new profileId
                 string body = await new StreamReader(req.Body).ReadToEndAsync();
-                
-                Profile profile = JsonSerializer.Deserialize<Profile>(body);
+
+                Profile profile = JsonSerializer.Deserialize<Profile>(body, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }); 
                 profile.LastUpdated = DateTime.UtcNow;
                 profile.Id = (string)req.RouteValues["profileId"];
 
                 var response = await client.ProfileContainer().UpsertItemAsync(profile, new PartitionKey(profile.Id));
 
-                return new OkObjectResult(response.Resource);
-                            }
+                return null;// new OkObjectResult(response.Resource);
+            }
             catch (Exception ex)
             {
                 log.LogError(ex, "An error occurred while inserting the profile.");

@@ -20,15 +20,18 @@
             @if (ProfileData.Id != null && !Editing)
             {
                 <div class="row mb-5 bg-white rounded-2 py-2 m-0">
-                    <div class="col-5">
+                    <div class="col-5 text-right">
+                    </div>
+                    <div class="col-2 text-center">
                         @if (CanEdit && !Editing)
                         {
                             <button class="btn btn-primary border-0 shadow-none px-4" @onclick="GoToEditMode">Edit</button>
                         }
-                            
-                    </div>
-                    <div class="col-2 text-center">
-                        <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>                        
+                        <span style="width:3px">&nbsp;</span>
+                        @if (!Editing)
+                        {
+                            <button class="btn btn-primary btn-success border-0 shadow-none" @onclick="Export">Export</button>
+                        }
                     </div>
                     <div class="col-5 text-right">
                     </div>
@@ -334,7 +337,7 @@
         }
 
         // turn editing off (remove later)
-        CanEdit = false;
+        //CanEdit = false;
 
         if (CanEdit && (Navigation.IsAt("edit") || Navigation.IsAt("new")))
         {
