@@ -26,7 +26,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An error occurred while getting the profile list.");
+                log?.LogError(ex, "An error occurred while getting the profile list.");
                 return new StatusCodeResult(500);
             }
         }

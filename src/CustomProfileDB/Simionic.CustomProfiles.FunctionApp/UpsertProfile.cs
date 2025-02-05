@@ -36,7 +36,7 @@ namespace Simionic.CustomProfiles.FunctionApp
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An error occurred while inserting the profile.");
+                log?.LogError(ex, "An error occurred while inserting the profile.");
                 return new StatusCodeResult(500);
             }
         }

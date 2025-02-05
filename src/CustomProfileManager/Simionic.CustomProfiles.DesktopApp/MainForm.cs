@@ -106,7 +106,11 @@ namespace Simionic.CustomProfiles.DesktopApp
             {
                 try
                 {
+#if DEBUG
+                    string version = _currentVersion;
+#else
                     string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
+#endif
                     if (version != _currentVersion)
                     {
                         DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
