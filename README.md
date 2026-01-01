@@ -1,10 +1,8 @@
 # Simionic G1000 Custom Profiles
 
-A comprehensive toolset for managing and sharing custom aircraft profiles for the [Simionic G1000 apps](https://www.simionic.net/wordpress/g1000-apps/). This project includes a desktop application for managing profiles on iOS devices and a web-based profile database for community sharing.
+A Web site and tool for sharing custom aircraft profiles for the [Simionic G1000 apps](https://www.simionic.net/wordpress/g1000-apps/). This project includes a desktop application for managing profiles on iOS devices, and a web-based profile database for community sharing which can be found at [https://g1000profiledb.com](https://g1000profiledb.com).
 
-## What Are the Simionic G1000 Apps?
-
-The Simionic G1000 apps are high-fidelity simulations of the Garmin G1000 avionics system, featuring Primary Flight Display (PFD) and Multi-Function Display (MFD) units. These apps allow users to create custom aircraft profiles with specific performance characteristics and configurations.
+The Simionic G1000 apps are high-fidelity simulations of the Garmin G1000 avionics system that run on iPad, including Primary Flight Display (PFD) and Multi-Function Display (MFD) units. These apps allow users to create custom aircraft profiles with specific performance characteristics and configurations for unsupported aircraft in the simulator. This Web app and the accompanying Profile Manager desktop app allow users to share and backup their custom profiles.
 
 ## Project Components
 
@@ -23,7 +21,7 @@ Azure Functions providing the API layer for profile management:
 - Integration with Azure Cosmos DB
 - User identity and ownership management
 
-**Technology**: Azure Functions (. NET 8. 0), Cosmos DB
+**Technology**: Azure Functions, Cosmos DB
 
 ### Custom Profile Manager
 A Windows desktop application for managing G1000 custom profiles on your iPad:  
@@ -37,9 +35,10 @@ A Windows desktop application for managing G1000 custom profiles on your iPad:
 ## Getting Started
 
 ### Prerequisites
-- .NET 6.0 SDK or later
-- Visual Studio 2022 or later (for desktop applications)
-- iOS device with Simionic G1000 app installed (for profile management)
+- .NET 6.0 SDK or later (for desktop app)
+- .NET 8.0 SDK or later (for function app)
+- Visual Studio 2022 or later
+- iOS device with Simionic G1000 app installed
 
 ### Building the Desktop Manager
 
@@ -71,4 +70,24 @@ src/
 
 ## License
 
-This project is licensed under the MIT license. See LICENSE for details.
+MIT License
+
+Copyright (c) 2023 Neil Hewitt
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
