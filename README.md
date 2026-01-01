@@ -71,4 +71,4 @@ src/
 
 ## License
 
-This project is licensed under the MIT license. See LICENSE.md for details.
+This project is licensed under the MIT license. See LICENSE for details.
