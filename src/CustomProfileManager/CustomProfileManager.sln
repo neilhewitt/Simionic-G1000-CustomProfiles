@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32314.265
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11206.111 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.DesktopApp", "Simionic.CustomProfiles.DesktopApp\Simionic.CustomProfiles.DesktopApp.csproj", "{2FEE4C4D-69F6-4CC6-A680-FDD62B1B8D6A}"
 EndProject
@@ -9,7 +9,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Simionic.CustomProfiles.Des
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.Core", "..\Common\Simionic.Core\Simionic.Core.csproj", "{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.ImportExport", "..\Common\Simonic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{A3E65E1D-D949-40A0-BE49-78563401EAB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simionic.CustomProfiles.ImportExport", "..\Common\Simionic.CustomProfiles.ImportExport\Simionic.CustomProfiles.ImportExport.csproj", "{3CBDF397-3BE2-0B99-F5E0-1ACCE81EBECF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52DF0EE0-DC6C-429A-92DC-F399979E9DB3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3E65E1D-D949-40A0-BE49-78563401EAB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3E65E1D-D949-40A0-BE49-78563401EAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3E65E1D-D949-40A0-BE49-78563401EAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3E65E1D-D949-40A0-BE49-78563401EAB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CBDF397-3BE2-0B99-F5E0-1ACCE81EBECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CBDF397-3BE2-0B99-F5E0-1ACCE81EBECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CBDF397-3BE2-0B99-F5E0-1ACCE81EBECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBDF397-3BE2-0B99-F5E0-1ACCE81EBECF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

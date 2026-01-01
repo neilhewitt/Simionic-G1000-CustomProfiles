@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
 using Simionic.Core;
 
 namespace Simionic.CustomProfiles.ImportExport
@@ -22,7 +22,7 @@ namespace Simionic.CustomProfiles.ImportExport
         {
             if (Directory.Exists(folderPath))
             {
-                string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
+                string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(Path.Combine(folderPath, profile.Name.Replace(' ', '-') + ".json"), json);
             }
         }
@@ -49,7 +49,7 @@ namespace Simionic.CustomProfiles.ImportExport
             {
                 foreach (Profile profile in Profiles)
                 {
-                    string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
+                    string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
                     File.WriteAllText(Path.Combine(folderPath, profile.Name.Replace(' ', '-') + ".json"), json);
                 }
             }
@@ -144,7 +144,7 @@ namespace Simionic.CustomProfiles.ImportExport
                 try
                 {
                     string json = File.ReadAllText(jsonPath);
-                    Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+                    Profile profile = JsonSerializer.Deserialize<Profile>(json);
                     return true;
                 }
                 catch
@@ -160,7 +160,7 @@ namespace Simionic.CustomProfiles.ImportExport
             if (File.Exists(jsonPath))
             {
                 string json = File.ReadAllText(jsonPath);
-                Profile profile = JsonConvert.DeserializeObject<Profile>(json);
+                Profile profile = JsonSerializer.Deserialize<Profile>(json);
                 AddProfile(profile);
                 return profile;
             }

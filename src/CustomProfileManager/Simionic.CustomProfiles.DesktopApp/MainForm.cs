@@ -24,7 +24,7 @@ namespace Simionic.CustomProfiles.DesktopApp
         public MainForm()
         {
             InitializeComponent();
-            this.Text += $" {_currentVersion}";
+            this.Text += $" {_currentVersion[..(_currentVersion.LastIndexOf('+'))]}";
         }
 
         public void NotifyDBExportedTo(string path)
@@ -107,7 +107,9 @@ namespace Simionic.CustomProfiles.DesktopApp
                 try
                 {
                     string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
-                    if (version != _currentVersion)
+                    int versionNumber = int.Parse(version.Replace(".",""));
+                    int currentVersionNumber = int.Parse(_currentVersion.Replace(".", ""));
+                    if (versionNumber > currentVersionNumber)
                     {
                         DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
                         if (result == DialogResult.Yes)
