@@ -6,7 +6,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_NAME: 'simionic-functions'  
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/CustomProfileDB/Simionic.CustomProfiles.FunctionApp'      
-  DOTNET_VERSION: '10.0.x'                   
+  DOTNET_VERSION: '9.0.x'                   
 
 jobs:
   build-and-deploy:
