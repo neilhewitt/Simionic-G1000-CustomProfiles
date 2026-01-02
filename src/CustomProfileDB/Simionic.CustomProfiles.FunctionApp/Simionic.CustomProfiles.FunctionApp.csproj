@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.56.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.CosmosDB" Version="4.14.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.1" />
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	<None Include="local.settings.json">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
