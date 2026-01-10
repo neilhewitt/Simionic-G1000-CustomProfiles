@@ -11,6 +11,8 @@ namespace Simionic.CustomProfiles.DesktopApp
 {
     public partial class MainForm : Form
     {
+        private const string APP_VERSION = "1.0.5";
+
         private const string NO_PROFILE_MSG = "-- This database has no profiles --";
         private const string LOG_PATH = "logfile.txt";
 
@@ -19,12 +21,11 @@ namespace Simionic.CustomProfiles.DesktopApp
         private bool _showAlerts = true;
         private bool _removedLastProfile = false;
 
-        private string _currentVersion => Application.ProductVersion;
-
         public MainForm()
         {
             InitializeComponent();
-            this.Text += $" {_currentVersion[..(_currentVersion.LastIndexOf('+'))]}";
+
+            this.Text += $" {APP_VERSION}";
         }
 
         public void NotifyDBExportedTo(string path)
@@ -107,9 +108,9 @@ namespace Simionic.CustomProfiles.DesktopApp
                 try
                 {
                     string version = client.GetStringAsync("https://g1000profiledb.com/files/simionic-custom-profile-manager-version.txt").Result;
-                    int versionNumber = int.Parse(version.Replace(".",""));
-                    int currentVersionNumber = int.Parse(_currentVersion.Replace(".", ""));
-                    if (versionNumber > currentVersionNumber)
+                    int releaseVersionNumber = int.Parse(version.Replace(".",""));
+                    int thisVersionNumber = int.Parse(APP_VERSION.Replace(".", ""));
+                    if (releaseVersionNumber > thisVersionNumber)
                     {
                         DialogResult result = ShowMessageBox($"A new version {version} is available. Download it?\n\nIf you say 'no' the application will ask again after 7 days.", "New version available", MessageBoxButtons.YesNoCancel);
                         if (result == DialogResult.Yes)
