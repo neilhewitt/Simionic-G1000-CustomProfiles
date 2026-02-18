@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/src/CustomProfileDB/Simionic.CustomProfiles.Next
+/src/CustomProfileDB/Simionic.CustomProfiles.Web/nul
