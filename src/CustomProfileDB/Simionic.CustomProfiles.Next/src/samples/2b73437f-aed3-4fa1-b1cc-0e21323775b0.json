@@ -1,0 +1,533 @@
+{
+  "id": "2b73437f-aed3-4fa1-b1cc-0e21323775b0",
+  "Owner": {
+    "Id": null,
+    "Name": "Neil Hewitt"
+  },
+  "LastUpdated": "2022-04-08T14:24:07.4641056Z",
+  "Name": "Quest Kodiak 100",
+  "AircraftType": 1,
+  "Engines": 1,
+  "IsPublished": true,
+  "Notes": "This profile was made for the Simworks Kodiak 100 in MSFS, though it should be applicable to any Kodiak 100. Data mostly sourced from the POH and engine type certification. The gauge ranges were estimated from visual inspection of the Garmin documentation as the ranges are not documented in the POH since the aircraft is available with different avionics packages. So these ranges are *estimates*. If anyone has accurate figures I\u0027d be most grateful if they\u0027d post them on the Facebook group and then I can update this profile. ",
+  "ForkedFrom": null,
+  "Cylinders": 0,
+  "FADEC": false,
+  "Turbocharged": false,
+  "ConstantSpeed": false,
+  "VacuumPSIRange": {
+    "Min": 0,
+    "Max": 0,
+    "GreenStart": 0,
+    "GreenEnd": 0
+  },
+  "ManifoldPressure": {
+    "Name": "Manifold Pressure (inHg)",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      }
+    ],
+    "AllowDecimals": true
+  },
+  "CHT": {
+    "Name": "CHT (\u00B0C)",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "EGT": {
+    "Name": "EGT (\u00B0C)",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "TIT": {
+    "Name": "TIT (\u00B0C)",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "Load": {
+    "Name": "Load %",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": 0,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "Torque": {
+    "Name": "Torque (FT-LB)",
+    "Min": 0,
+    "Max": 1700,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": true,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 1,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 3,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "NG": {
+    "Name": "NG (RPM%)",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 1,
+        "Min": 45,
+        "Max": 90,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 3,
+        "Min": 91,
+        "Max": 95,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "ITT": {
+    "Name": "ITT (\u00B0C)",
+    "Min": 0,
+    "Max": 850,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 1,
+        "Min": 200,
+        "Max": 699,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 2,
+        "Min": 700,
+        "Max": 744,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 3,
+        "Min": 745,
+        "Max": 750,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "TemperaturesInFahrenheit": false,
+  "RPM": {
+    "Name": "RPM",
+    "Min": 0,
+    "Max": 2400,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 2,
+        "Min": 400,
+        "Max": 1200,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 1,
+        "Min": 1440,
+        "Max": 2099,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 3,
+        "Min": 2100,
+        "Max": 2110,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "Fuel": {
+    "Name": "Fuel",
+    "Min": 0,
+    "Max": 0,
+    "FuelInGallons": true,
+    "CapacityForSingleTank": 160,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 2,
+        "Min": 0,
+        "Max": 20,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 1,
+        "Min": 21,
+        "Max": 160,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "FuelFlow": {
+    "Name": "Fuel Flow (GPH)",
+    "Min": 0,
+    "Max": 50,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      }
+    ],
+    "AllowDecimals": true
+  },
+  "OilPressure": {
+    "Name": "Oil Pressure (PSI)",
+    "Min": 0,
+    "Max": 105,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 2,
+        "Min": 35,
+        "Max": 89,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 1,
+        "Min": 90,
+        "Max": 95,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 3,
+        "Min": 96,
+        "Max": 98,
+        "AllowDecimals": true
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": true
+      }
+    ],
+    "AllowDecimals": true
+  },
+  "OilTemperature": {
+    "Name": "Oil Temp (\u00B0C)",
+    "Min": 0,
+    "Max": 100,
+    "FuelInGallons": null,
+    "CapacityForSingleTank": null,
+    "TorqueInFootPounds": null,
+    "MaxPower": null,
+    "Ranges": [
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 1,
+        "Min": 35,
+        "Max": 80,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 3,
+        "Min": 81,
+        "Max": 83,
+        "AllowDecimals": false
+      },
+      {
+        "Colour": 0,
+        "Min": 0,
+        "Max": 0,
+        "AllowDecimals": false
+      }
+    ],
+    "AllowDecimals": false
+  },
+  "DisplayElevatorTrim": true,
+  "ElevatorTrimTakeOffRange": {
+    "Min": 20,
+    "Max": 30
+  },
+  "DisplayRudderTrim": true,
+  "RudderTrimTakeOffRange": {
+    "Min": 40,
+    "Max": 60
+  },
+  "DisplayFlapsIndicator": true,
+  "FlapsRange": {
+    "Markings": [
+      "0",
+      "10",
+      null,
+      "20",
+      null,
+      "35"
+    ],
+    "Positions": [
+      0,
+      25,
+      0,
+      50,
+      0,
+      100
+    ]
+  },
+  "VSpeeds": {
+    "Vs0": 60,
+    "Vs1": 77,
+    "Vfe": 138,
+    "Vno": 175,
+    "Vne": 182,
+    "Vglide": 97,
+    "Vr": 70,
+    "Vx": 85,
+    "Vy": 101
+  }
+}

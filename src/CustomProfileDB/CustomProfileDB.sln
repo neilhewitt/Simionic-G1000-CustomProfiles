@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32314.265
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11506.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simionic.CustomProfiles.Web", "Simionic.CustomProfiles.Web\Simionic.CustomProfiles.Web.csproj", "{65A88D93-6C82-41C2-88F4-AF14B5214AC5}"
 EndProject
