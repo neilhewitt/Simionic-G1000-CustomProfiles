@@ -1,0 +1,57 @@
+﻿@page "/archive"
+
+@using System.IO
+@using System.IO.Compression
+@using System.Text
+@using System.Text.Json
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthState
+@inject IJSRuntime JS
+
+<section class="bg-white pt-5">
+    <div class="text-center mb-4"><h3>Profile Archive</h3></div>
+    <div class="text-center mb-5">
+        <button class="btn btn-large mt-1 mb-4 shadow-none" @onclick="GetArchiveZip">Download Archive</button>
+    </div>
+</section>
+
+@code {
+    protected async Task GetArchiveZip()
+    {
+        if (User.IsLoggedIn)
+        {
+            Profile[] profiles = await ProfileStore.GetProfiles();
+
+            using var memoryStream = new MemoryStream();
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, leaveOpen: true))
+            {
+                foreach (var profile in profiles)
+                {
+                    string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
+                    var entry = archive.CreateEntry($"{profile.Id}.json");
+                    using var entryStream = entry.Open();
+                    await entryStream.WriteAsync(Encoding.UTF8.GetBytes(json));
+                }
+            }
+
+            memoryStream.Position = 0;
+            using var streamRef = new DotNetStreamReference(stream: memoryStream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", "profiles.zip", streamRef);
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var state = await AuthState.GetAuthenticationStateAsync();
+
+        if (!User.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

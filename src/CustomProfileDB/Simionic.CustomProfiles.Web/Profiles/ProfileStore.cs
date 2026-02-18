@@ -1,6 +1,7 @@
 ﻿using Simionic.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -39,11 +40,24 @@ namespace Simionic.CustomProfiles.Web
             }
         }
 
+        public static async Task<Profile[]> GetProfiles()
+        {
+            try
+            {
+                IEnumerable<Profile> profiles = await HttpClientFactory.Client.GetFromJsonAsync<IEnumerable<Profile>>($"/api/profiles");
+                return new List<Profile>(profiles).ToArray();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ProfileStoreException($"Unable to get profile list. Status code was {(ex.StatusCode.HasValue ? ex.StatusCode.Value.ToString() : "unknown")}.", ex);
+            }
+        }
+
         public static async Task<ProfileSummaryList> GetProfileSummaries()
         {
             try
             {
-                IEnumerable<ProfileSummary> profiles = await HttpClientFactory.Client.GetFromJsonAsync<IEnumerable<ProfileSummary>>($"/api/profiles");
+                IEnumerable<ProfileSummary> profiles = await HttpClientFactory.Client.GetFromJsonAsync<IEnumerable<ProfileSummary>>($"/api/profilesummaries");
                 return new ProfileSummaryList(profiles);
             }
             catch (HttpRequestException ex)

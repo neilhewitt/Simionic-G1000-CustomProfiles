@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s \"C:\\\\projects\\\\Simionic-G1000-CustomProfiles\\\\src\\\\Common\\\\Simionic.CustomProfiles.Editor\")",
+      "Bash(dir:*)",
+      "Bash(find:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(npx next build)",
+      "Bash(npm run build:*)",
+      "Bash(npm uninstall:*)"
+    ]
+  }
+}
